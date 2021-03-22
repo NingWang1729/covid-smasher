@@ -14,4 +14,4 @@ push:
 	git push origin "$(b)"
 
 pull:
-	git pull
+	git pull -u origin master
