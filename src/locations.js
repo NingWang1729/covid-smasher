@@ -1,0 +1,1 @@
+// ALAN: Set up base location class, with different children classes
