@@ -1,0 +1,202 @@
+LA Hacks 2020 Brainstorm
+
+
+Unassigned responsibilties:
+Working on Discord bot (2)
+Unit testing (1)
+
+
+*(Number of people inside parentheses)
+
+Name
+Responsibilities
+Jesse Narkmanee
+
+
+Raj Piskala
+Set up backend + Git integration on google cloud
+Alan
+Quality assurance
+Writing docs
+MELODY
+
+
+Nevin
+
+
+
+
+
+
+
+Level up:
+Discord bot (potentially bot version of game)
+Impact:
+Game to raise awareness for (Covid?)
+COVID Website
+Network:
+N/A
+Messaging Service for College Kids (Applicants)
+UCLA Course Selector ew
+
+Covid game:
+Language:
+Python (Pygame?)
+Pro: can convert to discord bot
+Pro: easier language to use
+Con: harder to share, needs to build together for executable file
+JS (Canvas?)
+Pro: Discord.js API has better support than the Discord.py API
+Con: Is not python
+Pro: can host right away on a website
+C++
+Con: Is C++
+Smolberg knows all
+Design:
+Simulation:
+Pick a different character (ie college student, middle age person, elderly)
+Different scenarios show up, with branching outcomes
+OR RPG:
+Fight enemies, unlock “research” for vaccine, equip items…
+May be need to convert to text based game for discord bot
+
+
+Simulation game starting classes:
+HS teen
+Starts with $100
+Can heal 100% hp at home
+Starts with Strength (40)
+Starts with Intelligence (45)
+Starts with morale (50)
+College student
+Starts with $200
+Cannot heal in dorm
+Strength (50)
+Intelligence (69)
+Starts with morale (50)
+Poor person
+Starts with $50
+Cannot heal in apt
+Strength (30)
+Intelligence (50)
+Starts with morale (30)
+Rich kid
+Starts with $1000
+Can heal 110% in suite
+Strength (20)
+Intelligence (60)
+Starts with morale (60)
+Old man
+Starts with $100
+Can heal 10% in house
+Strength (10)
+Intelligence (50)
+Starts with morale (40)
+Pedestrian
+Kills you instantly
+
+Time periods:
+Morning: 6AM-8AM
+Safety: 10% danger
+Crowdedness: Low
+Midmorning: 8AM-11AM
+Safety: 15% danger
+Crowdedness: Medium
+Lunchtime: 11AM-2PM
+Safety: 20% danger
+Crowdedness: High
+Afternoon: 2PM-5PM
+Safety: 20% danger
+Crowdedness: High
+Evening: 5PM-8PM
+Safety: 30% danger
+Crowdedness: Medium
+Night: 8PM-11PM
+Safety: 50% danger
+Crowdedness: Low
+Late Night: 11PM-2AM
+Safety: 66% danger
+Crowdedness: Low
+Early Morning: 2AM-6AM
+Safety: 90% danger
+Crowdedness: Low
+
+Locations:
+Home (Mom’s house, Dorm, Apt, Suite, Retirement Home)
+Store (different stores for different activities?)
+Unary-Tree Store:
+$1 per item
+Plastic food:
+Sustenance +1
+Morale - 1
+Plastic drink:
+Morale +1
+Morale - 1
+Fidget Spinner:
+Morale + 1
+“Whee!”
+Binary-Tree Store:
+$2^n per item
+Ternary-Tree Store:
+3^n per item
+Mystery-Tree Store:
+Hard-to-swallow pills:
+??? Mystery effect
+“You could not swallow these pills! Lose 50% of current hp rounded down”
+Vim:
+-1 intelligence
+-10 morale
+“Note: Vim is built in. Why did you buy this?”
+Emacs:
+-10 hp
+-1 intelligence
+“Note: Eggert was here. GNU is open source.”
+Wurd:
++1 intelligence
+“Note: Smallberg knows all”
+Segfault: shift currency right by one bit
+Restaurants:
+Cin-N-Cout (Fast food)
+Object-garden (normal, parent-child relationship)
+Foobar (bar, has shady business)
+Work (either school, work, or n/a)
+HS: +1 intelligence
+College: +2 intelligence, -$80 for textbook
+Work: +1 intelligence, +Money ($15 if teen, poor person; $100 if rich kid; $0 if college student (unpaid internship))
+$15 if teen, poor person
++1 morale (depends on intelligence)
+-2 morale (depends on intelligence)
+$100 if rich kid
+-5 morale (not enough, depends on morale)
++5 morale (free money, depends on morale)
+$0 if college student
+-1 morale (unpaid internship, depends on intelligence)
+OR +2 morale (enjoyed work experience, depends on intelligence)
+$10 for pension for old man
++1 morale (remember youth, depends on morale)
+-2 morale (recall bad memories, depends on morale)
+Park (No entry fee)
++1 strength for any
+-10 morale for rich kid
+Gym (Increases strength, cost $10 per entry)
++1 if old man
++2 if rich kid or poor person
++3 if hs teen or college student
+Library (increases intelligence, free entry)
++1 if rich kid, poor person, or old man
++2 if HS student
++3 if college student
+Hospital (To get vaccine and win (Either requires 100 strength, or 100 Intelligence, or 100 morale))
+Random events:
+Pirate encounter:
+Strength check
+Anti-vaxxer sneeze:
+Mask check
+Shady person:
+Intelligence check
+Bully:
+Morale check
+Sleep deprivation:
+Vibe check
+
+
