@@ -1,5 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
+import './locations.js';
+import './timezones.js';
+import './player.js';
 
 function App() {
   return (
@@ -15,7 +18,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Don't Learn React yet
         </a>
       </header>
     </div>
