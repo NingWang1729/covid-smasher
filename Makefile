@@ -11,7 +11,7 @@ commit:
 	git commit -m "$(m)"
 
 push:
-	git push origin ning
+	git push origin "$(b)"
 
 pull:
 	git pull
