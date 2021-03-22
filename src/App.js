@@ -1,8 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import './locations.js';
-import './timezones.js';
-import './player.js';
+import './base_classes/locations.js';
+import './base_classes/timezones.js';
+import './base_classes/player.js';
 
 function App() {
   return (
