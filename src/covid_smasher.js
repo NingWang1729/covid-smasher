@@ -200,10 +200,15 @@ function COVID_SMASHER() {
                     <p>({player.x_pos},{player.y_pos})</p>
                     {/* This Cynthia is in public */}
                     <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{visibility: 'hidden'}}></img>
+                    {/* Top row buildings */}
                     <img src="/images/homes/Apartment.png" alt="Cynthia not here wtf" id="home" style={{visibility: 'hidden'}}></img>
                     <img src="/images/Neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{visibility: 'hidden'}}></img>
                     <img src="/images/City_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/homes/Apartment.png" alt="Cynthia not here wtf" id="home" style={{visibility: 'hidden'}}></img>
+                    {/* Row two buildings */}
+                    {/* Row Three buildings (Just the library) */}
+                    {/* Row Four buildings (Just the park one) */}
+                    {/* Row Five buildings (NOT COLLEGE) */}
+                    {/* Row Six building (College has different left side than others) */}
                 </td>
                 <td id="center-column">
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas"/>
