@@ -6,9 +6,10 @@ const locations_module = require('./base_classes/locations.js');
 const timezones_module = require('./base_classes/timezones.js');
 const player_module = require('./base_classes/player.js');
 
-
-
 const player = new player_module.player(2, 5);
+var animated = false;
+var animation_stage = 0;
+
 function COVID_SMASHER() {
     // CANVAS WIDTH
     const MAX_WIDTH = 1280;
@@ -33,7 +34,7 @@ function COVID_SMASHER() {
 
     // Game Clock
     useEffect(()=>{
-        setTimeout(counter, 100);
+        setTimeout(counter, 200);
     }, [ticks]);
 
     // Game Clock
@@ -44,41 +45,40 @@ function COVID_SMASHER() {
 
     function update_game () {
         let movequeue = moves;
-        switch (movequeue[0]) {
-            case 0:
-                if (player.direction === locations_module.DIRECTION.LEFT) {
-                    player.move_left();
-                } else {
-                    player.set_direction(locations_module.DIRECTION.LEFT);
-                };
-                break;
-            case 1:
-                if (player.direction === locations_module.DIRECTION.RIGHT) {
-                    player.move_right();
-                } else {
-                    player.set_direction(locations_module.DIRECTION.RIGHT);
-                };
-                break;
-            case 2:
-                if (player.direction === locations_module.DIRECTION.UP) {
-                    player.move_up();
-                } else {
-                    player.set_direction(locations_module.DIRECTION.UP);
-                };
-                break;
-            case 3:
-                if (player.direction === locations_module.DIRECTION.DOWN) {
-                    player.move_down();
-                } else {
-                    player.set_direction(locations_module.DIRECTION.DOWN);
-                };
-                break;
-            default:
-                break;
+        if (moves.length > 0 && ticks % 2 === 0) {
+            switch (movequeue[0]) {
+                case 0:
+                    if (player.direction === locations_module.DIRECTION.LEFT) {
+                        animated = true;
+                    } else {
+                        animated = false;
+                    };
+                    break;
+                case 1:
+                    if (player.direction === locations_module.DIRECTION.RIGHT) {
+                        animated = true;
+                    } else {
+                        animated = false;
+                    };
+                    break;
+                case 2:
+                    if (player.direction === locations_module.DIRECTION.UP) {
+                        animated = true;
+                    } else {
+                        animated = false;
+                    };
+                    break;
+                case 3:
+                    if (player.direction === locations_module.DIRECTION.DOWN) {
+                        animated = true;
+                    } else {
+                        animated = false;
+                    };
+                    break;
+                default:
+                    break;
+            };
         };
-        movequeue.shift();
-        setMoves(movequeue);
-
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears entire canvas
@@ -113,6 +113,42 @@ function COVID_SMASHER() {
         draw_sprite(ctx, player.direction);
         
         
+        if (moves.length > 0 && ticks % 2 === 0) {
+            switch (movequeue[0]) {
+                case 0:
+                    if (player.direction === locations_module.DIRECTION.LEFT) {
+                        player.move_left();
+                    } else {
+                        player.set_direction(locations_module.DIRECTION.LEFT);
+                    };
+                    break;
+                case 1:
+                    if (player.direction === locations_module.DIRECTION.RIGHT) {
+                        player.move_right();
+                    } else {
+                        player.set_direction(locations_module.DIRECTION.RIGHT);
+                    };
+                    break;
+                case 2:
+                    if (player.direction === locations_module.DIRECTION.UP) {
+                        player.move_up();
+                    } else {
+                        player.set_direction(locations_module.DIRECTION.UP);
+                    };
+                    break;
+                case 3:
+                    if (player.direction === locations_module.DIRECTION.DOWN) {
+                        player.move_down();
+                    } else {
+                        player.set_direction(locations_module.DIRECTION.DOWN);
+                    };
+                    break;
+                default:
+                    break;
+            };
+            movequeue.shift();
+            setMoves(movequeue);
+        };
     }
 
     // Sprite drawer
@@ -120,18 +156,75 @@ function COVID_SMASHER() {
         let sprite_sheet = document.getElementById("player-sprite-sheet");
         switch (direction) {
             case locations_module.DIRECTION.UP:
-                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                draw_animation(ctx, 1 + animation_stage);
                 break;
             case locations_module.DIRECTION.DOWN:
-                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                draw_animation(ctx, 4 + animation_stage);
                 break;
             case locations_module.DIRECTION.LEFT:
-                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                draw_animation(ctx, 7 + animation_stage);
                 break;
             case locations_module.DIRECTION.RIGHT:
-                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                draw_animation(ctx, 10 + animation_stage);
                 break;
             default:
+                break;
+        }
+        if (moves.length === 0) {
+            animation_stage = 0
+            animated = false;
+        }
+        if (animated) {
+            if (animation_stage === 1) {
+                animation_stage = 2;
+            } else {
+                animation_stage = 1;
+            }
+        }
+    }
+
+    function draw_animation(ctx, sprite_no) {
+        let sprite_sheet = document.getElementById("player-sprite-sheet");
+        switch(sprite_no) {
+            // Up
+            case 1:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 2:
+                ctx.drawImage(sprite_sheet, 128, 0, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 16, 64, 64);
+                break;
+            case 3:
+                ctx.drawImage(sprite_sheet, 64, 192, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            // Down
+            case 4:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 5:
+                ctx.drawImage(sprite_sheet, 128, 192, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 16, 64, 64);
+                break;
+            case 6:
+                ctx.drawImage(sprite_sheet, 128, 128, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            // Left
+            case 7:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 8:
+                ctx.drawImage(sprite_sheet, 0, 64, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 16, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 9:
+                ctx.drawImage(sprite_sheet, 0, 192, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            // Right
+            case 10:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 11:
+                ctx.drawImage(sprite_sheet, 64, 128, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 16, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 12:
+                ctx.drawImage(sprite_sheet, 64, 64, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
                 break;
         }
     }
@@ -144,6 +237,9 @@ function COVID_SMASHER() {
     // Keyboard inputs
     document.onkeydown = function(e) {
         var movequeue = moves;
+        if (moves.length >= 3) {
+            return;
+        }
         switch(e.which) {
             case 37: // Left
             case 65: // A
