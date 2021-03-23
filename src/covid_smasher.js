@@ -6,6 +6,8 @@ const locations_module = require('./base_classes/locations.js');
 const timezones_module = require('./base_classes/timezones.js');
 const player_module = require('./base_classes/player.js');
 
+
+
 const player = new player_module.player(2, 5);
 function COVID_SMASHER() {
     // CANVAS WIDTH
@@ -97,6 +99,30 @@ function COVID_SMASHER() {
                 ((player.get_y_pos() * locations_module.UNIT_SIZE) + (locations_module.UNIT_SIZE / 2)),
                 (locations_module.UNIT_SIZE / 2), 0, 2 * Math.PI);
         ctx.fill();
+        draw_sprite(ctx, player.direction);
+        
+        
+    }
+
+    // Sprite drawer
+    function draw_sprite(ctx, direction) {
+        let sprite_sheet = document.getElementById("player-sprite-sheet");
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE, 64, 64);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE, 64, 64);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE, 64, 64);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, player.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, player.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE, 64, 64);
+                break;
+            default:
+                break;
+        }
     }
 
     // To increment in-game time
@@ -156,20 +182,22 @@ function COVID_SMASHER() {
 
     return (
         <table id="game-table">
-          <tr>
-            <td id="left-column">
-              <p>Left column</p>
-              <p>{ticks}</p>
-              <p>{player.direction}</p>
-              <p>({player.x_pos},{player.y_pos})</p>
-            </td>
-            <td id="center-column">
-              <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT} id="game-canvas"/>
-            </td>
-            <td id="right-column">
-              <p>Right column</p>
-            </td>
-          </tr>
+            <tr>
+                <td id="left-column">
+                    <p>Left column</p>
+                    <p>{ticks}</p>
+                    <p>{player.direction}</p>
+                    <p>({player.x_pos},{player.y_pos})</p>
+                    {/* This Cynthia is in public */}
+                    <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{visibility: 'hidden'}}></img>
+                </td>
+                <td id="center-column">
+                    <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT} id="game-canvas"/>
+                </td>
+                <td id="right-column">
+                    <p>Right column</p>
+                </td>
+            </tr>
         </table>
     );
 };
