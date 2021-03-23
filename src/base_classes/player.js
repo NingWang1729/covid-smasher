@@ -5,6 +5,7 @@ class player {
     constructor(x_pos, y_pos) {
         this.x_pos = x_pos;
         this.y_pos = y_pos;
+        this.direction = locations_module.DIRECTION.DOWN;
     };
 
     get_x_pos() {
@@ -13,6 +14,14 @@ class player {
 
     get_y_pos() {
         return this.y_pos;
+    };
+
+    get_directon() {
+        return this.direction;
+    };
+
+    set_direction(new_direction) {
+        this.direction = new_direction;
     };
 
     move_right() {
