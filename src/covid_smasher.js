@@ -6,9 +6,11 @@ const locations_module = require('./base_classes/locations.js');
 const timezones_module = require('./base_classes/timezones.js');
 const player_module = require('./base_classes/player.js');
 
-const player = new player_module.player(0, 0);
+const player = new player_module.player(2, 5);
 function COVID_SMASHER() {
+    // CANVAS WIDTH
     const MAX_WIDTH = 1280;
+    // CANVAS HEIGHT
     const MAX_HEIGHT = 768;
     // Canvas for drawing the game
     const canvasRef = useRef(null);
@@ -42,16 +44,32 @@ function COVID_SMASHER() {
         let movequeue = moves;
         switch (movequeue[0]) {
             case 0:
-                player.move_left();
+                if (player.direction === locations_module.DIRECTION.LEFT) {
+                    player.move_left();
+                } else {
+                    player.set_direction(locations_module.DIRECTION.LEFT);
+                };
                 break;
             case 1:
-                player.move_right();
+                if (player.direction === locations_module.DIRECTION.RIGHT) {
+                    player.move_right();
+                } else {
+                    player.set_direction(locations_module.DIRECTION.RIGHT);
+                };
                 break;
             case 2:
-                player.move_up();
+                if (player.direction === locations_module.DIRECTION.UP) {
+                    player.move_up();
+                } else {
+                    player.set_direction(locations_module.DIRECTION.UP);
+                };
                 break;
             case 3:
-                player.move_down();
+                if (player.direction === locations_module.DIRECTION.DOWN) {
+                    player.move_down();
+                } else {
+                    player.set_direction(locations_module.DIRECTION.DOWN);
+                };
                 break;
             default:
                 break;
@@ -131,6 +149,8 @@ function COVID_SMASHER() {
             <td id="left-column">
               <p>Left column</p>
               <p>{ticks}</p>
+              <p>{player.direction}</p>
+              <p>({player.x_pos},{player.y_pos})</p>
             </td>
             <td id="center-column">
               <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT} id="game-canvas"/>
