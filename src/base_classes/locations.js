@@ -1,4 +1,6 @@
 // ALAN: Set up base location class, with different children classes
+import COVID_SMASHER from '../covid_smasher.js'
+console.log(COVID_SMASHER)
 
 // 40x24 units
 const UNIT_SIZE = 32;
@@ -39,4 +41,4 @@ const WORLD_MAP =
     [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
 ]
 
-module.exports = { UNIT_SIZE, WORLD_WIDTH, WORLD_HEIGHT, TOP_BUFFER, DIRECTION, WORLD_MAP };
+export { UNIT_SIZE, WORLD_WIDTH, WORLD_HEIGHT, TOP_BUFFER, DIRECTION, WORLD_MAP };

@@ -50,4 +50,4 @@ class player {
     };
 };
 
-module.exports = {player};
+export { player };
