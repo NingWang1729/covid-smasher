@@ -80,6 +80,17 @@ function COVID_SMASHER() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+
+        // Shadow of the buildings
+        ctx.fillStyle = "blue";
+        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 0 * locations_module.UNIT_SIZE, 40 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 5 * locations_module.UNIT_SIZE, 5 * locations_module.UNIT_SIZE);
+        ctx.fillRect(9 *  locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE, 10 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
+        ctx.fillRect(22 *  locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE, 18 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
+        ctx.fillRect(12 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE, 13 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillRect(25 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE, 15 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
+        
         ctx.fillStyle = "green";
         ctx.beginPath();
         ctx.arc(((player.get_x_pos() * locations_module.UNIT_SIZE) + (locations_module.UNIT_SIZE / 2)),
