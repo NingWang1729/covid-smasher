@@ -34,7 +34,7 @@ function COVID_SMASHER() {
 
     // Game Clock
     useEffect(()=>{
-        setTimeout(counter, 200);
+        setTimeout(counter, 150);
     }, [ticks]);
 
     // Game Clock
@@ -48,30 +48,34 @@ function COVID_SMASHER() {
         if (moves.length > 0 && ticks % 2 === 0) {
             switch (movequeue[0]) {
                 case 0:
-                    if (player.direction === locations_module.DIRECTION.LEFT) {
+                    if (player.direction === locations_module.DIRECTION.LEFT && player.x_pos > 0 && locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 0) {
                         animated = true;
                     } else {
+                        animation_stage = 0;
                         animated = false;
                     };
                     break;
                 case 1:
-                    if (player.direction === locations_module.DIRECTION.RIGHT) {
+                    if (player.direction === locations_module.DIRECTION.RIGHT && player.x_pos < locations_module.WORLD_WIDTH - 1 && locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0) {
                         animated = true;
                     } else {
+                        animation_stage = 0;
                         animated = false;
                     };
                     break;
                 case 2:
-                    if (player.direction === locations_module.DIRECTION.UP) {
+                    if (player.direction === locations_module.DIRECTION.UP && player.y_pos > 0 && locations_module.WORLD_MAP[player.y_pos - 1][player.x_pos] === 0) {
                         animated = true;
                     } else {
+                        animation_stage = 0;
                         animated = false;
                     };
                     break;
                 case 3:
-                    if (player.direction === locations_module.DIRECTION.DOWN) {
+                    if (player.direction === locations_module.DIRECTION.DOWN && player.y_pos < locations_module.WORLD_HEIGHT - 1 && locations_module.WORLD_MAP[player.y_pos + 1][player.x_pos] === 0) {
                         animated = true;
                     } else {
+                        animation_stage = 0;
                         animated = false;
                     };
                     break;
