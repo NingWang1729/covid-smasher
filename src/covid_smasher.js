@@ -93,6 +93,8 @@ function COVID_SMASHER() {
         ctx.fillRect(12 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE, 13 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.fillRect(25 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE, 15 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
         
+        ctx.drawImage()
+
         ctx.fillStyle = "green";
         ctx.beginPath();
         ctx.arc(((player.get_x_pos() * locations_module.UNIT_SIZE) + (locations_module.UNIT_SIZE / 2)),
