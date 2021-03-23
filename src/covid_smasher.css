@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    border: 0;
+  }
+  
+  #game-canvas {
+    width: 200;
+    height: 100;
+  }
+  
+  #game-table {
+    width: 100%;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+  }
+  
+  #left-column {
+    width: 25%;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+  }
+  
+  #center-column {
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    align-items: center;
+    background-color: cyan;
+  }
+  
+  #right-column {
+    width: 25%;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+  }
