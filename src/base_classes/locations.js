@@ -1,7 +1,10 @@
 // ALAN: Set up base location class, with different children classes
 
 // 40x24 units
-const world_map = 
+const UNIT_SIZE = 32;
+const WORLD_WIDTH = 40;
+const WORLD_HEIGHT = 24;
+const WORLD_MAP = 
 [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
@@ -28,3 +31,5 @@ const world_map =
     [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
     [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
 ]
+
+module.exports = { UNIT_SIZE, WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP };
