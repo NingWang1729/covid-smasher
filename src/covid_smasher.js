@@ -81,6 +81,7 @@ function COVID_SMASHER() {
 
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
+        // Clears entire canvas
         ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
 
         // Shadow of the buildings
