@@ -4,6 +4,7 @@
 const UNIT_SIZE = 32;
 const WORLD_WIDTH = 40;
 const WORLD_HEIGHT = 24;
+const TOP_BUFFER = 48;
 const DIRECTION = {
     UP: 'Up',
     DOWN: 'Down',
@@ -38,4 +39,4 @@ const WORLD_MAP =
     [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
 ]
 
-module.exports = { UNIT_SIZE, WORLD_WIDTH, WORLD_HEIGHT, DIRECTION, WORLD_MAP };
+module.exports = { UNIT_SIZE, WORLD_WIDTH, WORLD_HEIGHT, TOP_BUFFER, DIRECTION, WORLD_MAP };
