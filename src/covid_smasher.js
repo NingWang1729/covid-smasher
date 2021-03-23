@@ -6,9 +6,11 @@ const locations_module = require('./base_classes/locations.js');
 const timezones_module = require('./base_classes/timezones.js');
 const player_module = require('./base_classes/player.js');
 
-const player = new player_module.player(0, 0);
+const player = new player_module.player(2, 5);
 function COVID_SMASHER() {
+    // CANVAS WIDTH
     const MAX_WIDTH = 1280;
+    // CANVAS HEIGHT
     const MAX_HEIGHT = 768;
     // Canvas for drawing the game
     const canvasRef = useRef(null);
@@ -148,6 +150,7 @@ function COVID_SMASHER() {
               <p>Left column</p>
               <p>{ticks}</p>
               <p>{player.direction}</p>
+              <p>({player.x_pos},{player.y_pos})</p>
             </td>
             <td id="center-column">
               <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT} id="game-canvas"/>
