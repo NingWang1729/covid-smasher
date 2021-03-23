@@ -1,1 +1,42 @@
+const locations_module = require('./locations.js');
+
 // Player character
+class player {
+    constructor(x_pos, y_pos) {
+        this.x_pos = x_pos;
+        this.y_pos = y_pos;
+    };
+
+    get_x_pos() {
+        return this.x_pos;
+    };
+
+    get_y_pos() {
+        return this.y_pos;
+    };
+
+    move_right() {
+        if (this.x_pos < locations_module.WORLD_WIDTH - 1) {
+            this.x_pos += 1;
+        };
+    };
+    move_left() {
+        if (this.x_pos > 0) {
+            this.x_pos -= 1;
+        };
+    };
+
+    move_up() {
+        if (this.y_pos > 0) {
+            this.y_pos -= 1;
+        };
+    };
+
+    move_down() {
+        if (this.y_pos < locations_module.WORLD_HEIGHT - 1) {
+            this.y_pos += 1;
+        }
+    };
+};
+
+module.exports = {player};
