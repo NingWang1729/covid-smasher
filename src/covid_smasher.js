@@ -241,7 +241,7 @@ function COVID_SMASHER() {
     // Keyboard inputs
     document.onkeydown = function(e) {
         var movequeue = moves;
-        if (moves.length >= 3) {
+        if (moves.length >= 1) {
             return;
         }
         switch(e.which) {
