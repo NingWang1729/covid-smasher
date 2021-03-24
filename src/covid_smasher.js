@@ -10,6 +10,10 @@ const player = new player_module.player(2, 5);
 var animated = false;
 var animation_stage = 0;
 
+function character_selection() {
+    return 0;
+}
+
 function COVID_SMASHER() {
     // CANVAS WIDTH
     const MAX_WIDTH = 1280;
@@ -117,44 +121,44 @@ function COVID_SMASHER() {
         ctx.drawImage(home, 0, -48 + locations_module.TOP_BUFFER);
 
         let neighbor = document.getElementById("neighbor");
-        ctx.drawImage(neighbor, 128, -16 + locations_module.TOP_BUFFER);
+        ctx.drawImage(neighbor, 128, -24 + locations_module.TOP_BUFFER);
 
         let city_hall = document.getElementById("city-hall");
         ctx.drawImage(city_hall, 256, -56 + locations_module.TOP_BUFFER);
 
         let store_1 = document.getElementById("store-1");
-        ctx.drawImage(store_1, 512, 16 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_1, 496, -12 + locations_module.TOP_BUFFER);
 
         let store_2 = document.getElementById("store-2");
-        ctx.drawImage(store_2, 672, -8 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_2, 666, -8 + locations_module.TOP_BUFFER);
 
         let store_3 = document.getElementById("store-3");
-        ctx.drawImage(store_3, 832, 8 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_3, 832, -4 + locations_module.TOP_BUFFER);
 
         let store_4 = document.getElementById("store-4");
-        ctx.drawImage(store_4, 992, 32 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_4, 983, 8 + locations_module.TOP_BUFFER);
 
         let tree_1 = document.getElementById("tree-1");
         ctx.drawImage(tree_1, 1152, 32 + locations_module.TOP_BUFFER);
 
         // // Row 2
         let library = document.getElementById("library");
-        ctx.drawImage(library, 0, 256 + locations_module.TOP_BUFFER);
+        ctx.drawImage(library, -4, 256 + locations_module.TOP_BUFFER);
 
         let park = document.getElementById("park");
         ctx.drawImage(park, 288, 224 + locations_module.TOP_BUFFER);
 
         let object_garden = document.getElementById("object-garden");
-        ctx.drawImage(object_garden, 704, 248 + locations_module.TOP_BUFFER);
+        ctx.drawImage(object_garden, 708, 232 + locations_module.TOP_BUFFER);
 
         let cin_n_cout = document.getElementById("cin-n-cout");
-        ctx.drawImage(cin_n_cout, 864, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(cin_n_cout, 840, 224 + locations_module.TOP_BUFFER);
 
         let foobar = document.getElementById("foobar");
-        ctx.drawImage(foobar, 976, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(foobar, 984, 225 + locations_module.TOP_BUFFER);
 
         let casino = document.getElementById("casino");
-        ctx.drawImage(casino, 1120, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(casino, 1128, 220 + locations_module.TOP_BUFFER);
 
         // Row 3
         let highschool = document.getElementById("highschool");
@@ -210,11 +214,47 @@ function COVID_SMASHER() {
                     if (locations_module.WORLD_MAP[player.y_pos][player.x_pos] === 2) {
                         if (player.x_pos === 1 && player.y_pos === 4) {
                             alert("Arrived home!");
+                        } else if (player.x_pos === 2 && player.y_pos === 4) {
+                            alert("Arrived home!");
                         } else if (player.x_pos === 5 && player.y_pos === 4) {
                             alert("Arrived at Neighbor's house!");
                         } else if (player.x_pos === 12 && player.y_pos === 4) {
                             alert("Arrived at City Hall!");
-                        }
+                        } else if (player.x_pos === 17 && player.y_pos === 4) {
+                            alert("Arrived at Store 1!");
+                        } else if (player.x_pos === 23 && player.y_pos === 4) {
+                            alert("Arrived at Store 2!");
+                        } else if (player.x_pos === 28 && player.y_pos === 4) {
+                            alert("Arrived at Store 3!");
+                        } else if (player.x_pos === 33 && player.y_pos === 4) {
+                            alert("Arrived at Store 4!");
+                        } else if (player.x_pos === 2 && player.y_pos === 13) {
+                            alert("Arrived at Library!");
+                        } else if (player.x_pos === 23 && player.y_pos === 11) {
+                            alert("Arrived at Object Garden!");
+                        } else if (player.x_pos === 27 && player.y_pos === 11) {
+                            alert("Arrived at Cin-n-cout!");
+                        } else if (player.x_pos === 28 && player.y_pos === 11) {
+                            alert("Arrived at Cin-n-cout!");
+                        } else if (player.x_pos === 29 && player.y_pos === 11) {
+                            alert("Arrived at Cin-n-cout!");
+                        } else if (player.x_pos === 32 && player.y_pos === 11) {
+                            alert("Arrived at Foobar!");
+                        } else if (player.x_pos === 37 && player.y_pos === 11) {
+                            alert("Arrived at Game Corner!");
+                        } else if (player.x_pos === 7 && player.y_pos === 22) {
+                            alert("Arrived at High School!");
+                        } else if (player.x_pos === 14 && player.y_pos === 21) {
+                            alert("Arrived at DayJob!");
+                        } else if (player.x_pos === 18 && player.y_pos === 21) {
+                            alert("Arrived at Gymnasium!");
+                        } else if (player.x_pos === 22 && player.y_pos === 21) {
+                            alert("Arrived at Hospital!");
+                        } else if (player.x_pos === 24 && player.y_pos === 21) {
+                            alert("Arrived at College!");
+                        } else if (player.x_pos === 24 && player.y_pos === 22) {
+                            alert("Arrived at College!");
+                        } 
                     }
                     break;
                 default:
@@ -493,4 +533,5 @@ function COVID_SMASHER() {
         </table>
     );
 };
+
 export default COVID_SMASHER;
