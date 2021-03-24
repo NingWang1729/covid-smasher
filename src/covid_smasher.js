@@ -112,6 +112,7 @@ function COVID_SMASHER() {
         ctx.fillRect(25 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 15 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
         
 
+        // Buildings
         let home = document.getElementById("home");
         ctx.drawImage(home, -0, -48 + locations_module.TOP_BUFFER);
 
@@ -178,7 +179,7 @@ function COVID_SMASHER() {
         ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
         ctx.font = '48px serif';
         ctx.fillStyle = "black";
-        ctx.fillText("PAUSED", MAX_WIDTH / 2 - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.fillText("PAUSED", MAX_WIDTH / 2 - 3 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 6 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
     };
 
     // Sprite drawer
