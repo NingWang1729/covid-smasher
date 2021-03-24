@@ -133,10 +133,7 @@ function COVID_SMASHER() {
         // let store_4 = document.getElementById("store-4");
         // ctx.drawImage(store_4, 384, -56 + locations_module.TOP_BUFFER);
 
-        // let store_4 = document.getElementById("store-4");
-        // ctx.drawImage(store_4, 384, -56 + locations_module.TOP_BUFFER);
-
-        // Row 2
+        // // Row 2
         // let library = document.getElementById("library");
         // ctx.drawImage(library, 384, -56 + locations_module.TOP_BUFFER);
 
@@ -155,7 +152,7 @@ function COVID_SMASHER() {
         // let casino = document.getElementById("casino");
         // ctx.drawImage(casino, 384, -56 + locations_module.TOP_BUFFER);
 
-        // Row 3
+        // // Row 3
         // let highschool = document.getElementById("highschool");
         // ctx.drawImage(highschool, 384, -56 + locations_module.TOP_BUFFER);
 
