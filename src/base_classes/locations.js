@@ -1,6 +1,5 @@
 // ALAN: Set up base location class, with different children classes
 import COVID_SMASHER from '../covid_smasher.js'
-console.log(COVID_SMASHER)
 
 class Location {
     constructor(x_pos, y_pos, player) {
