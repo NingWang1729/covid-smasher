@@ -409,4 +409,5 @@ function COVID_SMASHER() {
         </table>
     );
 };
+
 export default COVID_SMASHER;
