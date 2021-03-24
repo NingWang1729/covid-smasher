@@ -25,6 +25,8 @@ function COVID_SMASHER() {
     const [time, setTime] = useState(0);
     // Movequeue for storing keyboard inputs
     const [moves, setMoves] = useState([]);
+    // Game state
+    const [game_state, setGameState] = useState(0);
     
     // Initializes display screen
     useEffect(()=>{
@@ -39,11 +41,22 @@ function COVID_SMASHER() {
 
     // Game Clock
     function counter () {
-        update_game();
+        switch (game_state) {
+            case 0:
+                update_game_0();
+                break;
+            case 1:
+                update_game_1();
+                break;
+            default:
+                update_game_0();
+                break;
+        }
         setTicks(ticks + 1)
     }
 
-    function update_game () {
+    // WORLD MAP
+    function update_game_0 () {
         let movequeue = moves;
         if (moves.length > 0 && ticks % 2 === 0) {
             switch (movequeue[0]) {
@@ -155,6 +168,19 @@ function COVID_SMASHER() {
         };
     }
 
+    // PAUSE MENU
+    function update_game_1() {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        // Clears most of the canvas
+        ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.fillStyle = "beige";
+        ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.font = '48px serif';
+        ctx.fillStyle = "black";
+        ctx.fillText("PAUSED", MAX_WIDTH / 2 - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+    };
+
     // Sprite drawer
     function draw_sprite(ctx, direction) {
         let sprite_sheet = document.getElementById("player-sprite-sheet");
@@ -187,6 +213,7 @@ function COVID_SMASHER() {
         }
     }
 
+    // For draw_sprite()
     function draw_animation(ctx, sprite_no) {
         let sprite_sheet = document.getElementById("player-sprite-sheet");
         switch(sprite_no) {
@@ -280,8 +307,10 @@ function COVID_SMASHER() {
                 break;
             case 80: // P
                 e.preventDefault();
-                if (play) {
+                if (game_state === 0) {
+                    setGameState(1);
                 } else {
+                    setGameState(0);
                 }
                 setPlay(!play);
                 break;
