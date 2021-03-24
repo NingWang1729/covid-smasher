@@ -114,7 +114,7 @@ function COVID_SMASHER() {
 
         // Buildings
         let home = document.getElementById("home");
-        ctx.drawImage(home, -0, -48 + locations_module.TOP_BUFFER);
+        ctx.drawImage(home, 0, -48 + locations_module.TOP_BUFFER);
 
         let neighbor = document.getElementById("neighbor");
         ctx.drawImage(neighbor, 128, -16 + locations_module.TOP_BUFFER);
@@ -122,36 +122,39 @@ function COVID_SMASHER() {
         let city_hall = document.getElementById("city-hall");
         ctx.drawImage(city_hall, 256, -56 + locations_module.TOP_BUFFER);
 
-        // let store_1 = document.getElementById("store-1");
-        // ctx.drawImage(store_1, 384, -56 + locations_module.TOP_BUFFER);
+        let store_1 = document.getElementById("store-1");
+        ctx.drawImage(store_1, 512, 16 + locations_module.TOP_BUFFER);
 
-        // let store_2 = document.getElementById("store-2");
-        // ctx.drawImage(store_2, 384, -56 + locations_module.TOP_BUFFER);
+        let store_2 = document.getElementById("store-2");
+        ctx.drawImage(store_2, 672, -8 + locations_module.TOP_BUFFER);
 
-        // let store_3 = document.getElementById("store-3");
-        // ctx.drawImage(store_3, 384, -56 + locations_module.TOP_BUFFER);
+        let store_3 = document.getElementById("store-3");
+        ctx.drawImage(store_3, 832, 8 + locations_module.TOP_BUFFER);
 
-        // let store_4 = document.getElementById("store-4");
-        // ctx.drawImage(store_4, 384, -56 + locations_module.TOP_BUFFER);
+        let store_4 = document.getElementById("store-4");
+        ctx.drawImage(store_4, 992, 32 + locations_module.TOP_BUFFER);
+
+        let tree_1 = document.getElementById("tree-1");
+        ctx.drawImage(tree_1, 1152, 32 + locations_module.TOP_BUFFER);
 
         // // Row 2
-        // let library = document.getElementById("library");
-        // ctx.drawImage(library, 384, -56 + locations_module.TOP_BUFFER);
+        let library = document.getElementById("library");
+        ctx.drawImage(library, 0, 256 + locations_module.TOP_BUFFER);
 
-        // let park = document.getElementById("park");
-        // ctx.drawImage(park, 384, -56 + locations_module.TOP_BUFFER);
+        let park = document.getElementById("park");
+        ctx.drawImage(park, 288, 224 + locations_module.TOP_BUFFER);
 
-        // let object_garden = document.getElementById("object-garden");
-        // ctx.drawImage(object_garden, 384, -56 + locations_module.TOP_BUFFER);
+        let object_garden = document.getElementById("object-garden");
+        ctx.drawImage(object_garden, 704, 248 + locations_module.TOP_BUFFER);
 
-        // let cin_n_cout = document.getElementById("cin-n-cout");
-        // ctx.drawImage(cin_n_cout, 384, -56 + locations_module.TOP_BUFFER);
+        let cin_n_cout = document.getElementById("cin-n-cout");
+        ctx.drawImage(cin_n_cout, 864, 224 + locations_module.TOP_BUFFER);
 
-        // let foobar = document.getElementById("foobar");
-        // ctx.drawImage(foobar, 384, -56 + locations_module.TOP_BUFFER);
+        let foobar = document.getElementById("foobar");
+        ctx.drawImage(foobar, 976, 224 + locations_module.TOP_BUFFER);
 
-        // let casino = document.getElementById("casino");
-        // ctx.drawImage(casino, 384, -56 + locations_module.TOP_BUFFER);
+        let casino = document.getElementById("casino");
+        ctx.drawImage(casino, 1120, 224 + locations_module.TOP_BUFFER);
 
         // Row 3
         let highschool = document.getElementById("highschool");
@@ -462,6 +465,7 @@ function COVID_SMASHER() {
                     <img src="/images/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
                     <img src="/images/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
                     <img src="/images/store4.png" alt="Cynthia not here wtf" id="store-4" style={{display: 'none'}}></img>
+                    <img src="/images/tree.png" alt="Cynthia not here wtf" id="tree-1" style={{display: 'none'}}></img>
                     {/* Row two buildings */}
                     <img src="/images/park.png" alt="Cynthia not here wtf" id="park" style={{display: 'none'}}></img>
                     <img src="/images/object_garden.png" alt="Cynthia not here wtf" id="object-garden" style={{display: 'none'}}></img>
