@@ -122,12 +122,7 @@ function COVID_SMASHER() {
         let city_hall = document.getElementById("city-hall");
         ctx.drawImage(city_hall, 256, -56 + locations_module.TOP_BUFFER);
 
-        ctx.fillStyle = "green";
-        ctx.beginPath();
-        ctx.arc(((player.get_x_pos() * locations_module.UNIT_SIZE) + (locations_module.UNIT_SIZE / 2)),
-                ((player.get_y_pos() * locations_module.UNIT_SIZE) + (locations_module.UNIT_SIZE / 2) + locations_module.TOP_BUFFER),
-                (locations_module.UNIT_SIZE / 2), 0, 2 * Math.PI);
-        ctx.fill();
+        // Draw player
         draw_sprite(ctx, player.direction);
         
         
@@ -316,6 +311,7 @@ function COVID_SMASHER() {
         if (moves.length >= 1) {
             return;
         }
+        e.preventDefault();
         switch(e.which) {
             case 37: // Left
             case 65: // A
@@ -332,26 +328,22 @@ function COVID_SMASHER() {
             case 38: // up
             case 87: // W
                 if(play) {
-                    e.preventDefault();
                     movequeue.push(2); // move_up();
                 }
                 break;
             case 40: // Down
             case 83: // S
                 if(play) {
-                    e.preventDefault();
                     movequeue.push(3); // move_down();
                 }
                 break;
             case 32: // Space
             case 70: // F
                 if(play) {
-                    e.preventDefault();
                     movequeue.push(4); // interact();
                 }
                 break;
             case 80: // P
-                e.preventDefault();
                 if (game_state === 0) {
                     setGameState(1);
                 } else {
