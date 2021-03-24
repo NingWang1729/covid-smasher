@@ -3,7 +3,6 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import COVID_SMASHER from './covid_smasher.js';
 
 function App() {
-
   return (
     <div className="App">
       <header className="App-header">
