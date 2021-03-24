@@ -31,6 +31,8 @@ function COVID_SMASHER() {
     const [moves, setMoves] = useState([]);
     // Game state
     const [game_state, setGameState] = useState(0);
+    // Setup
+    const [setup, setSetup] = useState(true);
     
     // Initializes display screen
     useEffect(()=>{
@@ -51,6 +53,9 @@ function COVID_SMASHER() {
                 break;
             case 1:
                 update_game_1();
+                break;
+            case 2:
+                update_game_2();
                 break;
             default:
                 update_game_0();
@@ -322,6 +327,24 @@ function COVID_SMASHER() {
         ctx.stroke();
     };
 
+    // Character Selection Screen
+    function update_game_2() {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        // Clears most of the canvas
+        ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        
+        // Pause menu background color
+        ctx.fillStyle = "beige";
+        ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        
+        // Pause menu border
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        
+    }
+
     // Sprite drawer
     function draw_sprite(ctx, direction) {
         let sprite_sheet = document.getElementById("player-sprite-sheet");
@@ -452,6 +475,14 @@ function COVID_SMASHER() {
                 }
                 setPlay(!play);
                 break;
+            case 67: // C
+                if (setup) {
+                    if (game_state === 2) {
+                        setGameState(0);
+                    } else {
+                        setGameState(2);
+                    }
+                }
             default: 
                 return; // exit this handler for other keys
         }
