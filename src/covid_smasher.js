@@ -10,6 +10,10 @@ const player = new player_module.player(2, 5);
 var animated = false;
 var animation_stage = 0;
 
+function character_selection() {
+    return 0;
+}
+
 function COVID_SMASHER() {
     // CANVAS WIDTH
     const MAX_WIDTH = 1280;
@@ -139,22 +143,22 @@ function COVID_SMASHER() {
 
         // // Row 2
         let library = document.getElementById("library");
-        ctx.drawImage(library, 0, 256 + locations_module.TOP_BUFFER);
+        ctx.drawImage(library, -4, 256 + locations_module.TOP_BUFFER);
 
         let park = document.getElementById("park");
         ctx.drawImage(park, 288, 224 + locations_module.TOP_BUFFER);
 
         let object_garden = document.getElementById("object-garden");
-        ctx.drawImage(object_garden, 704, 248 + locations_module.TOP_BUFFER);
+        ctx.drawImage(object_garden, 708, 232 + locations_module.TOP_BUFFER);
 
         let cin_n_cout = document.getElementById("cin-n-cout");
-        ctx.drawImage(cin_n_cout, 864, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(cin_n_cout, 840, 224 + locations_module.TOP_BUFFER);
 
         let foobar = document.getElementById("foobar");
-        ctx.drawImage(foobar, 976, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(foobar, 984, 225 + locations_module.TOP_BUFFER);
 
         let casino = document.getElementById("casino");
-        ctx.drawImage(casino, 1120, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(casino, 1128, 220 + locations_module.TOP_BUFFER);
 
         // Row 3
         let highschool = document.getElementById("highschool");
@@ -493,4 +497,5 @@ function COVID_SMASHER() {
         </table>
     );
 };
+
 export default COVID_SMASHER;
