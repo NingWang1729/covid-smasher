@@ -61,7 +61,7 @@ function COVID_SMASHER() {
         if (moves.length > 0 && ticks % 2 === 0) {
             switch (movequeue[0]) {
                 case 0:
-                    if (player.direction === locations_module.DIRECTION.LEFT && player.x_pos > 0 && locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 0) {
+                    if (player.direction === locations_module.DIRECTION.LEFT && player.x_pos > 0 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 0 || locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -69,7 +69,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (player.direction === locations_module.DIRECTION.RIGHT && player.x_pos < locations_module.WORLD_WIDTH - 1 && locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0) {
+                    if (player.direction === locations_module.DIRECTION.RIGHT && player.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -77,7 +77,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (player.direction === locations_module.DIRECTION.UP && player.y_pos > 0 && locations_module.WORLD_MAP[player.y_pos - 1][player.x_pos] === 0) {
+                    if (player.direction === locations_module.DIRECTION.UP && player.y_pos > 0 && (locations_module.WORLD_MAP[player.y_pos - 1][player.x_pos] === 0 || locations_module.WORLD_MAP[player.y_pos - 1][player.x_pos] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -85,7 +85,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (player.direction === locations_module.DIRECTION.DOWN && player.y_pos < locations_module.WORLD_HEIGHT - 1 && locations_module.WORLD_MAP[player.y_pos + 1][player.x_pos] === 0) {
+                    if (player.direction === locations_module.DIRECTION.DOWN && player.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[player.y_pos + 1][player.x_pos] === 0 || locations_module.WORLD_MAP[player.y_pos + 1][player.x_pos] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -155,6 +155,17 @@ function COVID_SMASHER() {
                     } else {
                         player.set_direction(locations_module.DIRECTION.DOWN);
                     };
+                    break;
+                case 4:
+                    if (locations_module.WORLD_MAP[player.y_pos][player.x_pos] === 2) {
+                        if (player.x_pos === 1 && player.y_pos === 4) {
+                            alert("Arrived home!");
+                        } else if (player.x_pos === 5 && player.y_pos === 4) {
+                            alert("Arrived at Neighbor's house!");
+                        } else if (player.x_pos === 12 && player.y_pos === 4) {
+                            alert("Arrived at City Hall!");
+                        }
+                    }
                     break;
                 default:
                     break;
