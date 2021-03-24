@@ -27,24 +27,24 @@ class player {
     };
 
     move_right() {
-        if (this.x_pos < locations_module.WORLD_WIDTH - 1 && locations_module.WORLD_MAP[this.y_pos][this.x_pos + 1] === 0) {
+        if (this.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[this.y_pos][this.x_pos + 1] === 0 || locations_module.WORLD_MAP[this.y_pos][this.x_pos + 1] === 2)) {
             this.x_pos += 1;
         };
     };
     move_left() {
-        if (this.x_pos > 0 && locations_module.WORLD_MAP[this.y_pos][this.x_pos - 1] === 0) {
+        if (this.x_pos > 0 && (locations_module.WORLD_MAP[this.y_pos][this.x_pos - 1] === 0 || locations_module.WORLD_MAP[this.y_pos][this.x_pos - 1] === 2)) {
             this.x_pos -= 1;
         };
     };
 
     move_up() {
-        if (this.y_pos > 0 && locations_module.WORLD_MAP[this.y_pos - 1][this.x_pos] === 0) {
+        if (this.y_pos > 0 && (locations_module.WORLD_MAP[this.y_pos - 1][this.x_pos] === 0 || locations_module.WORLD_MAP[this.y_pos - 1][this.x_pos] === 2)) {
             this.y_pos -= 1;
         };
     };
 
     move_down() {
-        if (this.y_pos < locations_module.WORLD_HEIGHT - 1 && locations_module.WORLD_MAP[this.y_pos + 1][this.x_pos] === 0) {
+        if (this.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[this.y_pos + 1][this.x_pos] === 0 || locations_module.WORLD_MAP[this.y_pos + 1][this.x_pos] === 2)) {
             this.y_pos += 1;
         }
     };
