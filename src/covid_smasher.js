@@ -373,28 +373,28 @@ function COVID_SMASHER() {
                     <p>{player.direction}</p>
                     <p>({player.x_pos},{player.y_pos})</p>
                     {/* This Cynthia is in public */}
-                    <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{visibility: 'hidden'}}></img>
+                    <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
-                    <img src="/images/homes/Apartment.png" alt="Cynthia not here wtf" id="home" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/Neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/City_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/store1.png" alt="Cynthia not here wtf" id="store-1" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/store2.png" alt="Cynthia not here wtf" id="store-2" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/store3.png" alt="Cynthia not here wtf" id="store-3" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/store4.png" alt="Cynthia not here wtf" id="store-4" style={{visibility: 'hidden'}}></img>
+                    <img src="/images/homes/Apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
+                    <img src="/images/Neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
+                    <img src="/images/City_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
+                    <img src="/images/store1.png" alt="Cynthia not here wtf" id="store-1" style={{display: 'none'}}></img>
+                    <img src="/images/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
+                    <img src="/images/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
+                    <img src="/images/store4.png" alt="Cynthia not here wtf" id="store-4" style={{display: 'none'}}></img>
                     {/* Row two buildings */}
-                    <img src="/images/library.png" alt="Cynthia not here wtf" id="library" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/park.png" alt="Cynthia not here wtf" id="park" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/object_garden.png" alt="Cynthia not here wtf" id="object-garden" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/cin_n_cout.png" alt="Cynthia not here wtf" id="cin-n-cout" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/foobar.png" alt="Cynthia not here wtf" id="foobar" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/casino.png" alt="Cynthia not here wtf" id="casino" style={{visibility: 'hidden'}}></img>
+                    <img src="/images/library.png" alt="Cynthia not here wtf" id="library" style={{display: 'none'}}></img>
+                    <img src="/images/park.png" alt="Cynthia not here wtf" id="park" style={{display: 'none'}}></img>
+                    <img src="/images/object_garden.png" alt="Cynthia not here wtf" id="object-garden" style={{display: 'none'}}></img>
+                    <img src="/images/cin_n_cout.png" alt="Cynthia not here wtf" id="cin-n-cout" style={{display: 'none'}}></img>
+                    <img src="/images/foobar.png" alt="Cynthia not here wtf" id="foobar" style={{display: 'none'}}></img>
+                    <img src="/images/casino.png" alt="Cynthia not here wtf" id="casino" style={{display: 'none'}}></img>
                     {/* Row Three buildings (Just the library) */}
-                    <img src="/images/highschool.png" alt="Cynthia not here wtf" id="highschool" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/work.png" alt="Cynthia not here wtf" id="work" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/gym.png" alt="Cynthia not here wtf" id="gym" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/college.png" alt="Cynthia not here wtf" id="college" style={{visibility: 'hidden'}}></img>
+                    <img src="/images/highschool.png" alt="Cynthia not here wtf" id="highschool" style={{display: 'none'}}></img>
+                    <img src="/images/work.png" alt="Cynthia not here wtf" id="work" style={{display: 'none'}}></img>
+                    <img src="/images/gym.png" alt="Cynthia not here wtf" id="gym" style={{display: 'none'}}></img>
+                    <img src="/images/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{display: 'none'}}></img>
+                    <img src="/images/college.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
                     {/* Row Four buildings (Just the park one) */}
                     {/* Row Five buildings (NOT COLLEGE) */}
                     {/* Row Six building (College has different left side than others) */}
