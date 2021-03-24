@@ -155,13 +155,16 @@ function COVID_SMASHER() {
 
         // Row 3
         let highschool = document.getElementById("highschool");
-        ctx.drawImage(highschool, -3, 504 + locations_module.TOP_BUFFER);
+        ctx.drawImage(highschool, -3, 500 + locations_module.TOP_BUFFER);
 
         let work = document.getElementById("work");
         ctx.drawImage(work, 384, 550 + locations_module.TOP_BUFFER);
 
         let gym = document.getElementById("gym");
         ctx.drawImage(gym, 524, 524 + locations_module.TOP_BUFFER);
+
+        let hospital = document.getElementById("hospital");
+        ctx.drawImage(hospital, 666, 543 + locations_module.TOP_BUFFER, 128, 128);
 
         let college = document.getElementById("college");
         ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
