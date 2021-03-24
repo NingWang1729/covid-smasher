@@ -107,7 +107,7 @@ function COVID_SMASHER() {
         ctx.fillRect(0 *  locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 5 * locations_module.UNIT_SIZE, 5 * locations_module.UNIT_SIZE);
         ctx.fillRect(9 *  locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 10 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
         ctx.fillRect(22 *  locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 18 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 7 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
+        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 16 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 7 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE);
         ctx.fillRect(12 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 13 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.fillRect(25 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 15 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
         
@@ -155,7 +155,7 @@ function COVID_SMASHER() {
 
         // Row 3
         let highschool = document.getElementById("highschool");
-        ctx.drawImage(highschool, 0, 500 + locations_module.TOP_BUFFER);
+        ctx.drawImage(highschool, -3, 504 + locations_module.TOP_BUFFER);
 
         let work = document.getElementById("work");
         ctx.drawImage(work, 384, 550 + locations_module.TOP_BUFFER);
