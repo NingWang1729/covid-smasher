@@ -153,18 +153,18 @@ function COVID_SMASHER() {
         // let casino = document.getElementById("casino");
         // ctx.drawImage(casino, 384, -56 + locations_module.TOP_BUFFER);
 
-        // // Row 3
-        // let highschool = document.getElementById("highschool");
-        // ctx.drawImage(highschool, 384, -56 + locations_module.TOP_BUFFER);
+        // Row 3
+        let highschool = document.getElementById("highschool");
+        ctx.drawImage(highschool, 0, 500 + locations_module.TOP_BUFFER);
 
-        // let work = document.getElementById("work");
-        // ctx.drawImage(work, 384, -56 + locations_module.TOP_BUFFER);
+        let work = document.getElementById("work");
+        ctx.drawImage(work, 384, 550 + locations_module.TOP_BUFFER);
 
-        // let gym = document.getElementById("gym");
-        // ctx.drawImage(gym, 384, -56 + locations_module.TOP_BUFFER);
+        let gym = document.getElementById("gym");
+        ctx.drawImage(gym, 524, 524 + locations_module.TOP_BUFFER);
 
-        // let college = document.getElementById("college");
-        // ctx.drawImage(college, 384, -56 + locations_module.TOP_BUFFER);
+        let college = document.getElementById("college");
+        ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
 
         // Draw player
         draw_sprite(ctx, player.direction);
@@ -450,11 +450,11 @@ function COVID_SMASHER() {
                     <p>{player.direction}</p>
                     <p>({player.x_pos},{player.y_pos})</p>
                     {/* This Cynthia is in public */}
-                    <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{visibility: 'hidden'}}></img>
+                    <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
-                    <img src="/images/homes/Apartment.png" alt="Cynthia not here wtf" id="home" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/Neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{visibility: 'hidden'}}></img>
-                    <img src="/images/City_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{visibility: 'hidden'}}></img>
+                    <img src="/images/homes/Apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
+                    <img src="/images/Neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
+                    <img src="/images/City_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
                     <img src="/images/store1.png" alt="Cynthia not here wtf" id="store-1" style={{display: 'none'}}></img>
                     <img src="/images/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
                     <img src="/images/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
