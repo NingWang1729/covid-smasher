@@ -600,9 +600,9 @@ function COVID_SMASHER() {
                     {/* This Cynthia is in public */}
                     <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
-                    <img src="/images/homes/Apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
-                    <img src="/images/Neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
-                    <img src="/images/City_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
+                    <img src="/images/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
+                    <img src="/images/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
+                    <img src="/images/city_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
                     <img src="/images/store1.png" alt="Cynthia not here wtf" id="store-1" style={{display: 'none'}}></img>
                     <img src="/images/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
                     <img src="/images/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
@@ -623,7 +623,7 @@ function COVID_SMASHER() {
                     <img src="/images/gym.png" alt="Cynthia not here wtf" id="gym" style={{display: 'none'}}></img>
                     <img src="/images/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{display: 'none'}}></img>
                     {/* Row Six building (College has different left side than others) */}
-                    <img src="/images/College.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
+                    <img src="/images/college.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
                 </td>
                 <td id="center-column">
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
