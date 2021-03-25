@@ -155,6 +155,20 @@ function COVID_SMASHER() {
         ctx.fillRect(12 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 13 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.fillRect(25 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 15 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
         
+        // Environmental Assets
+        let dirt_path = document.getElementById("dirt-path");
+        ctx.drawImage(dirt_path, 0, 0 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, locations_module.WORLD_HEIGHT * locations_module.UNIT_SIZE);
+
+        let tree_2 = document.getElementById("tree-2");
+        let total_pixel_width = locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE
+        for (let i = -locations_module.UNIT_SIZE; i < total_pixel_width; i+=32) {
+            ctx.drawImage(tree_2, i, -70 + locations_module.TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -60 + locations_module.TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -50 + locations_module.TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -40 + locations_module.TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -30 + locations_module.TOP_BUFFER);
+        }
+
 
         // Buildings
         let home = document.getElementById("home");
@@ -181,7 +195,7 @@ function COVID_SMASHER() {
         let tree_1 = document.getElementById("tree-1");
         ctx.drawImage(tree_1, 1152, 32 + locations_module.TOP_BUFFER);
 
-        // // Row 2
+        // Row 2
         let library = document.getElementById("library");
         ctx.drawImage(library, -4, 256 + locations_module.TOP_BUFFER);
 
@@ -634,6 +648,8 @@ function COVID_SMASHER() {
                     {/* This Cynthia is in public */}
                     <img src={player.img.src} alt="Cynthia not here wtf" id="FemaleCollegeStudent" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
+                    <img src="/images/dirt_path.png" alt="Cynthia not here wtf" id="dirt-path" style={{display: 'none'}}></img>
+                    <img src="/images/tree_2.png" alt="Cynthia not here wtf" id="tree-2" style={{display: 'none'}}></img>
                     <img src="/images/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
                     <img src="/images/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
                     <img src="/images/city_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
