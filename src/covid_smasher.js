@@ -6,6 +6,7 @@ import * as locations_module from './base_classes/locations.js'
 import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
 
+// test
 const player_selection = [
     new player_module.Role(2, 5, 100, 100, 40, 45, 50, 'Male Highschool Teen'),
     new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Male College Student'),
