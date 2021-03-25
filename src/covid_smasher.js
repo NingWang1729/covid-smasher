@@ -74,7 +74,7 @@ function COVID_SMASHER() {
     // ticks decide in game movement etc.
     const [ticks, setTicks] = useState(0);
     // Use 24hr clock, for easy modding, for in game time
-    const [time, setTime] = useState(0);
+    const [time, setTime] = useState(6);
     // Movequeue for storing keyboard inputs
     const [moves, setMoves] = useState([]);
     // Game state
@@ -97,6 +97,7 @@ function COVID_SMASHER() {
     function counter () {
         switch (game_state) {
             case 0: // WORLD MAP
+                pass_time(0.001);
                 update_game_0();
                 break;
             case 1: // PAUSE MENU
@@ -106,6 +107,7 @@ function COVID_SMASHER() {
                 update_game_2();
                 break;
             default:
+                pass_time(0.001);
                 update_game_0();
                 setGameState(0);
                 break;
@@ -117,6 +119,7 @@ function COVID_SMASHER() {
     function update_game_0 () {
         let movequeue = moves;
         if (moves.length > 0 && ticks % 2 === 0) {
+            pass_time(0.01);
             switch (movequeue[0]) {
                 case 0:
                     if (player.direction === locations_module.DIRECTION.LEFT && player.x_pos > 0 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 0 || locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 2)) {
@@ -239,6 +242,18 @@ function COVID_SMASHER() {
         let college = document.getElementById("college-without-doormat");
         ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
         
+
+
+        // Add shading
+        if (time >= 12) {
+            let light = (time - 12) / 18;
+            ctx.fillStyle = `rgba(0, 0, 0, ${light})`;
+        } else {
+            let light = (12 - time) / 18;
+            ctx.fillStyle = `rgba(0, 0, 0, ${light})`;
+        }
+        ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
+
         if (moves.length > 0 && ticks % 2 === 0) {
             switch (movequeue[0]) {
                 case 0:
@@ -647,17 +662,15 @@ function COVID_SMASHER() {
         <table id="game-table">
             <tr>
                 <td id="left-column">
-                    <p>Left column</p>
-                    <p>Play: {1 ? play : 2}</p>
-                    <p>{ticks}</p>
-                    <p>{player.direction}</p>
-                    <p>({player.x_pos},{player.y_pos})</p>
+                    <p>TIME: {Math.trunc(time).toString().padStart(2, "0")}:{Math.trunc((time - Math.trunc(time)) * 60).toString().padStart(2, "0")}</p>
                     <p>HEALTH POINTS: {player._hp}</p>
                     <p>CASH: ${player._cash}</p>
                     <p>STRENGTH: {player._strength}</p>
                     <p>INTELLIGENCE: {player._intelligence}</p>
                     <p>MORALE:{player._morale}</p>
-                    <p>PLAYER CLASS: {player._type}</p>
+                    <p>PLAYER: {player._type}</p>
+                    <p style={{visibility: 'hidden'}}>{player.direction}</p>
+                    <p style={{visibility: 'hidden'}}>({player.x_pos},{player.y_pos})</p>
                     {/* This Cynthia is in public */}
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
