@@ -6,21 +6,44 @@ const locations_module = require('./base_classes/locations.js');
 const timezones_module = require('./base_classes/timezones.js');
 const player_module = require('./base_classes/player.js');
 
-var player = new player_module.player(2, 5);
+// var player = new player_module.player(2, 5);
+var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'FCollegeStudent');
 var animated = false;
 var animation_stage = 0;
 
 function character_selection(player_class) {
     switch (player_class) {
         case 0:
+            // player = m_highschool_teen;
             break;
         case 1:
+            // player = m_college_student;
             break;
         case 2:
-            //player = m_college_student;
+            // player = m_rich_kid;
             break;
         case 3:
-            //player = f_college_student;
+            // player = m_poor_person;
+            break;
+        case 4:
+            // player = m_old_person;
+            break;
+        case 5:
+            // player = f_highschool_teen;
+            break;
+        case 6:
+            // player = f_college_student;
+            break;
+        case 7:
+            // player = f_rich_kid;
+            break;
+        case 8:
+            // player = f_poor_person;
+            break;
+        case 9:
+            // player = f_old_person;
+            break;
+        default:
             break;
     }
 }
@@ -33,7 +56,7 @@ function COVID_SMASHER() {
     // Canvas for drawing the game
     const canvasRef = useRef(null);
     // Play is boolean for play/pause
-    const [play, setPlay] = useState(true);
+    const [play, setPlay] = useState(false);
     // ticks decide in game movement etc.
     const [ticks, setTicks] = useState(0);
     // Use 24hr clock, for easy modding, for in game time
@@ -505,17 +528,22 @@ function COVID_SMASHER() {
             case 80: // P
                 if (game_state === 0) {
                     setGameState(1);
+                    setPlay(false);
                 } else {
                     setGameState(0);
+                    if (!play) {
+                        setPlay(true);
+                    }
                 }
-                setPlay(!play);
                 break;
             case 67: // C
                 if (setup) {
                     if (game_state === 2) {
                         setGameState(0);
+                        setPlay(true);
                     } else {
                         setGameState(2);
+                        setPlay(false);
                     }
                 }
             default: 
@@ -594,9 +622,16 @@ function COVID_SMASHER() {
             <tr>
                 <td id="left-column">
                     <p>Left column</p>
+                    <p>Play: {1 ? play : 2}</p>
                     <p>{ticks}</p>
                     <p>{player.direction}</p>
                     <p>({player.x_pos},{player.y_pos})</p>
+                    <p>HEALTH POINTS: {player._hp}</p>
+                    <p>CASH: ${player._cash}</p>
+                    <p>STRENGTH: {player._strength}</p>
+                    <p>INTELLIGENCE: {player._intelligence}</p>
+                    <p>MORALE:{player._morale}</p>
+                    <p>PLAYER CLASS: {player._type}</p>
                     {/* This Cynthia is in public */}
                     <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
