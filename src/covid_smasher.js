@@ -230,10 +230,13 @@ function COVID_SMASHER() {
         let hospital = document.getElementById("hospital");
         ctx.drawImage(hospital, 666, 543 + locations_module.TOP_BUFFER, 128, 128);
 
+        let college_doormat = document.getElementById("college-doormat");
+        ctx.drawImage(college_doormat, 768, 456 + locations_module.TOP_BUFFER);
+
         // Draw player
         draw_sprite(ctx, player.direction, player._type, player);
 
-        let college = document.getElementById("college");
+        let college = document.getElementById("college-without-doormat");
         ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
         
         if (moves.length > 0 && ticks % 2 === 0) {
@@ -699,6 +702,8 @@ function COVID_SMASHER() {
                     <img src="/images/buildings/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{display: 'none'}}></img>
                     {/* Row Six building (College has different left side than others) */}
                     <img src="/images/buildings/college.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college2.png" alt="Cynthia not here wtf" id="college-without-doormat" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college_doormat.png" alt="Cynthia not here wtf" id="college-doormat" style={{display: 'none'}}></img>
                 </td>
                 <td id="center-column">
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
