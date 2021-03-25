@@ -6,7 +6,43 @@ import * as locations_module from './base_classes/locations.js'
 import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
 
-// test
+const location_objects = [
+    new locations_module.Home(1, 4),
+    new locations_module.Home(2, 4),
+    new locations_module.Home(5, 4),
+    /* include City Hall */
+    new locations_module.Store(17, 4),
+    new locations_module.Store(23, 4),
+    new locations_module.Store(28, 4),
+    new locations_module.Store(33, 4),
+    new locations_module.Library(2, 13),
+    /* include Object Garden */
+    new locations_module.Restaurant(27, 11),
+    new locations_module.Restaurant(27, 11),
+    new locations_module.Restaurant(28, 11),
+    new locations_module.Restaurant(29, 11),
+    /* include FooBar */
+    /* include Game Corner */
+    new locations_module.HighSchool(7, 22),
+    new locations_module.Work(14, 21),
+    new locations_module.Gym(18, 21),
+    new locations_module.Hospital(22, 21),
+    new locations_module.College(24, 21),
+    new locations_module.College(24, 22)
+];
+
+// sort in ascending order for easy binary search
+function hashKey(x, y) {
+    return 100 * x + y;
+}
+
+let obj_pos_map = new Map();
+// match position with index of location in location_objects
+for (let i = 0; i < location_objects.length; ++i) {
+    obj_pos_map.set(hashKey(location_objects[i].x, location_objects[i].y), i);
+    console.log(hashKey(location_objects[i].x, location_objects[i].y));
+}
+
 const player_selection = [
     new player_module.Role(2, 5, 100, 100, 40, 45, 50, 'Male Highschool Teen'),
     new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Male College Student'),
@@ -338,7 +374,13 @@ function COVID_SMASHER() {
                             alert("Arrived at College!");
                         } else if (player.x_pos === 24 && player.y_pos === 22) {
                             alert("Arrived at College!");
-                        } 
+                        }
+                        let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
+                        console.log(obj_pos_map.get(hashedPos));
+                        if (obj_pos_map.has(hashedPos))  {
+                            console.log("ARRIVED");
+                            location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                        }
                     }
                     break;
                 default:
