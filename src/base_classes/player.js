@@ -1,4 +1,4 @@
-const locations_module = require('./locations.js');
+import * as locations_module from './locations.js';
 
 // Player character
 class player {
@@ -7,7 +7,7 @@ class player {
         this.y_pos = y_pos;
         this.direction = locations_module.DIRECTION.DOWN;
         this.img = new Image();
-        this.img.src = "images/Cynthia.png"
+        this.img.src = "images/sprite_sheets/Cynthia.png"
     };
 
     get_x_pos() {
@@ -125,4 +125,4 @@ class Pedestrian extends player {
     }
 }
 
-export { player };
+export { player, Role };
