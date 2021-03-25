@@ -163,9 +163,19 @@ function COVID_SMASHER() {
         // Clears entire canvas
         ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
 
-        // Environmental Assets
+       // Environmental Assets
         let dirt_path = document.getElementById("dirt-path");
         ctx.drawImage(dirt_path, 0, 0 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, locations_module.WORLD_HEIGHT * locations_module.UNIT_SIZE);
+
+        let grass = document.getElementById("grass");
+        ctx.drawImage(grass, 0, 48 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, 2.5 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 0, 256 + locations_module.TOP_BUFFER, 5 * locations_module.UNIT_SIZE, 5 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 708, 232 + locations_module.TOP_BUFFER, 18 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 0, 500 + locations_module.TOP_BUFFER, 9.5 * locations_module.UNIT_SIZE, 8.5 * locations_module.UNIT_SIZE);
+       
+        ctx.drawImage(grass, 384, 550 + locations_module.TOP_BUFFER, 14 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 768, 456 + locations_module.TOP_BUFFER, 16 * locations_module.UNIT_SIZE, 12 * locations_module.UNIT_SIZE);
+
 
         let tree_2 = document.getElementById("tree-2");
         let total_pixel_width = locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE
@@ -176,6 +186,7 @@ function COVID_SMASHER() {
             ctx.drawImage(tree_2, i, -40 + locations_module.TOP_BUFFER);
             ctx.drawImage(tree_2, i, -30 + locations_module.TOP_BUFFER);
         }
+
 
         // Buildings
         let home = document.getElementById("home");
@@ -216,7 +227,7 @@ function COVID_SMASHER() {
         ctx.drawImage(cin_n_cout, 840, 224 + locations_module.TOP_BUFFER);
 
         let foobar = document.getElementById("foobar");
-        ctx.drawImage(foobar, 984, 225 + locations_module.TOP_BUFFER);
+        ctx.drawImage(foobar, 976, 225 + locations_module.TOP_BUFFER);
 
         let casino = document.getElementById("casino");
         ctx.drawImage(casino, 1128, 220 + locations_module.TOP_BUFFER);
@@ -242,8 +253,6 @@ function COVID_SMASHER() {
 
         let college = document.getElementById("college-without-doormat");
         ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
-        
-
 
         // Add shading
         if (time >= 12) {
@@ -690,7 +699,10 @@ function COVID_SMASHER() {
                     <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
                     <img src="/images/environment/dirt_path.png" alt="Cynthia not here wtf" id="dirt-path" style={{display: 'none'}}></img>
+                    <img src="/images/environment/grass.png" alt="Cynthia not here wtf" id="grass" style={{display: 'none'}}></img>
                     <img src="/images/environment/tree_2.png" alt="Cynthia not here wtf" id="tree-2" style={{display: 'none'}}></img>
+
+
                     <img src="/images/buildings/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
                     <img src="/images/buildings/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
                     <img src="/images/buildings/city_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
