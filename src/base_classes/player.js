@@ -125,4 +125,4 @@ class Pedestrian extends player {
     }
 }
 
-export { player };
+export { player, Role };
