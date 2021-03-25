@@ -7,7 +7,7 @@ import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
 
 // var player = new player_module.player(2, 5);
-var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'FCollegeStudent');
+var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'FemaleCollegeStudent');
 var animated = false;
 var animation_stage = 0;
 
@@ -217,7 +217,7 @@ function COVID_SMASHER() {
         ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
 
         // Draw player
-        draw_sprite(ctx, player.direction);
+        draw_sprite(ctx, player.direction, player._type);
         
         
         if (moves.length > 0 && ticks % 2 === 0) {
@@ -404,20 +404,20 @@ function COVID_SMASHER() {
     }
 
     // Sprite drawer
-    function draw_sprite(ctx, direction) {
-        let sprite_sheet = document.getElementById("player-sprite-sheet");
+    function draw_sprite(ctx, direction, sprite_sheet_type) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
         switch (direction) {
             case locations_module.DIRECTION.UP:
-                draw_animation(ctx, 1 + animation_stage);
+                draw_animation(ctx, 1 + animation_stage, sprite_sheet);
                 break;
             case locations_module.DIRECTION.DOWN:
-                draw_animation(ctx, 4 + animation_stage);
+                draw_animation(ctx, 4 + animation_stage, sprite_sheet);
                 break;
             case locations_module.DIRECTION.LEFT:
-                draw_animation(ctx, 7 + animation_stage);
+                draw_animation(ctx, 7 + animation_stage, sprite_sheet);
                 break;
             case locations_module.DIRECTION.RIGHT:
-                draw_animation(ctx, 10 + animation_stage);
+                draw_animation(ctx, 10 + animation_stage, sprite_sheet);
                 break;
             default:
                 break;
@@ -436,8 +436,7 @@ function COVID_SMASHER() {
     }
 
     // For draw_sprite()
-    function draw_animation(ctx, sprite_no) {
-        let sprite_sheet = document.getElementById("player-sprite-sheet");
+    function draw_animation(ctx, sprite_no, sprite_sheet) {
         switch(sprite_no) {
             // Up
             case 1:
@@ -633,7 +632,7 @@ function COVID_SMASHER() {
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER CLASS: {player._type}</p>
                     {/* This Cynthia is in public */}
-                    <img src={player.img.src} alt="Cynthia not here wtf" id="player-sprite-sheet" style={{display: 'none'}}></img>
+                    <img src={player.img.src} alt="Cynthia not here wtf" id="FemaleCollegeStudent" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
                     <img src="/images/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
                     <img src="/images/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
