@@ -159,16 +159,6 @@ function COVID_SMASHER() {
         // Clears entire canvas
         ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
 
-        // Shadow of the buildings
-        ctx.fillStyle = "blue";
-        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 0 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 40 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 5 * locations_module.UNIT_SIZE, 5 * locations_module.UNIT_SIZE);
-        ctx.fillRect(9 *  locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 10 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
-        ctx.fillRect(22 *  locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 18 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillRect(0 *  locations_module.UNIT_SIZE, 16 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 7 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE);
-        ctx.fillRect(12 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 13 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillRect(25 *  locations_module.UNIT_SIZE, 17 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 15 * locations_module.UNIT_SIZE, 7 * locations_module.UNIT_SIZE);
-        
         // Environmental Assets
         let dirt_path = document.getElementById("dirt-path");
         ctx.drawImage(dirt_path, 0, 0 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, locations_module.WORLD_HEIGHT * locations_module.UNIT_SIZE);
@@ -182,7 +172,6 @@ function COVID_SMASHER() {
             ctx.drawImage(tree_2, i, -40 + locations_module.TOP_BUFFER);
             ctx.drawImage(tree_2, i, -30 + locations_module.TOP_BUFFER);
         }
-
 
         // Buildings
         let home = document.getElementById("home");
@@ -241,12 +230,11 @@ function COVID_SMASHER() {
         let hospital = document.getElementById("hospital");
         ctx.drawImage(hospital, 666, 543 + locations_module.TOP_BUFFER, 128, 128);
 
-        let college = document.getElementById("college");
-        ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
-
         // Draw player
         draw_sprite(ctx, player.direction, player._type, player);
-        
+
+        let college = document.getElementById("college");
+        ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
         
         if (moves.length > 0 && ticks % 2 === 0) {
             switch (movequeue[0]) {
@@ -684,32 +672,33 @@ function COVID_SMASHER() {
                     <img src="images/sprite_sheets/Volkner.png" alt="Volkner" id="NPC" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
-                    <img src="/images/dirt_path.png" alt="Cynthia not here wtf" id="dirt-path" style={{display: 'none'}}></img>
-                    <img src="/images/tree_2.png" alt="Cynthia not here wtf" id="tree-2" style={{display: 'none'}}></img>
-                    <img src="/images/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
-                    <img src="/images/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
-                    <img src="/images/city_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
-                    <img src="/images/store1.png" alt="Cynthia not here wtf" id="store-1" style={{display: 'none'}}></img>
-                    <img src="/images/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
-                    <img src="/images/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
-                    <img src="/images/store4.png" alt="Cynthia not here wtf" id="store-4" style={{display: 'none'}}></img>
-                    <img src="/images/tree.png" alt="Cynthia not here wtf" id="tree-1" style={{display: 'none'}}></img>
+                    <img src="/images/environment/dirt_path.png" alt="Cynthia not here wtf" id="dirt-path" style={{display: 'none'}}></img>
+                    <img src="/images/environment/tree_2.png" alt="Cynthia not here wtf" id="tree-2" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/city_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store1.png" alt="Cynthia not here wtf" id="store-1" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store4.png" alt="Cynthia not here wtf" id="store-4" style={{display: 'none'}}></img>
+                    <img src="/images/environment/tree.png" alt="Cynthia not here wtf" id="tree-1" style={{display: 'none'}}></img>
                     {/* Row two buildings */}
-                    <img src="/images/park.png" alt="Cynthia not here wtf" id="park" style={{display: 'none'}}></img>
-                    <img src="/images/object_garden.png" alt="Cynthia not here wtf" id="object-garden" style={{display: 'none'}}></img>
-                    <img src="/images/cin_n_cout.png" alt="Cynthia not here wtf" id="cin-n-cout" style={{display: 'none'}}></img>
-                    <img src="/images/foobar.png" alt="Cynthia not here wtf" id="foobar" style={{display: 'none'}}></img>
-                    <img src="/images/casino.png" alt="Cynthia not here wtf" id="casino" style={{display: 'none'}}></img>
+                    <img src="/images/environment/park.png" alt="Cynthia not here wtf" id="park" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/object_garden.png" alt="Cynthia not here wtf" id="object-garden" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/cin_n_cout.png" alt="Cynthia not here wtf" id="cin-n-cout" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/foobar.png" alt="Cynthia not here wtf" id="foobar" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/casino.png" alt="Cynthia not here wtf" id="casino" style={{display: 'none'}}></img>
                     {/* Row Three buildings (Just the library) */}
-                    <img src="/images/library.png" alt="Cynthia not here wtf" id="library" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/library.png" alt="Cynthia not here wtf" id="library" style={{display: 'none'}}></img>
                     {/* Row Four buildings (Just the park one) */}
+                    {/* We have no park building yet... */}
                     {/* Row Five buildings (NOT COLLEGE) */}
-                    <img src="/images/highschool.png" alt="Cynthia not here wtf" id="highschool" style={{display: 'none'}}></img>
-                    <img src="/images/work.png" alt="Cynthia not here wtf" id="work" style={{display: 'none'}}></img>
-                    <img src="/images/gym.png" alt="Cynthia not here wtf" id="gym" style={{display: 'none'}}></img>
-                    <img src="/images/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/highschool.png" alt="Cynthia not here wtf" id="highschool" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/work.png" alt="Cynthia not here wtf" id="work" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/gym.png" alt="Cynthia not here wtf" id="gym" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{display: 'none'}}></img>
                     {/* Row Six building (College has different left side than others) */}
-                    <img src="/images/college.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
                 </td>
                 <td id="center-column">
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
