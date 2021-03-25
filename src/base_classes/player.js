@@ -7,7 +7,7 @@ class player {
         this.y_pos = y_pos;
         this.direction = locations_module.DIRECTION.DOWN;
         this.img = new Image();
-        this.img.src = "images/cynthia.png"
+        this.img.src = "images/sprite_sheets/Cynthia.png"
     };
 
     get_x_pos() {

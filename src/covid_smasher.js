@@ -7,7 +7,7 @@ import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
 
 // var player = new player_module.player(2, 5);
-var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'FemaleCollegeStudent');
+var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
 var animated = false;
 var animation_stage = 0;
 
@@ -630,7 +630,21 @@ function COVID_SMASHER() {
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER CLASS: {player._type}</p>
                     {/* This Cynthia is in public */}
-                    <img src={player.img.src} alt="Cynthia not here wtf" id="FemaleCollegeStudent" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Student" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Flint.png" alt="Flint" id="Male Spoiled Brat" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Byron.png" alt="Byron" id="Male Elderly Person" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Maylene.png" alt="Maylene" id="Female Highschool Student" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Cynthia.png" alt="Cynthia" id="Female College Student" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Gardenia.png" alt="Gardenia" id="Female Impoverished" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Candice.png" alt="Candice" id="Female Spoiled Brat" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Bertha.png" alt="Bertha" id="Female Elderly Person" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Dawn.png" alt="Smol" id="Smol" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Fantina.png" alt="Fantina" id="NPC" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Palmer.png" alt="Palmer" id="NPC" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Volkner.png" alt="Volkner" id="NPC" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
                     <img src="/images/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
                     <img src="/images/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
