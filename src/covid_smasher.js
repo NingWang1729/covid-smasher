@@ -204,13 +204,13 @@ function COVID_SMASHER() {
         ctx.drawImage(dirt_path, 0, 0 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, locations_module.WORLD_HEIGHT * locations_module.UNIT_SIZE);
 
         let grass = document.getElementById("grass");
-        ctx.drawImage(grass, 0, 16 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 0, 8 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.drawImage(grass, 0, 256 + locations_module.TOP_BUFFER, 5 * locations_module.UNIT_SIZE, 5 * locations_module.UNIT_SIZE);
         ctx.drawImage(grass, 708, 232 + locations_module.TOP_BUFFER, 18 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.drawImage(grass, 0, 500 + locations_module.TOP_BUFFER, 9 * locations_module.UNIT_SIZE, 8.5 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 0, 500 + locations_module.TOP_BUFFER, 8 * locations_module.UNIT_SIZE, 8.5 * locations_module.UNIT_SIZE);
        
         ctx.drawImage(grass, 384, 550 + locations_module.TOP_BUFFER, 14 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.drawImage(grass, 768, 456 + locations_module.TOP_BUFFER, 16 * locations_module.UNIT_SIZE, 12 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 768, 520 + locations_module.TOP_BUFFER, 16 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE);
 
 
         let tree_2 = document.getElementById("tree-2");
