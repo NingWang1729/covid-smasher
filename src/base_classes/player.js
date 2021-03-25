@@ -1,4 +1,4 @@
-const locations_module = require('./locations.js');
+import * as locations_module from './locations.js';
 
 // Player character
 class player {

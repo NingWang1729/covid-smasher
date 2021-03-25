@@ -140,17 +140,17 @@ class Casino extends Location {
 };
 
 // 40x24 units
-const UNIT_SIZE = 32;
-const WORLD_WIDTH = 40;
-const WORLD_HEIGHT = 24;
-const TOP_BUFFER = 48;
-const DIRECTION = {
+export const UNIT_SIZE = 32;
+export const WORLD_WIDTH = 40;
+export const WORLD_HEIGHT = 24;
+export const TOP_BUFFER = 48;
+export const DIRECTION = {
     UP: 'Up',
     DOWN: 'Down',
     LEFT: 'Left',
     RIGHT: 'Right'
 };
-const WORLD_MAP = 
+export const WORLD_MAP = 
 [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
@@ -177,5 +177,3 @@ const WORLD_MAP =
     [1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
     [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
 ]
-
-export { UNIT_SIZE, WORLD_WIDTH, WORLD_HEIGHT, TOP_BUFFER, DIRECTION, WORLD_MAP };
