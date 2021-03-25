@@ -1,5 +1,32 @@
 import * as locations_module from './locations.js';
 
+const _INVENTORY_ROWS = 3;
+const _INVENTORY_COLS = 5;
+
+class Inventory {
+    constructor(nRows, nCols) {
+        this._item_array = [];
+        this._n_rows = nRows;
+        this._n_cols = nCols;
+        this._n_items = 0;
+        for (let i = 0; i < nRows; ++i) {
+            this._item_array.push([]);
+        }
+    }
+    add_item(item) {
+        // inventory maxed out
+        if (this._n_items === this._n_rows * this._n_cols) {
+            alert("You have no space left in your inventory.");
+        } else {
+            ++this._n_items;
+            this._item_array[Math.floor(this._n_items / this._n_cols)].push(item);
+        }
+    }
+    use_item(row, col) {
+        ;
+    }
+};
+
 // Player character
 class player {
     constructor(x_pos, y_pos) {
@@ -8,7 +35,12 @@ class player {
         this.direction = locations_module.DIRECTION.DOWN;
         this.img = new Image();
         this.img.src = "images/sprite_sheets/Cynthia.png"
+        this._inventory = new Inventory(_INVENTORY_ROWS, _INVENTORY_COLS);
     };
+
+    add_item(item) {
+        this._inventory.add_item(item);
+    }
 
     get_x_pos() {
         return this.x_pos;
