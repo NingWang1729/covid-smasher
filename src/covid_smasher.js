@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import './covid_smasher.css';
 
-const locations_module = require('./base_classes/locations.js');
-const timezones_module = require('./base_classes/timezones.js');
-const player_module = require('./base_classes/player.js');
-
-
+import * as locations_module from './base_classes/locations.js'
+import * as timezones_module from './base_classes/timezones.js'
+import * as player_module from './base_classes/player.js'
 
 const player = new player_module.player(2, 5);
 function COVID_SMASHER() {
