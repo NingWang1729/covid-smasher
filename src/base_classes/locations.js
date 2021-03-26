@@ -77,7 +77,19 @@ export class Store extends Location {
         super(x_pos, y_pos);
     }
     do_something(player) {
-        ;
+        let selection = prompt("1: Food, 2: Drink, 3: Spinner", "1");
+        switch (parseInt(selection)) {
+            case 1:
+                player.delta_morale = -1;
+                break;
+            case 2:
+                player.delta_morale = 1;
+                break;
+            case 3:
+                player.delta_morale = 1;
+                alert("Whee!");
+                break;
+        }
     }
 };
 

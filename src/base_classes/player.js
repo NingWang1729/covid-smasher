@@ -1,5 +1,41 @@
 import * as locations_module from './locations.js';
 
+const _INVENTORY_ROWS = 3;
+const _INVENTORY_COLS = 5;
+
+class Inventory {
+    constructor(maxSize) {
+        this._item_array = [];
+        this._max_size = maxSize;
+    }
+    add_item(item) {
+        // inventory maxed out
+        if (this._item_array.length === this._max_size) {
+            alert ("Your inventory is already full!");
+        } else {
+            this._item_array.push(item);
+        }
+    }
+    use_item(index, player) {
+        this._item_array[index].use_effect(player);
+        for (let i = index+1; i < this._item_array.length; ++i) {
+            this._item_array[i - 1] = this._item_array[i];
+        }
+        this._item_array.pop();
+    }
+    convert_2D_array(nRows, nCols) {
+        let item_2D_array = [];
+        let k = this._item_array.length;
+        for (let i = 0; i < nRows && k != 0; ++i) {
+            item_2D_array.push([]);
+            for (let j = 0; j < nCols && k != 0; ++j) {
+                item_2D_array[i].push(this._item_array[this._item_array.length - k]);
+            }
+        }
+        return item_2D_array;
+    }
+};
+
 // Player character
 class player {
     constructor(x_pos, y_pos) {
@@ -8,7 +44,16 @@ class player {
         this.direction = locations_module.DIRECTION.DOWN;
         this.img = new Image();
         this.img.src = "images/sprite_sheets/Cynthia.png"
+        this._inventory = new Inventory(_INVENTORY_ROWS, _INVENTORY_COLS);
     };
+
+    add_item(item) {
+        this._inventory.add_item(item);
+    }
+
+    use_item(index) {
+        this._inventory.use_item(index, this);
+    }
 
     get_x_pos() {
         return this.x_pos;
