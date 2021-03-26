@@ -109,6 +109,12 @@ class Role extends player {
     get type() {
         return this._type;
     }
+    get hp() {
+        return this._hp;
+    }
+    get cash() {
+        return this._cash;
+    }
     get strength() {
         return this._strength;
     }
@@ -136,7 +142,7 @@ class Role extends player {
     set delta_morale(val) {
         this._morale += val;
     }
-    set substenance(val) {
+    set delta_substenance(val) {
         this._substenance += val;
     }
 };
