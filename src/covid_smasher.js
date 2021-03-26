@@ -68,7 +68,11 @@ var time = 6;
 var npc1 = new player_module.Role(15, 5, 100, 50, 30, 50, 30, 'Female Impoverished');
 var animation_stage_npc = 0;
 var is_animated = true;
-var move_directions = [1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,0,0,0,0,0,0];
+var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
+
+function dfs() {
+    return
+}
 
 function character_selection(player_class) {
     player = player_selection[player_class];
@@ -161,8 +165,53 @@ function COVID_SMASHER() {
         setTicks(ticks + 1)
     }
 
+    // Function to reuse first made for NPC
+    function updateFacingDirection(a_stage, is_animated, character, queue=undefined) {
+        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
+            pass_time(0.01);
+            switch (queue[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                        is_animated = true;
+                    } else {
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                        is_animated = true;
+                    } else {
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                        is_animated = true;
+                    } else {
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                        is_animated = true;
+                    } else {
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                default:
+                    break;
+            };
+        };
+    }
     // WORLD MAP
     function update_game_0 () {
+        // Same as code below
+        updateFacingDirection(animation_stage_npc, is_animated, npc1, move_directions);
+
         let movequeue = moves;
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 4)) {
             pass_time(0.01);
@@ -203,6 +252,7 @@ function COVID_SMASHER() {
                     break;
             };
         };
+
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears entire canvas
@@ -313,7 +363,7 @@ function COVID_SMASHER() {
         }
         ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
 
-        // Moves NPC
+        // Moves NPC same as code below
         move_npc(npc1);
 
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 3)) {
