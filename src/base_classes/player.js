@@ -1,4 +1,5 @@
 import * as locations_module from './locations.js';
+import * as items_module from './items.js';
 
 const _INVENTORY_ROWS = 3;
 const _INVENTORY_COLS = 5;
@@ -108,6 +109,12 @@ class Role extends player {
     }
     get type() {
         return this._type;
+    }
+    get cash() {
+        return this._cash;
+    }
+    get health() {
+        return this._hp;
     }
     get strength() {
         return this._strength;
