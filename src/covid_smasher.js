@@ -131,7 +131,7 @@ function COVID_SMASHER() {
 
     // Game Clock
     useEffect(()=>{
-        setTimeout(counter, 150);
+        setTimeout(counter, 100);
     }, [ticks]);
 
     // Game Clock
@@ -643,10 +643,49 @@ function COVID_SMASHER() {
                                         break;
                                 };
                             });
-                        } else if (player.x_pos === 24 && player.y_pos === 21) {
-                            swal("Arrived at College!");
-                        } else if (player.x_pos === 24 && player.y_pos === 22) {
-                            swal("Arrived at College!");
+                        } else if (player.x_pos === 24 && (player.y_pos === 21 || player.y_pos === 22)) {
+                            swal("You arrived at the college! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Enter college...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            switch (result) {
+                                                case 0:
+                                                    swal(<p>You went to college and paid part of your <a href="https://www.investopedia.com/student-loan-debt-2019-statistics-and-outlook-4772007" target="_blank">tuition</a>!</p>);
+                                                    pass_time(2);
+                                                    break;
+                                                case 1:
+                                                    swal(<p>You could not afford a guided tour of the campus!</p>);
+                                                    pass_time(1);
+                                                    break;
+                                                case 2:
+                                                    swal(<p>You went on a guided tour of the beautiful campus.</p>)
+                                                    pass_time(1);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit the college.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit the college.");
+                                        break;
+                                };
+                            });
                         }
                     }
                     break;
