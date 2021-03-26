@@ -49,6 +49,29 @@ export class Neighbor extends Location {
     }
 };
 
+export class Cityhall extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    }
+    do_something(player) {
+        if (player._type === "Male Elderly Person" || player._type === "Female Elderly Person") {
+            player.delta_cash = 10;
+            if (Math.random() > 0.6) {
+                player.delta_morale = 2;
+                return 1;
+            } else {
+                player.delta_morale = -1;
+                return 0;
+            };
+        } else {
+            player.delta_cash = -10;
+            player.delta_intelligence = -1;
+            player.delta_morale = -1;
+            return -1;
+        };
+    }
+};
+
 export class Store extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
