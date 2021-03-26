@@ -156,7 +156,7 @@ export class Work extends Location {
                 player.delta_cash = player._intelligence - 60;
                 player.delta_intelligence = 5;
                 return 2;
-            } else if (player._intelligence <= 75) {
+            } else if (player._intelligence >= 75) {
                 player.delta_intelligence = 2;
                 return 1;
             } else {
