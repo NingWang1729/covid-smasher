@@ -5,19 +5,19 @@ class Location {
     constructor(x_pos, y_pos) {
         this._x_pos = x_pos;
         this._y_pos = y_pos;
-    }
+    };
     get x() {
         return this._x_pos;
-    }
+    };
     get y() {
         return this._y_pos;
-    }
+    };
 };
 
 export class Home extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         if (player._type === "Male Highschool Teen" || player._type === "Female Highschool Teen") {
             player._hp = 100;
@@ -43,16 +43,16 @@ export class Home extends Location {
 export class Neighbor extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         player.delta_health = -10;
-    }
+    };
 };
 
 export class Cityhall extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         if (player._type === "Male Elderly Person" || player._type === "Female Elderly Person") {
             player.delta_cash = 10;
@@ -69,13 +69,13 @@ export class Cityhall extends Location {
             player.delta_morale = -1;
             return -1;
         };
-    }
+    };
 };
 
 export class Store extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         let selection = prompt("1: Food, 2: Drink, 3: Spinner", "1");
         switch (parseInt(selection)) {
@@ -89,29 +89,23 @@ export class Store extends Location {
                 player.delta_morale = 1;
                 alert("Whee!");
                 break;
-        }
-    }
+        };
+    };
 };
 
 export class Restaurant extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         ;
-    }
+    };
 };
 
-class DayJob extends Location {
+export class HighSchool extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
-};
-
-export class HighSchool extends DayJob {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         if (player._type === "Male Highschool Teen" || player._type === "Female Highschool Teen") {
             if (Math.random() > 0.6) {
@@ -125,23 +119,34 @@ export class HighSchool extends DayJob {
             player.delta_morale = -1;
             return -1;
         };
-    }
+    };
 };
 
-export class College extends DayJob {
+export class College extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
-        player.delta_intelligence = 2;
-        player.delta_cash = -80;
-    }
+        if (player._type === "Male College Student" || player._type === "Female College Student") {
+            player.delta_intelligence = 2;
+            player.delta_cash = -50;
+            return 0;
+        } else {
+            if (player._cash < 10) {
+                player.delta_morale = -1;
+                return 1;
+            }
+            player.delta_morale = 1;
+            player.delta_cash = -10;
+            return 2;
+        };
+    };
 };
 
-export class Work extends DayJob {
+export class Work extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         if (player._type === "Male Highschool Teen" || player._type === "Female Highschool Teen") {
             player.delta_cash = 15;
@@ -181,19 +186,19 @@ export class Work extends DayJob {
 export class Park extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         player.delta_strength = 1;
         if (player.type === 'RichKid') {
             player.delta_morale = -10;
-        }
-    }
+        };
+    };
 };
 
 export class Gym extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         if (player._cash < 10) {
             player.delta_morale = -10;
@@ -228,13 +233,13 @@ export class Gym extends Location {
                 break;
         };
         return true;
-    }
+    };
 };
 
 export class Library extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         switch (player.type) {
             case "Male College Student":
@@ -258,28 +263,28 @@ export class Library extends Location {
             default:
                 player.delta_intelligence = 1;
                 break;
-        }
-    }
+        };
+    };
 };
 
 export class Hospital extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         if (player.strength >= 100 || player.intelligence >= 100 || player.morale >= 100) {
             return true;
-        }
-    }
+        };
+    };
 };
 
 export class Casino extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
-    }
+    };
     do_something(player) {
         ;
-    }
+    };
 };
 
 // 40x24 units
