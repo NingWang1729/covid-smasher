@@ -11,6 +11,7 @@ const location_objects = [
     new locations_module.Home(1, 4),
     new locations_module.Home(2, 4),
     new locations_module.Neighbor(5, 4),
+    new locations_module.Cityhall(12, 4),
     /* include City Hall */
     new locations_module.Store(17, 4),
     new locations_module.Store(23, 4),
@@ -334,6 +335,8 @@ function COVID_SMASHER() {
                     break;
                 case 4:
                     if (locations_module.WORLD_MAP[player.y_pos][player.x_pos] === 2) {
+                        let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
+                        console.log(obj_pos_map.get(hashedPos));
                         if (player.x_pos === 1 && player.y_pos === 4 || player.x_pos === 2 && player.y_pos === 4) {
                             swal("You arrived home! What do you want to do?", {
                                 buttons: {
@@ -350,8 +353,6 @@ function COVID_SMASHER() {
                                 switch (value) {
                                     case "rest":
                                         swal("ZZZZZ", "You took a nice long nap!", "success");
-                                        let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
-                                        console.log(obj_pos_map.get(hashedPos));
                                         if (obj_pos_map.has(hashedPos))  {
                                             console.log("ARRIVED");
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
@@ -367,7 +368,6 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 5 && player.y_pos === 4) {
-                            swal("Arrived at Neighbor's house!");
                             swal("You arrived at your neighbor's house! What do you want to do?", {
                                 buttons: {
                                   leave: {
@@ -383,12 +383,11 @@ function COVID_SMASHER() {
                                 switch (value) {
                                     case "enter":
                                         swal("Achoo!", "You were infected and took damage!", "error");
-                                        let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
-                                        console.log(obj_pos_map.get(hashedPos));
                                         if (obj_pos_map.has(hashedPos))  {
                                             console.log("ARRIVED");
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                         }
+                                        pass_time(0.5);
                                         break;
                                     case "leave":
                                         swal("You decided not to visit your neighbor.");
@@ -399,7 +398,47 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 12 && player.y_pos === 4) {
-                            swal("Arrived at City Hall!");
+                            swal("You arrived at City Hall!! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Collect social security benefits...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos))  {
+                                            console.log("ARRIVED");
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            if (result === 1) {
+                                                swal("Memories!", "You recall your days of old!", "info").then(()=>{
+                                                    swal("Happy thoughts", "You recall happy memories...", "success");
+                                                });
+                                            } else if (result === 0) {
+                                                swal("Memories!", "You recall your days of old!", "info").then(()=>{
+                                                    swal("Hxppy Thxxghts", "You recall traumatic events...", "error").then(() => {
+                                                        swal(<p>The average wait time at the DMV is 2-3 hours! This is a huge issue for the elderly and disabled. Find your <a href="https://www.house.gov/representatives/find-your-representative">representative</a> and let them know your concern!</p>);
+                                                    });
+                                                });
+                                            } else {
+                                                swal("Nothing!", "You don't qualify for social security yet! You were fined $10.", "error");
+                                            };
+                                        };
+                                        pass_time(2 + Math.random());
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit the government. Taxation is theft, anyways.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit City hall.");
+                                        break;
+                                }
+                            });
                         } else if (player.x_pos === 17 && player.y_pos === 4) {
                             swal("Arrived at Store 1!");
                         } else if (player.x_pos === 23 && player.y_pos === 4) {
