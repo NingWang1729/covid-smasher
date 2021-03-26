@@ -64,6 +64,12 @@ var animated = false;
 var animation_stage = 0;
 var time = 6;
 
+// NPC
+var npc1 = new player_module.Role(15, 5, 100, 50, 30, 50, 30, 'Female Impoverished');
+var animation_stage_npc = 0;
+var is_animated = true;
+var move_directions = [1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,0,0,0,0,0,0];
+
 function character_selection(player_class) {
     player = player_selection[player_class];
     switch (player_class) {
@@ -290,6 +296,10 @@ function COVID_SMASHER() {
         // Draw player
         draw_sprite(ctx, player.direction, player._type, player);
 
+        // Draw npc
+        draw_sprite_npc(ctx, npc1.direction, npc1._type, npc1);
+        
+
         let college = document.getElementById("college-without-doormat");
         ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
 
@@ -302,6 +312,9 @@ function COVID_SMASHER() {
             ctx.fillStyle = `rgba(0, 0, 0, ${light})`;
         }
         ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
+
+        // Moves NPC
+        move_npc(npc1);
 
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 3)) {
             switch (movequeue[0]) {
@@ -484,6 +497,42 @@ function COVID_SMASHER() {
         };
     }
 
+    function move_npc(character) {
+        if (move_directions.length > 0 && (animation_stage_npc === 0 || animation_stage_npc === 3)) {
+            switch (move_directions[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT) {
+                        character.move_left();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.LEFT);
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT) {
+                        character.move_right();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.RIGHT);
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP) {
+                        character.move_up();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.UP);
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN) {
+                        character.move_down();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.DOWN);
+                    };
+                    break;
+                }
+            move_directions.shift();
+        }
+    }
+
     // PAUSE MENU
     function update_game_1() {
         const canvas = canvasRef.current;
@@ -619,111 +668,220 @@ function COVID_SMASHER() {
         ctx.stroke();
     }
 
-        // Sprite drawer
-        function draw_sprite(ctx, direction, sprite_sheet_type, player) {
-            let sprite_sheet = document.getElementById(sprite_sheet_type);
-            switch (direction) {
-                case locations_module.DIRECTION.UP:
-                    draw_animation(ctx, 1 + animation_stage, sprite_sheet, player);
-                    break;
-                case locations_module.DIRECTION.DOWN:
-                    draw_animation(ctx, 6 + animation_stage, sprite_sheet, player);
-                    break;
-                case locations_module.DIRECTION.LEFT:
-                    draw_animation(ctx, 11 + animation_stage, sprite_sheet, player);
-                    break;
-                case locations_module.DIRECTION.RIGHT:
-                    draw_animation(ctx, 16 + animation_stage, sprite_sheet, player);
-                    break;
-                default:
-                    break;
-            }
-            if (moves.length === 0) {
-                animation_stage = 0
-                animated = false;
-            }
-            if (animated) {
-                if (animation_stage === 1) {
-                    animation_stage = 2;
-                } else if (animation_stage === 2) {
-                    animation_stage = 3;
-                } else if (animation_stage === 3) {
-                    animation_stage = 4;
-                } else {
-                    animation_stage = 1;
-                }
+
+    // Sprite drawer
+    function draw_sprite(ctx, direction, sprite_sheet_type, player) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                draw_animation(ctx, 1 + animation_stage, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                draw_animation(ctx, 6 + animation_stage, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                draw_animation(ctx, 11 + animation_stage, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                draw_animation(ctx, 16 + animation_stage, sprite_sheet, player);
+                break;
+            default:
+                break;
+        }
+        if (moves.length === 0) {
+            animation_stage = 0
+            animated = false;
+        }
+        if (animated) {
+            if (animation_stage === 1) {
+                animation_stage = 2;
+            } else if (animation_stage === 2) {
+                animation_stage = 3;
+            } else if (animation_stage === 3) {
+                animation_stage = 4;
+            } else {
+                animation_stage = 1;
             }
         }
+    }
+
+    // For draw_sprite()
+    function draw_animation(ctx, sprite_no, sprite_sheet, sprite) {
+        switch(sprite_no) {
+            // Up
+            case 1:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 2:
+                ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+                break;
+            case 3:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+                break;
+            case 4:
+                ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+                break;
+            case 5:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+                break;
+            // Down
+            case 6:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 7:
+                ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+                break;
+            case 8:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+                break;
+            case 9:
+                ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+                break;
+            case 10:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+                break;
+            // Left
+            case 11:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 12:
+                ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 13:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 14:
+                ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 15:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            // Right
+            case 16:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 17:
+                ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 18:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 19:
+                ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 20:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+        }
+    }
+
+    // Draw NPC
+    function draw_sprite_npc(ctx, direction, sprite_sheet_type, player) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                draw_animation(ctx, 1 + animation_stage_npc, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                draw_animation(ctx, 6 + animation_stage_npc, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                draw_animation(ctx, 11 + animation_stage_npc, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                draw_animation(ctx, 16 + animation_stage_npc, sprite_sheet, player);
+                break;
+            default:
+                break;
+        }
+
+        if (move_directions.length === 0) {
+            animation_stage_npc = 0
+            is_animated = false;
+        }
+
+        if (is_animated) {
+            if (animation_stage_npc === 1) {
+                animation_stage_npc = 2;
+            } else if (animation_stage_npc === 2) {
+                animation_stage_npc = 3;
+            } else if (animation_stage_npc === 3) {
+                animation_stage_npc = 4;
+            } else {
+                animation_stage_npc = 1;
+            }
+        }
+    }
     
-        // For draw_sprite()
-        function draw_animation(ctx, sprite_no, sprite_sheet, sprite) {
-            switch(sprite_no) {
-                // Up
-                case 1:
-                    ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 2:
-                    ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
-                    break;
-                case 3:
-                    ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
-                    break;
-                case 4:
-                    ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
-                    break;
-                case 5:
-                    ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
-                    break;
-                // Down
-                case 6:
-                    ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 7:
-                    ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
-                    break;
-                case 8:
-                    ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
-                    break;
-                case 9:
-                    ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
-                    break;
-                case 10:
-                    ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
-                    break;
-                // Left
-                case 11:
-                    ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 12:
-                    ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 13:
-                    ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 14:
-                    ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 15:
-                    ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                // Right
-                case 16:
-                    ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 17:
-                    ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 18:
-                    ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 19:
-                    ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 20:
-                    ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-            }
-        }
+    // // For draw_sprite()
+    // function draw_animation(ctx, sprite_no, sprite_sheet, sprite) {
+    //     switch(sprite_no) {
+    //         // Up
+    //         case 1:
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 2:
+    //             ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+    //             break;
+    //         case 3:
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+    //             break;
+    //         case 4:
+    //             ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+    //             break;
+    //         case 5:
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+    //             break;
+    //         // Down
+    //         case 6:
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 7:
+    //             ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+    //             break;
+    //         case 8:
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+    //             break;
+    //         case 9:
+    //             ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+    //             break;
+    //         case 10:
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+    //             break;
+    //         // Left
+    //         case 11:
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 12:
+    //             ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 13:
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 14:
+    //             ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 15:
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         // Right
+    //         case 16:
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 17:
+    //             ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 18:
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 19:
+    //             ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 20:
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //     }
+    // }
 
     // To increment in-game time
     function pass_time(time_passed) {
