@@ -182,18 +182,39 @@ export class Gym extends Location {
         super(x_pos, y_pos);
     }
     do_something(player) {
+        if (player._cash < 10) {
+            player.delta_morale = -10;
+            return false;
+        };
         player.delta_cash = -10;
         switch (player.type) {
-            case 'OldMan':
+            case "Male College Student":
+            case "Female College Student":
+            case "Male Highschool Teen":
+            case "Female Highschool Teen":
+                if (Math.random() > 0.9) {
+                    player.delta_strength = 3;
+                } else if (Math.random() > 0.8) {
+                    player.delta_strength = 2;
+                } else {
+                    player.delta_strength = 1;
+                }
+                break;
+            case "Male Spoiled Brat":
+            case "Female Spoiled Brat":
+            case "Male Impoverished":
+            case "Female Impoverished":
+                if (Math.random() > 0.8) {
+                    player.delta_strength = 2;
+                } else {
+                    player.delta_strength = 1;
+                }
+                break;
+            default:
                 player.delta_strength = 1;
                 break;
-            case 'RichKid': case 'PoorPerson':
-                player.delta_strength = 2;
-                break;
-            case 'HSTeen': case 'CollegeStudent':
-                player.delta_strength = 3;
-                break;
-        }
+        };
+        return true;
     }
 };
 

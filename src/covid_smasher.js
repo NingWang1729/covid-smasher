@@ -354,7 +354,7 @@ function COVID_SMASHER() {
                                 switch (value) {
                                     case "rest":
                                         swal("ZZZZZ", "You took a nice long nap!", "success");
-                                        if (obj_pos_map.has(hashedPos))  {
+                                        if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                         }
                                         time = 6;
@@ -385,7 +385,7 @@ function COVID_SMASHER() {
                                         swal("Achoo!", "You were infected and took damage!", "error").then(()=>{
                                             swal(<p>Here are some reasons why <a href="https://www.forbes.com/sites/startswithabang/2020/04/24/these-are-the-dangers-of-visiting-even-one-friend-during-the-covid-19-pandemic/?sh=2102feb91783" target="_blank">you shouldn't visit your neighbors</a> during the middle of a pandemic.</p>)
                                         });
-                                        if (obj_pos_map.has(hashedPos))  {
+                                        if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                         }
                                         pass_time(0.5);
@@ -413,7 +413,7 @@ function COVID_SMASHER() {
                             }).then((value) => {
                                 switch (value) {
                                     case "enter":
-                                        if (obj_pos_map.has(hashedPos))  {
+                                        if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                             if (result === 1) {
                                                 swal("Memories!", "You recall your days of old!", "info").then(()=>{
@@ -501,7 +501,7 @@ function COVID_SMASHER() {
                             }).then((value) => {
                                 switch (value) {
                                     case "enter":
-                                        if (obj_pos_map.has(hashedPos))  {
+                                        if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                             if (result === 1) {
                                                 swal("Success!", "You went to class as usual.", "success");
@@ -527,7 +527,37 @@ function COVID_SMASHER() {
                         } else if (player.x_pos === 14 && player.y_pos === 21) {
                             swal("Arrived at DayJob!");
                         } else if (player.x_pos === 18 && player.y_pos === 21) {
-                            swal("Arrived at Gymnasium!");
+                            swal("You arrived at the gym! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Workout ($10 fine for violation!)",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            if (location_objects[obj_pos_map.get(hashedPos)].do_something(player)) {
+                                                swal("Phew!", "What a great workout!", "success").then(() => {
+                                                    swal(<p>With an uneasy economy, learn more about how <a href="https://kmph.com/news/local/governor-newsom-shuts-down-gyms-and-hair-salons-again" target="_blank">COVID-19 shutdowns</a> further hurt struggling, small businesses.</p>);
+                                                });
+                                            } else {
+                                                swal("Uh-oh", "You don't have enough cash!", "error")};
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
                             swal("You arrived at the hospital! What do you want to do?", {
                                 buttons: {
@@ -543,7 +573,7 @@ function COVID_SMASHER() {
                             }).then((value) => {
                                 switch (value) {
                                     case "enter":
-                                        if (obj_pos_map.has(hashedPos))  {
+                                        if (obj_pos_map.has(hashedPos)) {
                                             if (location_objects[obj_pos_map.get(hashedPos)].do_something(player)) {
                                                 swal("You Win!", "You received the vaccine!.", "success");
                                             } else {
