@@ -59,6 +59,7 @@ class Role extends player {
         this._intelligence = intelligence;
         this._morale = morale;
         this._type = type;
+        this._substenance = 100;
     }
     get type() {
         return this._type;
@@ -71,6 +72,9 @@ class Role extends player {
     }
     get morale() {
         return this._morale;
+    }
+    get substenance() {
+        return this._substenance;
     }
     set delta_health(val) {
         this._hp += val;
@@ -86,6 +90,9 @@ class Role extends player {
     }
     set delta_morale(val) {
         this._morale += val;
+    }
+    set substenance(val) {
+        this._substenance += val;
     }
 };
 

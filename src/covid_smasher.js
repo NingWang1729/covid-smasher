@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
+import swal from '@sweetalert/with-react';
 import './covid_smasher.css';
 
 import * as locations_module from './base_classes/locations.js'
@@ -9,7 +10,7 @@ import * as player_module from './base_classes/player.js'
 const location_objects = [
     new locations_module.Home(1, 4),
     new locations_module.Home(2, 4),
-    new locations_module.Home(5, 4),
+    new locations_module.Neighbor(5, 4),
     /* include City Hall */
     new locations_module.Store(17, 4),
     new locations_module.Store(23, 4),
@@ -60,6 +61,7 @@ const player_selection = [
 var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
 var animated = false;
 var animation_stage = 0;
+var time = 6;
 
 function character_selection(player_class) {
     player = player_selection[player_class];
@@ -111,7 +113,7 @@ function COVID_SMASHER() {
     // ticks decide in game movement etc.
     const [ticks, setTicks] = useState(0);
     // Use 24hr clock, for easy modding, for in game time
-    const [time, setTime] = useState(6);
+    // const [time, setTime] = useState(6);
     // Movequeue for storing keyboard inputs
     const [moves, setMoves] = useState([]);
     // Game state
@@ -332,54 +334,106 @@ function COVID_SMASHER() {
                     break;
                 case 4:
                     if (locations_module.WORLD_MAP[player.y_pos][player.x_pos] === 2) {
-                        if (player.x_pos === 1 && player.y_pos === 4) {
-                            alert("Arrived home!");
-                        } else if (player.x_pos === 2 && player.y_pos === 4) {
-                            alert("Arrived home!");
+                        if (player.x_pos === 1 && player.y_pos === 4 || player.x_pos === 2 && player.y_pos === 4) {
+                            swal("You arrived home! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  rest: {
+                                    text: "Rest until tomorrow (6AM)",
+                                    value: "rest",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "rest":
+                                        swal("ZZZZZ", "You took a nice long nap!", "success");
+                                        let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
+                                        console.log(obj_pos_map.get(hashedPos));
+                                        if (obj_pos_map.has(hashedPos))  {
+                                            console.log("ARRIVED");
+                                            location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                        }
+                                        time = 6;
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to go home just yet.");
+                                        break;
+                                    default:
+                                        swal("You decided not to go home just yet.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 5 && player.y_pos === 4) {
-                            alert("Arrived at Neighbor's house!");
+                            swal("Arrived at Neighbor's house!");
+                            swal("You arrived at your neighbor's house! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Visit neighbor...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        swal("Achoo!", "You were infected and took damage!", "error");
+                                        let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
+                                        console.log(obj_pos_map.get(hashedPos));
+                                        if (obj_pos_map.has(hashedPos))  {
+                                            console.log("ARRIVED");
+                                            location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                        }
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit your neighbor.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit your neighbor.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 12 && player.y_pos === 4) {
-                            alert("Arrived at City Hall!");
+                            swal("Arrived at City Hall!");
                         } else if (player.x_pos === 17 && player.y_pos === 4) {
-                            alert("Arrived at Store 1!");
+                            swal("Arrived at Store 1!");
                         } else if (player.x_pos === 23 && player.y_pos === 4) {
-                            alert("Arrived at Store 2!");
+                            swal("Arrived at Store 2!");
                         } else if (player.x_pos === 28 && player.y_pos === 4) {
-                            alert("Arrived at Store 3!");
+                            swal("Arrived at Store 3!");
                         } else if (player.x_pos === 33 && player.y_pos === 4) {
-                            alert("Arrived at Store 4!");
+                            swal("Arrived at Store 4!");
                         } else if (player.x_pos === 2 && player.y_pos === 13) {
-                            alert("Arrived at Library!");
+                            swal("Arrived at Library!");
                         } else if (player.x_pos === 23 && player.y_pos === 11) {
-                            alert("Arrived at Object Garden!");
+                            swal("Arrived at Object Garden!");
                         } else if (player.x_pos === 27 && player.y_pos === 11) {
-                            alert("Arrived at Cin-n-cout!");
+                            swal("Arrived at Cin-n-cout!");
                         } else if (player.x_pos === 28 && player.y_pos === 11) {
-                            alert("Arrived at Cin-n-cout!");
+                            swal("Arrived at Cin-n-cout!");
                         } else if (player.x_pos === 29 && player.y_pos === 11) {
-                            alert("Arrived at Cin-n-cout!");
+                            swal("Arrived at Cin-n-cout!");
                         } else if (player.x_pos === 32 && player.y_pos === 11) {
-                            alert("Arrived at Foobar!");
+                            swal("Arrived at Foobar!");
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
-                            alert("Arrived at Game Corner!");
+                            swal("Arrived at Game Corner!");
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
-                            alert("Arrived at High School!");
+                            swal("Arrived at High School!");
                         } else if (player.x_pos === 14 && player.y_pos === 21) {
-                            alert("Arrived at DayJob!");
+                            swal("Arrived at DayJob!");
                         } else if (player.x_pos === 18 && player.y_pos === 21) {
-                            alert("Arrived at Gymnasium!");
+                            swal("Arrived at Gymnasium!");
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
-                            alert("Arrived at Hospital!");
+                            swal("Arrived at Hospital!");
                         } else if (player.x_pos === 24 && player.y_pos === 21) {
-                            alert("Arrived at College!");
+                            swal("Arrived at College!");
                         } else if (player.x_pos === 24 && player.y_pos === 22) {
-                            alert("Arrived at College!");
-                        }
-                        let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
-                        console.log(obj_pos_map.get(hashedPos));
-                        if (obj_pos_map.has(hashedPos))  {
-                            console.log("ARRIVED");
-                            location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                            swal("Arrived at College!");
                         }
                     }
                     break;
@@ -508,6 +562,24 @@ function COVID_SMASHER() {
         ctx.stroke();
     }
 
+    // Neighbor pop_up
+    function update_game_3() {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        // Clears most of the canvas
+        ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        
+        // Character selection menu background color
+        ctx.fillStyle = "beige";
+        ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        
+        // Character selection menu border
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.stroke();
+    }
+
         // Sprite drawer
         function draw_sprite(ctx, direction, sprite_sheet_type, player) {
             let sprite_sheet = document.getElementById(sprite_sheet_type);
@@ -541,12 +613,6 @@ function COVID_SMASHER() {
                 } else {
                     animation_stage = 1;
                 }
-                // if (animation_stage === 4) {
-                //     animation_stage = 0;
-                //     animated = false;
-                // } else {
-                //     animation_stage = (animation_stage + 1) % 5;
-                // }
             }
         }
     
@@ -622,7 +688,7 @@ function COVID_SMASHER() {
 
     // To increment in-game time
     function pass_time(time_passed) {
-        setTime((time + time_passed) % 24);
+        time = (time + time_passed) % 24
     };
 
     // Keyboard inputs
@@ -657,8 +723,9 @@ function COVID_SMASHER() {
                     movequeue.push(3); // move_down();
                 }
                 break;
-            case 32: // Space
+            // case 32: // Space
             case 70: // F
+            case 88: // X
                 if(play) {
                     movequeue.push(4); // interact();
                 }
@@ -684,6 +751,7 @@ function COVID_SMASHER() {
                         setPlay(false);
                     }
                 }
+                break;
             default: 
                 return; // exit this handler for other keys
         }
@@ -701,17 +769,17 @@ function COVID_SMASHER() {
                 console.log(e);
                 console.log(x, y);
                 if (x > 2 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    alert("Loaded Slot 1!");
+                    swal("Loaded Slot 1!");
                 } else if (x > 7.5 * locations_module.UNIT_SIZE && x < 7.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    alert("Saved Slot 1!");
+                    swal("Saved Slot 1!");
                 } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    alert("Loaded Slot 2!");
+                    swal("Loaded Slot 2!");
                 } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    alert("Saved Slot 2!");
+                    swal("Saved Slot 2!");
                 } else if (x > MAX_WIDTH * 2 / 3 && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    alert("Loaded Slot 3!");
+                    swal("Loaded Slot 3!");
                 } else if (x > MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    alert("Saved Slot 3!");
+                    swal("Saved Slot 3!");
                 };
                 break;
             case 2:
