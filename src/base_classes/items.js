@@ -1,6 +1,6 @@
 class Item {
     constructor(store_type) { // store_type = unary, binary, ternary
-        switch (store_type) {
+        switch (store_type) { // Will prob change up....
             case "unary":
                 this._cost = 1;
                 break;
