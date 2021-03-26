@@ -382,7 +382,9 @@ function COVID_SMASHER() {
                             }).then((value) => {
                                 switch (value) {
                                     case "enter":
-                                        swal("Achoo!", "You were infected and took damage!", "error");
+                                        swal("Achoo!", "You were infected and took damage!", "error").then(()=>{
+                                            swal(<p>Here are some reasons why <a href="https://www.forbes.com/sites/startswithabang/2020/04/24/these-are-the-dangers-of-visiting-even-one-friend-during-the-covid-19-pandemic/?sh=2102feb91783" target="_blank">you shouldn't visit your neighbors</a> during the middle of a pandemic.</p>)
+                                        });
                                         if (obj_pos_map.has(hashedPos))  {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                         }
@@ -527,7 +529,36 @@ function COVID_SMASHER() {
                         } else if (player.x_pos === 18 && player.y_pos === 21) {
                             swal("Arrived at Gymnasium!");
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
-                            swal("Arrived at Hospital!");
+                            swal("You arrived at the hospital! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Check vaccine progress...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos))  {
+                                            if (location_objects[obj_pos_map.get(hashedPos)].do_something(player)) {
+                                                swal("You Win!", "You received the vaccine!.", "success");
+                                            } else {
+                                                swal(<p>Check again when you have 100 in strength, intelligence, or morale, and <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/expect.html" target="_blank">learn more</a> about <a href="https://www.defense.gov/Explore/Spotlight/Coronavirus/Operation-Warp-Speed/" target="_blank">the COVID-19 vaccine.</a></p>);
+                                            };
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 24 && player.y_pos === 21) {
                             swal("Arrived at College!");
                         } else if (player.x_pos === 24 && player.y_pos === 22) {

@@ -233,8 +233,8 @@ export class Hospital extends Location {
         super(x_pos, y_pos);
     }
     do_something(player) {
-        if (player.strength === 100 || player.intelligence === 100 || player.morale === 100) {
-            alert("You got vaccinated. You win!");
+        if (player.strength >= 100 || player.intelligence >= 100 || player.morale >= 100) {
+            return true;
         }
     }
 };
