@@ -64,15 +64,152 @@ var animated = false;
 var animation_stage = 0;
 var time = 6;
 
+
+
+
 // NPC
-var npc1 = new player_module.Role(15, 5, 100, 50, 30, 50, 30, 'Female Impoverished');
+// Numbers are inclusive
+const getRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+// Sometimes this does not work
+let getRandomValidPosition = () => {
+    for (;;) {
+        let random_row = getRandomNumber(0, locations_module.WORLD_HEIGHT - 1)
+        // 4 is for the buffer
+        let random_col = getRandomNumber(4, locations_module.WORLD_WIDTH - 1)
+        
+        // If the start position is valid
+        if (locations_module.WORLD_MAP[random_row][random_col] == 0) {
+            return [random_row, random_col]
+        }
+    }
+}
+
+// We get a random valid position for our npc to start
+const [rows, cols] = getRandomValidPosition();
+
+var npc1 = new player_module.Role(rows, cols, 100, 50, 30, 50, 30, 'Female Impoverished');
 var animation_stage_npc = 0;
 var is_animated = true;
 var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
 
-function dfs() {
-    return
+
+
+function randomMovement(character) {
+    let move_arr = [];
+    // let curr_row = character.get_y_pos;
+    // let curr_col = character.get_x_pos;
+
+    for (let i = 0; i < 101; i++) {
+        let direction_int = getRandomNumber(0,3);
+        let append_count = getRandomNumber(1,10);
+        for (let j = 0; j < append_count; j++) {
+            // if (direction_int === 0) {
+            //     if (locations_module.WORLD_MAP[curr_row][curr_col - 1] != 0) {
+            //         continue;
+            //     }
+            //     curr_col -= 1;
+            // } else if (direction_int === 1) {
+            //     if (locations_module.WORLD_MAP[curr_row][curr_col + 1] != 0) {
+            //         continue;
+            //     }
+            //     curr_col += 1;
+            // } else if (direction_int === 2) {
+            //     if (locations_module.WORLD_MAP[curr_row - 1][curr_col] != 0) {
+            //         continue;
+            //     }
+            //     curr_row -= 1;
+            // } else if (direction_int === 3) {
+            //     if (locations_module.WORLD_MAP[curr_row + 1][curr_col] != 0) {
+            //         continue;
+            //     }
+            //     curr_row += 1;
+            // }
+            
+            move_arr.push(direction_int)
+        }    
+    }
+
+    return move_arr;
 }
+
+var dfs_move_que = [];
+var dfs_map = [
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [0,2,2,0,0,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,2,0,0,0,2,2,2,0,0,2,0,0,0,0,2,0,0,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,2,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+]
+
+function canMove(row, col) {
+    return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] == 0); 
+}
+
+function bfs() {
+    return;
+}
+
+function dfs(row, col) {
+    // console.log(row, col);
+    dfs_map[row][col] = 1;
+
+    if (dfs_map[row][col] == 3) {
+        return 
+    }
+
+    if (canMove(row - 1, col)) {
+        dfs_move_que.push(2);
+        dfs(row - 1, col);
+    }
+    if (canMove(row, col + 1)) {
+        dfs_move_que.push(1);
+        dfs(row, col + 1);
+    }
+    if (canMove(row + 1, col)) {
+        dfs_move_que.push(3);
+        dfs(row + 1, col);
+    }
+    if (canMove(row, col - 1)) {
+        dfs_move_que.push(0);
+        dfs(row, col - 1);
+    }
+
+
+}
+
+// Comment Out One of these to choose type of pathfinder algo
+// Comment Out all algos to set pre-made path
+
+// Random Algo
+move_directions = randomMovement(npc1);
+
+// DFS Algo
+// dfs(rows, cols);
+// move_directions = dfs_move_que;
+
+
+
 
 function character_selection(player_class) {
     player = player_selection[player_class];
