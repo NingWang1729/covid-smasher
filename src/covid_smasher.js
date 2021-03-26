@@ -356,7 +356,7 @@ function COVID_SMASHER() {
                                         swal("ZZZZZ", "You took a nice long nap!", "success");
                                         if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                        }
+                                        };
                                         time = 6;
                                         break;
                                     case "leave":
@@ -387,7 +387,7 @@ function COVID_SMASHER() {
                                         });
                                         if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                        }
+                                        };
                                         pass_time(0.5);
                                         break;
                                     case "leave":
@@ -525,7 +525,60 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 14 && player.y_pos === 21) {
-                            swal("Arrived at DayJob!");
+                            swal("You arrived at work! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Go to work...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            switch (result) {
+                                                case 0:
+                                                    swal(<p>You worked <a href="https://www.investopedia.com/articles/markets-economy/090516/what-are-pros-and-cons-raising-minimum-wage.asp" target="_blank">minimum wage</a>!</p>);
+                                                    pass_time(1);
+                                                    break;
+                                                case 1:
+                                                    swal(<p>You worked at an <a href="https://technologyadvice.com/blog/human-resources/company-needs-start-paying-interns/" target ="_blank">unpaid internship</a>!</p>);
+                                                    pass_time(3);
+                                                    break;
+                                                case 2:
+                                                    swal(<p>You worked at a <a href="https://www.thebalancecareers.com/the-pros-and-cons-of-working-at-a-startup-company-3859588" target="_blank">tech startup</a>!</p>);
+                                                    pass_time(3);
+                                                    break;
+                                                case 3:
+                                                    swal(<p>You lost your job due to <a href="https://www.thebalance.com/how-outsourcing-jobs-affects-the-u-s-economy-3306279" target="_blank">outsourcing</a>! (In game hint: Try raising your intelligence stat! This is harder in real life.)</p>);
+                                                    pass_time(2);
+                                                    break;
+                                                case 4:
+                                                    swal(<p>You received <a href="https://www.youtube.com/watch?v=iik25wqIuFo" target="_blank">a small loan of $100</a>!</p>);
+                                                    pass_time(2);
+                                                    break;
+                                                case 5:
+                                                    swal(<p>You remember that you are retired and should go collect <a href="https://abcnews.go.com/Politics/social-security-running-money-benefits-track-reduced-2035/story?id=62557507" target="_blank">social security benefits</a> from the city hall while it lasts!</p>)
+                                                    pass_time(1);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to go to work.");
+                                        break;
+                                    default:
+                                        swal("You decided not to go to work.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 18 && player.y_pos === 21) {
                             swal("You arrived at the gym! What do you want to do?", {
                                 buttons: {
@@ -558,6 +611,7 @@ function COVID_SMASHER() {
                                         break;
                                 };
                             });
+                            pass_time(2);
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
                             swal("You arrived at the hospital! What do you want to do?", {
                                 buttons: {

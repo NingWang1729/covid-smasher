@@ -36,8 +36,8 @@ export class Home extends Location {
         } else if (player._type === "Male Elderly Person" || player._type === "Female Elderly Person") {
             player.delta_health = 10;
             player.delta_morale = 1;
-        }
-    }
+        };
+    };
 };
 
 export class Neighbor extends Location {
@@ -143,27 +143,40 @@ export class Work extends DayJob {
         super(x_pos, y_pos);
     }
     do_something(player) {
-        player.delta_intelligence = 1;
-        switch (player.type) {
-            case 'HSTeen': case 'PoorPerson':
-                player.delta_morale = 1;
+        if (player._type === "Male Highschool Teen" || player._type === "Female Highschool Teen") {
+            player.delta_cash = 15;
+            return 0;
+        } else if (player._type === "Male College Student" || player._type === "Female College Student") {
+            if (player._intelligence >= 85) {
+                player.delta_cash = player._intelligence - 60;
+                player.delta_intelligence = 5;
+                return 2;
+            } else if (player._intelligence <= 75) {
+                player.delta_intelligence = 2;
+                return 1;
+            } else {
                 player.delta_cash = 15;
-                break;
-            case 'RichKid':
-                player.delta_morale = -5;
-                player.delta_cash = 100;
-                break;
-            case 'CollegeStudent':
-                player.delta_morale = -1;
-                break;
-            case 'OldMan':
+                return 0;
+            }
+        } else if (player._type === "Male Impoverished" || player._type === "Female Impoverished") {
+            if (player._intelligence >= 60) {
+                player.delta_cash = 15;
+                return 0;
+            } else {
+                player.delta_morale = -2;
+                return 3;
+            }
+        } else if (player._type === "Male Spoiled Brat" || player._type === "Female Spoiled Brat") {
+            player.delta_cash = 100;
+            return 4;
+        } else if (player._type === "Male Elderly Person" || player._type === "Female Elderly Person") {
+            if (Math.random() > 0.8) {
                 player.delta_morale = 1;
-                break;
-            default:
-                break;
-        }
-    }
-}
+            }
+            return 5;
+        };
+    };
+};
 
 export class Park extends Location {
     constructor(x_pos, y_pos) {
