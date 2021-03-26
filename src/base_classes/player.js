@@ -136,7 +136,7 @@ class Role extends player {
     set delta_morale(val) {
         this._morale += val;
     }
-    set substenance(val) {
+    set delta_substenance(val) {
         this._substenance += val;
     }
 };

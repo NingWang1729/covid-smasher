@@ -19,7 +19,7 @@ export class Home extends Location {
         super(x_pos, y_pos);
     }
     do_something(player) {
-        if (player._type === "Male Highschool Teen" || player._type === "Male Highschool Teen") {
+        if (player._type === "Male Highschool Teen" || player._type === "Female Highschool Teen") {
             player._hp = 100;
             player.delta_morale = 1;
         } else if (player._type === "Male College Student" || player._type === "Female College Student") {
@@ -113,7 +113,18 @@ export class HighSchool extends DayJob {
         super(x_pos, y_pos);
     }
     do_something(player) {
-        player.delta_intelligence = 1;
+        if (player._type === "Male Highschool Teen" || player._type === "Female Highschool Teen") {
+            if (Math.random() > 0.6) {
+                player.delta_intelligence = 1;
+                return 1;
+            } else {
+                player.delta_intelligence = -2;
+                return 0;
+            }
+        } else {
+            player.delta_morale = -1;
+            return -1;
+        };
     }
 };
 
@@ -192,14 +203,26 @@ export class Library extends Location {
     }
     do_something(player) {
         switch (player.type) {
-            case 'RichKid': case 'PoorPerson': case 'OldMan':
+            case "Male College Student":
+            case "Female College Student":
+                if (Math.random() > 0.9) {
+                    player.delta_intelligence = 3;
+                } else if (Math.random() > 0.8) {
+                    player.delta_intelligence = 2;
+                } else {
+                    player.delta_intelligence = 1;
+                }
+                break;
+            case "Male Highschool Teen":
+            case "Female Highschool Teen":
+                if (Math.random() > 0.8) {
+                    player.delta_intelligence = 2;
+                } else {
+                    player.delta_intelligence = 1;
+                }
+                break;
+            default:
                 player.delta_intelligence = 1;
-                break;
-            case 'HSTeen': 
-                player.delta_intelligence = 2;
-                break;
-            case 'CollegeStudent':
-                player.delta_intelligence = 3;
                 break;
         }
     }

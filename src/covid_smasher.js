@@ -113,14 +113,15 @@ function COVID_SMASHER() {
     const [play, setPlay] = useState(false);
     // ticks decide in game movement etc.
     const [ticks, setTicks] = useState(0);
-    // Use 24hr clock, for easy modding, for in game time
-    // const [time, setTime] = useState(6);
     // Movequeue for storing keyboard inputs
     const [moves, setMoves] = useState([]);
     // Game state
     const [game_state, setGameState] = useState(2);
     // Setup
     const [setup, setSetup] = useState(true);
+    // Library
+    const [books, setBooks] = useState(["graph theory", "algebra", "digital art", "lucid dreams", "baking bread",
+                                        "alchemy", "philosophy", "pistachio farming", "literacy rates", "books"]);
     
     // Initializes display screen
     useEffect(()=>{
@@ -337,7 +338,7 @@ function COVID_SMASHER() {
                     if (locations_module.WORLD_MAP[player.y_pos][player.x_pos] === 2) {
                         let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
                         console.log(obj_pos_map.get(hashedPos));
-                        if (player.x_pos === 1 && player.y_pos === 4 || player.x_pos === 2 && player.y_pos === 4) {
+                        if ((player.x_pos === 1 || player.x_pos === 2) && player.y_pos === 4) {
                             swal("You arrived home! What do you want to do?", {
                                 buttons: {
                                   leave: {
@@ -354,7 +355,6 @@ function COVID_SMASHER() {
                                     case "rest":
                                         swal("ZZZZZ", "You took a nice long nap!", "success");
                                         if (obj_pos_map.has(hashedPos))  {
-                                            console.log("ARRIVED");
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                         }
                                         time = 6;
@@ -384,7 +384,6 @@ function COVID_SMASHER() {
                                     case "enter":
                                         swal("Achoo!", "You were infected and took damage!", "error");
                                         if (obj_pos_map.has(hashedPos))  {
-                                            console.log("ARRIVED");
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                         }
                                         pass_time(0.5);
@@ -413,7 +412,6 @@ function COVID_SMASHER() {
                                 switch (value) {
                                     case "enter":
                                         if (obj_pos_map.has(hashedPos))  {
-                                            console.log("ARRIVED");
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                             if (result === 1) {
                                                 swal("Memories!", "You recall your days of old!", "info").then(()=>{
@@ -422,7 +420,7 @@ function COVID_SMASHER() {
                                             } else if (result === 0) {
                                                 swal("Memories!", "You recall your days of old!", "info").then(()=>{
                                                     swal("Hxppy Thxxghts", "You recall traumatic events...", "error").then(() => {
-                                                        swal(<p>The average wait time at the DMV is 2-3 hours! This is a huge issue for the elderly and disabled. Find your <a href="https://www.house.gov/representatives/find-your-representative">representative</a> and let them know your concern!</p>);
+                                                        swal(<p>The average wait time at the DMV is 2-3 hours! This is a huge issue for the elderly, disabled, and impatient. Find your <a href="https://www.house.gov/representatives/find-your-representative" target="_blank">representative</a> and let them know your concern!</p>);
                                                     });
                                                 });
                                             } else {
@@ -448,21 +446,82 @@ function COVID_SMASHER() {
                         } else if (player.x_pos === 33 && player.y_pos === 4) {
                             swal("Arrived at Store 4!");
                         } else if (player.x_pos === 2 && player.y_pos === 13) {
-                            swal("Arrived at Library!");
+                            swal("You arrived at the library! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Read a book...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        swal("Success!", `You read a book about ${books[Math.trunc(10 * Math.random())]}...`, "success").then(()=>{
+                                            swal(<p>With libraries no longer open in person, you can checkout over 60,000 free ebooks at the <a href="http://www.gutenberg.org/" target="_blank">Gutenberg Project!</a></p>);
+                                        });
+                                        if (obj_pos_map.has(hashedPos))  {
+                                            location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                        };
+                                        pass_time(1.5);
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the library.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the library.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 23 && player.y_pos === 11) {
                             swal("Arrived at Object Garden!");
-                        } else if (player.x_pos === 27 && player.y_pos === 11) {
-                            swal("Arrived at Cin-n-cout!");
-                        } else if (player.x_pos === 28 && player.y_pos === 11) {
-                            swal("Arrived at Cin-n-cout!");
-                        } else if (player.x_pos === 29 && player.y_pos === 11) {
+                        } else if ((player.x_pos === 27 || player.x_pos === 28 || player.x_pos === 29) && player.y_pos === 11) {
                             swal("Arrived at Cin-n-cout!");
                         } else if (player.x_pos === 32 && player.y_pos === 11) {
                             swal("Arrived at Foobar!");
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
                             swal("Arrived at Game Corner!");
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
-                            swal("Arrived at High School!");
+                            swal("You arrived at the highschool! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Go to class...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos))  {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            if (result === 1) {
+                                                swal("Success!", "You went to class as usual.", "success");
+                                                pass_time(1.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You were unable to concentrate.", "error").then(() => {
+                                                    swal(<p>Remote learning has made education more difficult all around the country, with <a href="https://www.cbsnews.com/news/coronavirus-pandemic-students-grades-suffering-all-remote-learning/" target="_blank">higher rates of failing classes</a>. This has been significantly worse in more rural and poorer areas.</p>);
+                                                });
+                                                pass_time(1.5);
+                                            } else {
+                                                swal("Hold up...", "You are not a highschooler! What a silly mistake...", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the highschool.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the highschool.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 14 && player.y_pos === 21) {
                             swal("Arrived at DayJob!");
                         } else if (player.x_pos === 18 && player.y_pos === 21) {
@@ -727,7 +786,8 @@ function COVID_SMASHER() {
 
     // To increment in-game time
     function pass_time(time_passed) {
-        time = (time + time_passed) % 24
+        time = (time + time_passed) % 24;
+        player.delta_substenance = - (10 - player._morale / 100) * time_passed;
     };
 
     // Keyboard inputs
@@ -857,6 +917,7 @@ function COVID_SMASHER() {
                 <td id="left-column">
                     <p>TIME: {Math.trunc(time).toString().padStart(2, "0")}:{Math.trunc((time - Math.trunc(time)) * 60).toString().padStart(2, "0")}</p>
                     <p>HEALTH POINTS: {player._hp}</p>
+                    <p>SUBSTENANCE: {Math.trunc(player._substenance)}</p>
                     <p>CASH: ${player._cash}</p>
                     <p>STRENGTH: {player._strength}</p>
                     <p>INTELLIGENCE: {player._intelligence}</p>
