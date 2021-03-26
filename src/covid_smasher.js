@@ -58,7 +58,6 @@ const player_selection = [
     new player_module.Role(2, 5, 100, 100, 10, 50, 40, 'Female Elderly Person'),
 ];
 
-// var player = new player_module.player(2, 5);
 var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
 var animated = false;
 var animation_stage = 0;
@@ -116,7 +115,7 @@ function COVID_SMASHER() {
     // Movequeue for storing keyboard inputs
     const [moves, setMoves] = useState([]);
     // Game state
-    const [game_state, setGameState] = useState(2);
+    const [game_state, setGameState] = useState(3); // 0 = World Map, 1 = Pause Menu, 2 = Character Selection, 3 = Load Screen
     // Setup
     const [setup, setSetup] = useState(true);
     // Library
@@ -146,6 +145,9 @@ function COVID_SMASHER() {
                 break;
             case 2: // CHARACTER SELECTION SCREEN
                 update_game_2();
+                break;
+            case 3: // LOAD SCREEN
+                update_game_3();
                 break;
             default:
                 pass_time(0.001);
@@ -814,7 +816,7 @@ function COVID_SMASHER() {
         ctx.stroke();
     }
 
-    // Neighbor pop_up
+    // Game Menu pop_up
     function update_game_3() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
@@ -829,6 +831,9 @@ function COVID_SMASHER() {
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        
+
+        
         ctx.stroke();
     }
 
@@ -1005,6 +1010,17 @@ function COVID_SMASHER() {
                     }
                 }
                 break;
+            case 86: // V
+                if (setup) {
+                    if (game_state === 3) {
+                        setGameState(0);
+                        setPlay(true);
+                    } else {
+                        setGameState(3);
+                        setPlay(false);
+                    }
+                }
+                break;
             default: 
                 return; // exit this handler for other keys
         }
@@ -1038,6 +1054,35 @@ function COVID_SMASHER() {
             case 2:
                 console.log(e);
                 console.log(x, y);
+                function start_game() {
+                    swal("Confirm selection:", "Are you sure about your character class? (This action cannot be undone.)", "info", {
+                        buttons: {
+                          leave: {
+                            text: "Not sure...",
+                            value: "leave",
+                          },
+                          enter: {
+                            text: "Let's start!",
+                            value: "enter",
+                          },
+                        }
+                    }).then((value)=>{
+                        switch (value) {
+                            case "leave":
+                                swal("OK, take your time.");
+                                break;
+                            case "enter":
+                                swal("Let's go!", "Starting game...", "success").then(() => {
+                                    setGameState(0);
+                                    setPlay(true);
+                                });
+                                break;
+                            default:
+                                swal("Leave")
+                                break;
+                        }
+                    });
+                };
                 if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
                     character_selection(0);
                 } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
@@ -1059,6 +1104,12 @@ function COVID_SMASHER() {
                 } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
                     character_selection(9);
                 };
+                start_game();
+                break;
+            case 3:
+                swal("Alright!", "Let's select your character...").then(()=>{
+                    setGameState(2);
+                });
                 break;
             default:
                 break;
