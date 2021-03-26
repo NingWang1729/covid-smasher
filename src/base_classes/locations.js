@@ -19,7 +19,33 @@ export class Home extends Location {
         super(x_pos, y_pos);
     }
     do_something(player) {
-        ;
+        if (player._type === "Male Highschool Teen" || player._type === "Male Highschool Teen") {
+            player._hp = 100;
+            player.delta_morale = 1;
+        } else if (player._type === "Male College Student" || player._type === "Female College Student") {
+            if (player._hp < 96) {
+                player.delta_health = 5;
+            }
+        } else if (player._type === "Male Impoverished" || player._type === "Female Impoverished") {
+            if (player._hp < 96) {
+                player.delta_health = 5;
+            }
+        } else if (player._type === "Male Spoiled Brat" || player._type === "Female Spoiled Brat") {
+            player._hp = 110;
+            player.delta_morale = 2;
+        } else if (player._type === "Male Elderly Person" || player._type === "Female Elderly Person") {
+            player.delta_health = 10;
+            player.delta_morale = 1;
+        }
+    }
+};
+
+export class Neighbor extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    }
+    do_something(player) {
+        player.delta_health = -10;
     }
 };
 
@@ -150,7 +176,7 @@ export class Hospital extends Location {
     }
     do_something(player) {
         if (player.strength === 100 || player.intelligence === 100 || player.morale === 100) {
-            // Win? IDK how to end a game
+            alert("You got vaccinated. You win!");
         }
     }
 };
