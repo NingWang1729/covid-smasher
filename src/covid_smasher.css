@@ -23,6 +23,7 @@
   }
   
   #center-column {
+    width: 1280px;
     border: 1px;
     border-style: solid;
     border-color: black;
@@ -35,4 +36,12 @@
     border: 1px;
     border-style: solid;
     border-color: black;
+  }
+
+  table {
+    table-layout: fixed;
+  }
+
+  td {
+    word-wrap: break-word;
   }
