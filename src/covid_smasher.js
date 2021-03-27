@@ -392,6 +392,17 @@ function COVID_SMASHER() {
     }
     // WORLD MAP
     function update_game_0 () {
+        if (player._substenance <= 0 && ticks % 20 === 0) {
+            swal("Game Over!", "You died from starvation!", "error").then(() => {
+                swal(<p>The UN warns of <a href="https://townhall.com/tipsheet/bronsonstocking/2020/04/22/so-130-million-people-could-starve-because-of-the-lockdowns-n2567446" target="_blank">Mass Starvation</a> due to COVID-19.</p>);
+            });
+        } else if (player._hp <= 0 && ticks % 20 === 0) {
+            swal("Game Over!", "You died from injuries!", "error").then(() => {
+                swal(<p><a href="https://www.worldometers.info/coronavirus/" target="_blank">Millions of people</a> have died from COVID-19.</p>);
+            });
+        } else if ((player._substenance > 0 && player._substenance <= 50 || player._hp > 0 && player._hp <= 50) && ticks % 200 === 0) {
+            swal("You're not looking so good!", "Try increasing your substenance and hp.", "info")
+        }
         // Same as code below
         updateFacingDirection(animation_stage_npc, is_animated, npc1, move_directions);
 
@@ -1579,7 +1590,7 @@ function COVID_SMASHER() {
         ctx.fillText("Try to reach 100 in strength, intelligence, or morale to", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 8 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.fillText("unlock the COVID-19 vaccine at the hospital to win!", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 10 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.textAlign = "center";
-        ctx.font = '60px serif';
+        ctx.font = '42px serif';
         ctx.fillText("    Click anywhere to start...  ", MAX_WIDTH * 3 / 4 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 9 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, locations_module.UNIT_SIZE / 3);
         
         ctx.stroke();
