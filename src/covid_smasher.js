@@ -138,7 +138,7 @@ console.log("coordinates", rows, cols);
 
 var npc1 = new player_module.Role(cols, rows, 100, 50, 30, 50, 30, 'Female Impoverished');
 var animation_stage_npc = 0;
-var is_animated = false;
+var is_animated = true;
 var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
 
 //   0     1     2    3  4  5   6
@@ -158,6 +158,7 @@ function fixNPCMoveQueue(npc_queue) {
         }
         
     }
+    return npc_queue;
 } 
 
 function randomMovement(character) {
@@ -241,11 +242,12 @@ function dfs(row, col) {
 // Comment Out all algos to set pre-made path
 
 // Random Algo
-move_directions = randomMovement(npc1);
+// move_directions = randomMovement(npc1);
 
 // DFS Algo
-// dfs(rows, cols);
-// move_directions = dfs_move_que;
+dfs(rows, cols);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+move_directions = dfs_move_que;
 
 
 

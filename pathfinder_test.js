@@ -87,3 +87,26 @@ console.log(moveableSpaces(WORLD_MAP));
 
 
 // console.log(WORLD_MAP[10][10]);
+
+//   0     1     2    3  4  5   6
+// right right right up up up down
+function fixNPCMoveQueue(npc_queue) {
+    let join_arr = [];
+    if (npc_queue[0] != 3) {
+        npc_queue.unshift(npc_queue[0])
+    }
+    for (let i = 1; i < npc_queue.length - 1; i++) {
+        let prev = i - 1;
+        let next = i;
+        if (npc_queue[prev] != npc_queue[next]) {
+            console.log(npc_queue.join());
+            npc_queue.splice(next, 0, npc_queue[next]);
+            console.log(npc_queue.join());
+        }
+        
+    }
+    return npc_queue;
+} 
+
+
+console.log(fixNPCMoveQueue([3,2,2,3,3,2,1,1,0]));
