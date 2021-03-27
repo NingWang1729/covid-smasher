@@ -224,37 +224,86 @@ export class Soda extends Item {
     }
 };
 
-class Alcohol extends Item {
+export class Butterbeer extends Item {
     constructor(store_type) {
         super(store_type);
+        this._item_type = "Butterbeer";
     }
     use_effect(player) {
         super.use_effect(player);
-        alert("Are you sure you should be drinking this?");
-        player.delta_health = -10;
-        player.delta_intelligence = -5;
-        player.delta_morale = 5;
-    }
-};
-
-class BreadStacks extends Item {
-    constructor(store_type) {
-        super(store_type);
-    }
-    use_effect(player) {
-        super.use_effect(player);
-        alert("These are unlimited until stack overflow.");
         player.delta_health = 5;
+        player.delta_morale = 1;
     }
 };
 
-class Copypasta extends Item {
+export class Dry_Martini extends Item {
     constructor(store_type) {
         super(store_type);
+        this._item_type = "Dry_Martini";
     }
     use_effect(player) {
         super.use_effect(player);
-        alert("Mmm. Fresh pasta.");
-        player.delta_morale = 10;
+        player.delta_health = -10;
+        player.delta_intelligence = 1;
+        player.delta_strength = 1;
+        player.delta_morale = 1;
+    }
+};
+
+export class Spam_and_eggs extends Item {
+    constructor(store_type) {
+        super(store_type);
+        this._item_type = "Spam_and_eggs";
+    }
+    use_effect(player) {
+        super.use_effect(player);
+        player.delta_health = 5;
+        player._substenance = 10;
+        player.delta_intelligence = 1;
+        player.delta_morale = 1;
+    }
+};
+
+export class Bread_Stacks extends Item {
+    constructor(store_type) {
+        super(store_type);
+        this._item_type = "Bread_Stacks";
+    }
+    use_effect(player) {
+        super.use_effect(player);
+        swal("These are unlimited until stack overflows.");
+        player.delta_health = 5;
+        player.delta_substenance = 10;
+        player.delta_morale = 1;
+    }
+};
+
+export class Copypasta extends Item {
+    constructor(store_type) {
+        super(store_type);
+        this._item_type = "Copypasta";
+    }
+    use_effect(player) {
+        super.use_effect(player);
+        swal("Mmm. Fresh pasta.");
+        player.delta_morale = 2;
+        player.delta_health = 10;
+        player.delta_substenance = 30;
+        player.delta_strength = 1;
+    }
+}
+
+export class Tiramisu extends Item {
+    constructor(store_type) {
+        super(store_type);
+        this._item_type = "Tiramisu";
+    }
+    use_effect(player) {
+        super.use_effect(player);
+        swal("Mmm. Chocolate Mousse.");
+        player.delta_health = 10;
+        player.delta_substenance = 10;
+        player.delta_morale = 1;
+        player.delta_intelligence = 1;
     }
 }

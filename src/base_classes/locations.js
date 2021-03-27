@@ -203,6 +203,37 @@ export class Mystery_Store extends Location {
     };
 };
 
+export class Object_Garden extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    };
+    do_something(player, item_no) {
+        switch (item_no) {
+            case 1:
+                if (player._cash > 6 && player.add_item(new items_module.Bread_Stacks) === true) {
+                    player.delta_cash = -6;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 2:
+                if (player._cash > 20 && player.add_item(new items_module.Copypasta) === true) {
+                    player.delta_cash = -20;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 3:
+                if (player._cash > 8 && player.add_item(new items_module.Tiramisu) === true) {
+                    player.delta_cash = -8;
+                    return true;
+                } else {
+                    return false;
+                };
+        };
+    };
+};
+
 export class Cin_N_Cout extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
@@ -226,6 +257,37 @@ export class Cin_N_Cout extends Location {
             case 3:
                 if (player._cash > 1 && player.add_item(new items_module.Soda) === true) {
                     player.delta_cash = -1;
+                    return true;
+                } else {
+                    return false;
+                };
+        };
+    };
+};
+
+export class Foobar extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    };
+    do_something(player, item_no) {
+        switch (item_no) {
+            case 1:
+                if (player._cash > 2 && player.add_item(new items_module.Butterbeer) === true) {
+                    player.delta_cash = -2;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 2:
+                if (player._cash > 3 && player.add_item(new items_module.Dry_Martini) === true) {
+                    player.delta_cash = -3;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 3:
+                if (player._cash > 5 && player.add_item(new items_module.Spam_and_eggs) === true) {
+                    player.delta_cash = -5;
                     return true;
                 } else {
                     return false;
