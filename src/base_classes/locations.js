@@ -1,5 +1,5 @@
 // ALAN: Set up base location class, with different children classes
-import COVID_SMASHER from '../covid_smasher.js'
+import * as items_module from './items.js'
 
 class Location {
     constructor(x_pos, y_pos) {
@@ -72,13 +72,12 @@ export class Cityhall extends Location {
     };
 };
 
-export class Store extends Location {
+export class Store1 extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
     };
-    do_something(player) {
-        let selection = prompt("1: Food, 2: Drink, 3: Spinner", "1");
-        switch (parseInt(selection)) {
+    do_something(player, item_no) {
+        switch (item_no) {
             case 1:
                 player.delta_morale = -1;
                 break;
@@ -86,9 +85,12 @@ export class Store extends Location {
                 player.delta_morale = 1;
                 break;
             case 3:
-                player.delta_morale = 1;
-                alert("Whee!");
-                break;
+                if (player._cash > 1 && player.add_item(new items_module.FidgetSpinner) === true) {
+                    player.delta_cash = -1;
+                    return true;
+                } else {
+                    return false;
+                };
         };
     };
 };

@@ -6,6 +6,7 @@ import './covid_smasher.css';
 import * as locations_module from './base_classes/locations.js'
 import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
+import * as items_module from './base_classes/items.js'
 
 const location_objects = [
     new locations_module.Home(1, 4),
@@ -13,10 +14,10 @@ const location_objects = [
     new locations_module.Neighbor(5, 4),
     new locations_module.Cityhall(12, 4),
     /* include City Hall */
-    new locations_module.Store(17, 4),
-    new locations_module.Store(23, 4),
-    new locations_module.Store(28, 4),
-    new locations_module.Store(33, 4),
+    new locations_module.Store1(17, 4),
+    new locations_module.Store1(23, 4),
+    new locations_module.Store1(28, 4),
+    new locations_module.Store1(33, 4),
     new locations_module.Library(2, 13),
     /* include Object Garden */
     new locations_module.Restaurant(27, 11),
@@ -443,6 +444,46 @@ function COVID_SMASHER() {
                             });
                         } else if (player.x_pos === 17 && player.y_pos === 4) {
                             swal("Arrived at Store 1!");
+                            swal("You arrived at the Unary-store! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "n/a...",
+                                    value: "enter",
+                                  },
+                                  item2: {
+                                    text: "n/a...",
+                                    value: "enter",
+                                  },
+                                  item3: {
+                                    text: "Buy spidget finner...",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Hey, you got a spidget finner! *nice*");
+                                            } else {
+                                                swal("inventory full!");
+                                            };
+                                        };
+                                        pass_time(2 + Math.random());
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit the unary store.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit the unary store.");
+                                        break;
+                                }
+                            });
                         } else if (player.x_pos === 23 && player.y_pos === 4) {
                             swal("Arrived at Store 2!");
                         } else if (player.x_pos === 28 && player.y_pos === 4) {
@@ -688,8 +729,8 @@ function COVID_SMASHER() {
                                         break;
                                 };
                             });
-                        }
-                    }
+                        };
+                    };
                     break;
                 default:
                     break;
@@ -1128,8 +1169,44 @@ function COVID_SMASHER() {
                     <p>INTELLIGENCE: {player._intelligence}</p>
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER: {player._type}</p>
+                    <p>{player._inventory._item_array.length}</p>
                     <p style={{visibility: 'hidden'}}>{player.direction}</p>
                     <p style={{visibility: 'hidden'}}>({player.x_pos},{player.y_pos})</p>
+                    <table>
+                        <tr>
+                            {player._inventory._item_array.slice(0, 5).map((item) => {
+                                return (<td>{item._item_type}</td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td>{item}</td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(5, 10).map((item) => {
+                                return (<td>{item._item_type}</td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(5, 10).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td>{item}</td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(10, 15).map((item) => {
+                                return (<td>{item._item_type}</td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(10, 15).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td>{item}</td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                    </table>
                     {/* This Cynthia is in public */}
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>

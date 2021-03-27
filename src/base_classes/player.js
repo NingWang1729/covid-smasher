@@ -11,10 +11,11 @@ class Inventory {
     }
     add_item(item) {
         // inventory maxed out
-        if (this._item_array.length === this._max_size) {
-            alert ("Your inventory is already full!");
+        if (this._item_array.length >= this._max_size) {
+            return false;
         } else {
             this._item_array.push(item);
+            return true;
         }
     }
     use_item(index, player) {
@@ -45,12 +46,12 @@ class player {
         this.direction = locations_module.DIRECTION.DOWN;
         this.img = new Image();
         this.img.src = "images/sprite_sheets/Cynthia.png"
-        this._inventory = new Inventory(_INVENTORY_ROWS, _INVENTORY_COLS);
+        this._inventory = new Inventory(_INVENTORY_ROWS * _INVENTORY_COLS);
     };
 
     add_item(item) {
-        this._inventory.add_item(item);
-    }
+        return this._inventory.add_item(item);
+    };
 
     use_item(index) {
         this._inventory.use_item(index, this);
