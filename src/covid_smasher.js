@@ -813,7 +813,7 @@ function COVID_SMASHER() {
         ctx.beginPath();
         ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
 
-        // Character selection menu pause text
+        // Character selection menu text
         ctx.font = '48px serif';
         ctx.fillStyle = "black";
         ctx.textAlign = "center"; 
@@ -822,7 +822,7 @@ function COVID_SMASHER() {
         // Character selection menu text border
         ctx.rect(MAX_WIDTH / 2 - 4 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
 
-        // Save Slot 1 text border
+        // Character slots
         ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
         ctx.fillText("    Highschool Teen", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
         ctx.drawImage(document.getElementById("Male Highschool Teen"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 256, 256);
@@ -864,16 +864,38 @@ function COVID_SMASHER() {
         // Clears most of the canvas
         ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
         
-        // Character selection menu background color
+        // Load menu background color
         ctx.fillStyle = "beige";
         ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
         
-        // Character selection menu border
+        // Load menu border
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
         
+        // Load menu top text
+        ctx.font = '48px serif';
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center"; 
+        ctx.fillText(" COVID SMASHER! ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
 
+        // Load menu text border
+        ctx.rect(MAX_WIDTH / 2 - 4 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+
+        // Instructions menu
+        ctx.font = '60px serif';
+        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, MAX_HEIGHT * 2 / 5 + 8 * locations_module.UNIT_SIZE);
+        ctx.fillText("    Instructions:  ", MAX_WIDTH / 10 + 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 0.25 * locations_module.UNIT_SIZE, MAX_WIDTH / 5, 3 * locations_module.UNIT_SIZE);
+        ctx.textAlign = "left";
+        ctx.font = '48px serif';
+        ctx.fillText("Use WASD or Arrow Keys to move and X to interact.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 2 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("Use P or ESC to pause the game to save or load files.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("Practice social distancing with any nearby players.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 6 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("Try to reach 100 in strength, intelligence, or morale to", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 8 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("unlock the COVID-19 vaccine at the hospital to win!", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 10 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.textAlign = "center";
+        ctx.font = '60px serif';
+        ctx.fillText("    Click anywhere to start...  ", MAX_WIDTH * 3 / 4 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 9 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, locations_module.UNIT_SIZE / 3);
         
         ctx.stroke();
     }
