@@ -11,6 +11,8 @@ import * as items_module from './base_classes/items.js'
 
 import axios from 'axios'
 
+const { UNIT_SIZE, TOP_BUFFER, WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP } = locations_module
+
 const location_objects = [
     new locations_module.Home(1, 4),
     new locations_module.Home(2, 4),
@@ -118,13 +120,13 @@ function moveableSpaces(grid) {
 // Sometimes this does not work
 let getRandomValidPosition = () => {
     for (;;) {
-        let random_row = getRandomNumber(0, locations_module.WORLD_HEIGHT - 1)
+        let random_row = getRandomNumber(0, WORLD_HEIGHT - 1)
         // 4 is for the buffer
-        let random_col = getRandomNumber(0, locations_module.WORLD_WIDTH - 1)
+        let random_col = getRandomNumber(0, WORLD_WIDTH - 1)
         
         // If the start position is valid
-        if (locations_module.WORLD_MAP[random_row][random_col] == 0) {
-            console.log("Map Locale", locations_module.WORLD_MAP[random_row][random_col]);
+        if (WORLD_MAP[random_row][random_col] == 0) {
+            console.log("Map Locale", WORLD_MAP[random_row][random_col]);
             console.log(random_row, random_col);
             return [random_row, random_col]
         }
@@ -133,7 +135,7 @@ let getRandomValidPosition = () => {
 
 // We get a random valid position for our npc to start
 // const [rows, cols] = getRandomValidPosition();
-// const [rows, cols] = moveableSpaces(locations_module.WORLD_MAP)[getRandomNumber(0, moveableSpaces(locations_module.WORLD_MAP).length - 1)];
+// const [rows, cols] = moveableSpaces(WORLD_MAP)[getRandomNumber(0, moveableSpaces(WORLD_MAP).length - 1)];
 let random_num = getRandomNumber(0, moveableSpaces(dfs_map).length - 1)
 const rows = moveableSpaces(dfs_map)[random_num][0];
 const cols = moveableSpaces(dfs_map)[random_num][1];
@@ -174,22 +176,22 @@ function randomMovement(character) {
         let append_count = getRandomNumber(1,10);
         for (let j = 0; j < append_count; j++) {
             // if (direction_int === 0) {
-            //     if (locations_module.WORLD_MAP[curr_row][curr_col - 1] != 0) {
+            //     if (WORLD_MAP[curr_row][curr_col - 1] != 0) {
             //         continue;
             //     }
             //     curr_col -= 1;
             // } else if (direction_int === 1) {
-            //     if (locations_module.WORLD_MAP[curr_row][curr_col + 1] != 0) {
+            //     if (WORLD_MAP[curr_row][curr_col + 1] != 0) {
             //         continue;
             //     }
             //     curr_col += 1;
             // } else if (direction_int === 2) {
-            //     if (locations_module.WORLD_MAP[curr_row - 1][curr_col] != 0) {
+            //     if (WORLD_MAP[curr_row - 1][curr_col] != 0) {
             //         continue;
             //     }
             //     curr_row -= 1;
             // } else if (direction_int === 3) {
-            //     if (locations_module.WORLD_MAP[curr_row + 1][curr_col] != 0) {
+            //     if (WORLD_MAP[curr_row + 1][curr_col] != 0) {
             //         continue;
             //     }
             //     curr_row += 1;
@@ -355,7 +357,7 @@ function COVID_SMASHER() {
         if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
             switch (queue[0]) {
                 case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing left");
@@ -364,7 +366,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing right");
@@ -373,7 +375,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing up");
@@ -382,7 +384,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing down");
@@ -416,7 +418,7 @@ function COVID_SMASHER() {
             pass_time(0.01);
             switch (movequeue[0]) {
                 case 0:
-                    if (player.direction === locations_module.DIRECTION.LEFT && player.x_pos > 0 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 0 || locations_module.WORLD_MAP[player.y_pos][player.x_pos - 1] === 2)) {
+                    if (player.direction === locations_module.DIRECTION.LEFT && player.x_pos > 0 && (WORLD_MAP[player.y_pos][player.x_pos - 1] === 0 || WORLD_MAP[player.y_pos][player.x_pos - 1] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -424,7 +426,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (player.direction === locations_module.DIRECTION.RIGHT && player.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 2)) {
+                    if (player.direction === locations_module.DIRECTION.RIGHT && player.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[player.y_pos][player.x_pos + 1] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -432,7 +434,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (player.direction === locations_module.DIRECTION.UP && player.y_pos > 0 && (locations_module.WORLD_MAP[player.y_pos - 1][player.x_pos] === 0 || locations_module.WORLD_MAP[player.y_pos - 1][player.x_pos] === 2)) {
+                    if (player.direction === locations_module.DIRECTION.UP && player.y_pos > 0 && (WORLD_MAP[player.y_pos - 1][player.x_pos] === 0 || WORLD_MAP[player.y_pos - 1][player.x_pos] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -440,7 +442,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (player.direction === locations_module.DIRECTION.DOWN && player.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[player.y_pos + 1][player.x_pos] === 0 || locations_module.WORLD_MAP[player.y_pos + 1][player.x_pos] === 2)) {
+                    if (player.direction === locations_module.DIRECTION.DOWN && player.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][player.x_pos] === 0 || WORLD_MAP[player.y_pos + 1][player.x_pos] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -455,92 +457,92 @@ function COVID_SMASHER() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears entire canvas
-        ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
+        ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT + TOP_BUFFER);
 
        // Environmental Assets
         let dirt_path = document.getElementById("dirt-path");
-        ctx.drawImage(dirt_path, 0, 0 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, locations_module.WORLD_HEIGHT * locations_module.UNIT_SIZE);
+        ctx.drawImage(dirt_path, 0, 0 + TOP_BUFFER, WORLD_WIDTH * UNIT_SIZE, WORLD_HEIGHT * UNIT_SIZE);
 
         let grass = document.getElementById("grass");
-        ctx.drawImage(grass, 0, 8 + locations_module.TOP_BUFFER, locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.drawImage(grass, 0, 256 + locations_module.TOP_BUFFER, 5 * locations_module.UNIT_SIZE, 5 * locations_module.UNIT_SIZE);
-        ctx.drawImage(grass, 708, 232 + locations_module.TOP_BUFFER, 18 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.drawImage(grass, 0, 500 + locations_module.TOP_BUFFER, 8 * locations_module.UNIT_SIZE, 8.5 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 0, 8 + TOP_BUFFER, WORLD_WIDTH * UNIT_SIZE, 4 * UNIT_SIZE);
+        ctx.drawImage(grass, 0, 256 + TOP_BUFFER, 5 * UNIT_SIZE, 5 * UNIT_SIZE);
+        ctx.drawImage(grass, 708, 232 + TOP_BUFFER, 18 * UNIT_SIZE, 4 * UNIT_SIZE);
+        ctx.drawImage(grass, 0, 500 + TOP_BUFFER, 8 * UNIT_SIZE, 8.5 * UNIT_SIZE);
        
-        ctx.drawImage(grass, 384, 550 + locations_module.TOP_BUFFER, 14 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.drawImage(grass, 768, 520 + locations_module.TOP_BUFFER, 16 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE);
+        ctx.drawImage(grass, 384, 550 + TOP_BUFFER, 14 * UNIT_SIZE, 4 * UNIT_SIZE);
+        ctx.drawImage(grass, 768, 520 + TOP_BUFFER, 16 * UNIT_SIZE, 8 * UNIT_SIZE);
 
 
         let tree_2 = document.getElementById("tree-2");
-        let total_pixel_width = locations_module.WORLD_WIDTH * locations_module.UNIT_SIZE
-        for (let i = -locations_module.UNIT_SIZE; i < total_pixel_width; i+=32) {
-            ctx.drawImage(tree_2, i, -70 + locations_module.TOP_BUFFER);
-            ctx.drawImage(tree_2, i, -60 + locations_module.TOP_BUFFER);
-            ctx.drawImage(tree_2, i, -50 + locations_module.TOP_BUFFER);
-            ctx.drawImage(tree_2, i, -40 + locations_module.TOP_BUFFER);
-            ctx.drawImage(tree_2, i, -30 + locations_module.TOP_BUFFER);
+        let total_pixel_width = WORLD_WIDTH * UNIT_SIZE
+        for (let i = -UNIT_SIZE; i < total_pixel_width; i+=32) {
+            ctx.drawImage(tree_2, i, -70 + TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -60 + TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -50 + TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -40 + TOP_BUFFER);
+            ctx.drawImage(tree_2, i, -30 + TOP_BUFFER);
         }
 
 
         // Buildings
         let home = document.getElementById("home");
-        ctx.drawImage(home, 0, -48 + locations_module.TOP_BUFFER);
+        ctx.drawImage(home, 0, -48 + TOP_BUFFER);
 
         let neighbor = document.getElementById("neighbor");
-        ctx.drawImage(neighbor, 128, -24 + locations_module.TOP_BUFFER);
+        ctx.drawImage(neighbor, 128, -24 + TOP_BUFFER);
 
         let city_hall = document.getElementById("city-hall");
-        ctx.drawImage(city_hall, 256, -56 + locations_module.TOP_BUFFER);
+        ctx.drawImage(city_hall, 256, -56 + TOP_BUFFER);
 
         let store_1 = document.getElementById("store-1");
-        ctx.drawImage(store_1, 496, -12 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_1, 496, -12 + TOP_BUFFER);
 
         let store_2 = document.getElementById("store-2");
-        ctx.drawImage(store_2, 666, -8 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_2, 666, -8 + TOP_BUFFER);
 
         let store_3 = document.getElementById("store-3");
-        ctx.drawImage(store_3, 832, -4 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_3, 832, -4 + TOP_BUFFER);
 
         let store_4 = document.getElementById("store-4");
-        ctx.drawImage(store_4, 983, 8 + locations_module.TOP_BUFFER);
+        ctx.drawImage(store_4, 983, 8 + TOP_BUFFER);
 
         let tree_1 = document.getElementById("tree-1");
-        ctx.drawImage(tree_1, 1152, 32 + locations_module.TOP_BUFFER);
+        ctx.drawImage(tree_1, 1152, 32 + TOP_BUFFER);
 
         // Row 2
         let library = document.getElementById("library");
-        ctx.drawImage(library, -4, 256 + locations_module.TOP_BUFFER);
+        ctx.drawImage(library, -4, 256 + TOP_BUFFER);
 
         let park = document.getElementById("park");
-        ctx.drawImage(park, 288, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(park, 288, 224 + TOP_BUFFER);
 
         let object_garden = document.getElementById("object-garden");
-        ctx.drawImage(object_garden, 708, 232 + locations_module.TOP_BUFFER);
+        ctx.drawImage(object_garden, 708, 232 + TOP_BUFFER);
 
         let cin_n_cout = document.getElementById("cin-n-cout");
-        ctx.drawImage(cin_n_cout, 840, 224 + locations_module.TOP_BUFFER);
+        ctx.drawImage(cin_n_cout, 840, 224 + TOP_BUFFER);
 
         let foobar = document.getElementById("foobar");
-        ctx.drawImage(foobar, 976, 225 + locations_module.TOP_BUFFER);
+        ctx.drawImage(foobar, 976, 225 + TOP_BUFFER);
 
         let casino = document.getElementById("casino");
-        ctx.drawImage(casino, 1128, 220 + locations_module.TOP_BUFFER);
+        ctx.drawImage(casino, 1128, 220 + TOP_BUFFER);
 
         // Row 3
         let highschool = document.getElementById("highschool");
-        ctx.drawImage(highschool, -3, 500 + locations_module.TOP_BUFFER);
+        ctx.drawImage(highschool, -3, 500 + TOP_BUFFER);
 
         let work = document.getElementById("work");
-        ctx.drawImage(work, 384, 550 + locations_module.TOP_BUFFER);
+        ctx.drawImage(work, 384, 550 + TOP_BUFFER);
 
         let gym = document.getElementById("gym");
-        ctx.drawImage(gym, 524, 524 + locations_module.TOP_BUFFER);
+        ctx.drawImage(gym, 524, 524 + TOP_BUFFER);
 
         let hospital = document.getElementById("hospital");
-        ctx.drawImage(hospital, 666, 543 + locations_module.TOP_BUFFER, 128, 128);
+        ctx.drawImage(hospital, 666, 543 + TOP_BUFFER, 128, 128);
 
         let college_doormat = document.getElementById("college-doormat");
-        ctx.drawImage(college_doormat, 768, 456 + locations_module.TOP_BUFFER);
+        ctx.drawImage(college_doormat, 768, 456 + TOP_BUFFER);
 
         // Draw player
         draw_sprite(ctx, player.direction, player._type, player);
@@ -550,7 +552,7 @@ function COVID_SMASHER() {
         
 
         let college = document.getElementById("college-without-doormat");
-        ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
+        ctx.drawImage(college, 768, 456 + TOP_BUFFER);
 
         // Add shading
         if (time >= 12) {
@@ -560,7 +562,7 @@ function COVID_SMASHER() {
             let light = (12 - time) / 18;
             ctx.fillStyle = `rgba(0, 0, 0, ${light})`;
         }
-        ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
+        ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT + TOP_BUFFER);
 
         // Moves NPC same as code below
         move_npc(npc1);
@@ -596,7 +598,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 4:
-                    if (locations_module.WORLD_MAP[player.y_pos][player.x_pos] === 2) {
+                    if (WORLD_MAP[player.y_pos][player.x_pos] === 2) {
                         let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
                         console.log(obj_pos_map.get(hashedPos));
                         if ((player.x_pos === 1 || player.x_pos === 2) && player.y_pos === 4) {
@@ -1446,54 +1448,54 @@ function COVID_SMASHER() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears most of the canvas
-        ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.clearRect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Pause menu background color
         ctx.fillStyle = "beige";
-        ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.fillRect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Pause menu border
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.rect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Pause menu pause text
         ctx.font = '48px serif';
         ctx.fillStyle = "black";
         ctx.textAlign = "center"; 
-        ctx.fillText("PAUSED", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 6 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.fillText("PAUSED", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * UNIT_SIZE, 6 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Pause menu pause text border
-        ctx.rect(MAX_WIDTH / 2 - 3 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * locations_module.UNIT_SIZE, 6 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.rect(MAX_WIDTH / 2 - 3 * UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * UNIT_SIZE, 6 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Save Slot 1 text border
-        ctx.rect(2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 4 + 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 4 * locations_module.UNIT_SIZE);
+        ctx.rect(2 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
     
         // Save/Load for Slot 1
         ctx.font = '30px serif';
         ctx.textAlign = "left";
-        ctx.rect(2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.fillText("  Load Slot 1", 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.rect(7.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.fillText("  Save Slot 1", 7.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.rect(2 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.fillText("  Load Slot 1", 2 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.rect(7.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.fillText("  Save Slot 1", 7.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Save Slot 2 text border
-        ctx.rect(MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 4 + 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 4 * locations_module.UNIT_SIZE);
+        ctx.rect(MAX_WIDTH / 3 + 1 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
 
         // Save/Load for Slot 2
-        ctx.rect(MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.fillText("  Load Slot 2", MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.rect(MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.fillText("  Save Slot 2", MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.rect(MAX_WIDTH / 3 + 1 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.fillText("  Load Slot 2", MAX_WIDTH / 3 + 1 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.rect(MAX_WIDTH / 3 + 1 * UNIT_SIZE + 5.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.fillText("  Save Slot 2", MAX_WIDTH / 3 + 1 * UNIT_SIZE + 5.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Save Slot 3 text border
-        ctx.rect(MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 4 + 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 4 * locations_module.UNIT_SIZE);
+        ctx.rect(MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
         
         // Save/Load for Slot 3
-        ctx.rect(MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.fillText("  Load Slot 3", MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.rect(MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.fillText("  Save Slot 3", MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, 5.5 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.rect(MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.fillText("  Load Slot 3", MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.rect(MAX_WIDTH * 2 / 3 + 5.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.fillText("  Save Slot 3", MAX_WIDTH * 2 / 3 + 5.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         ctx.stroke();
     };
@@ -1503,57 +1505,57 @@ function COVID_SMASHER() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears most of the canvas
-        ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.clearRect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Character selection menu background color
         ctx.fillStyle = "beige";
-        ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.fillRect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Character selection menu border
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.rect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
 
         // Character selection menu text
         ctx.font = '48px serif';
         ctx.fillStyle = "black";
         ctx.textAlign = "center"; 
-        ctx.fillText(" Character Selection ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.fillText(" Character Selection ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * UNIT_SIZE, 8 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Character selection menu text border
-        ctx.rect(MAX_WIDTH / 2 - 4 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.rect(MAX_WIDTH / 2 - 4 * UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * UNIT_SIZE, 8 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Character slots
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Highschool Teen", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Male Highschool Teen"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    College Student", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Male College Student"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Impoverished   ", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Male Impoverished"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Spoiled Brat   ", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Male Spoiled Brat"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Elderly Person", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Male Elderly Person"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Highschool Teen", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Female Highschool Teen"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    College Student", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Female College Student"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Impoverished   ", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Female Impoverished"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Spoiled Brat   ", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Female Spoiled Brat"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, 256, 256);
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Elderly Person ", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
-        ctx.drawImage(document.getElementById("Female Elderly Person"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Highschool Teen", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Male Highschool Teen"), 128, 64, 64, 64, 2 * UNIT_SIZE, MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    College Student", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Male College Student"), 128, 64, 64, 64, 2 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Impoverished   ", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Male Impoverished"), 128, 64, 64, 64, 2 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Spoiled Brat   ", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Male Spoiled Brat"), 128, 64, 64, 64, 2 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Elderly Person", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Male Elderly Person"), 128, 64, 64, 64, 2 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Highschool Teen", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Female Highschool Teen"), 128, 64, 64, 64, 2 * UNIT_SIZE, MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    College Student", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Female College Student"), 128, 64, 64, 64, 2 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Impoverished   ", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Female Impoverished"), 128, 64, 64, 64, 2 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Spoiled Brat   ", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Female Spoiled Brat"), 128, 64, 64, 64, 2 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, 256, 256);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, MAX_HEIGHT / 5 + 4 * UNIT_SIZE);
+        ctx.fillText("    Elderly Person ", MAX_WIDTH / 10 + 1.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.drawImage(document.getElementById("Female Elderly Person"), 128, 64, 64, 64, 2 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE), MAX_HEIGHT / 3 - 2.5 * UNIT_SIZE + TOP_BUFFER + MAX_HEIGHT / 5 + 4 * UNIT_SIZE, 256, 256);
 
         ctx.stroke();
     }
@@ -1563,40 +1565,40 @@ function COVID_SMASHER() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears most of the canvas
-        ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.clearRect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Load menu background color
         ctx.fillStyle = "beige";
-        ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.fillRect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Load menu border
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        ctx.rect(UNIT_SIZE, UNIT_SIZE, MAX_WIDTH - 2 * UNIT_SIZE, MAX_HEIGHT + TOP_BUFFER - 2 * UNIT_SIZE);
         
         // Load menu top text
         ctx.font = '48px serif';
         ctx.fillStyle = "black";
         ctx.textAlign = "center"; 
-        ctx.fillText(" COVID SMASHER! ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.fillText(" COVID SMASHER! ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * UNIT_SIZE, 8 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Load menu text border
-        ctx.rect(MAX_WIDTH / 2 - 4 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+        ctx.rect(MAX_WIDTH / 2 - 4 * UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * UNIT_SIZE, 8 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Instructions menu
         ctx.font = '60px serif';
-        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, MAX_HEIGHT * 2 / 5 + 8 * locations_module.UNIT_SIZE);
-        ctx.fillText("    Instructions:  ", MAX_WIDTH / 10 + 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 0.25 * locations_module.UNIT_SIZE, MAX_WIDTH / 5, 3 * locations_module.UNIT_SIZE);
+        ctx.rect(2 * UNIT_SIZE + 0.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH - 5 * UNIT_SIZE, MAX_HEIGHT * 2 / 5 + 8 * UNIT_SIZE);
+        ctx.fillText("    Instructions:  ", MAX_WIDTH / 10 + 2 * UNIT_SIZE, MAX_HEIGHT / 3 + 0.25 * UNIT_SIZE, MAX_WIDTH / 5, 3 * UNIT_SIZE);
         ctx.textAlign = "left";
         ctx.font = '48px serif';
-        ctx.fillText("Use WASD or Arrow Keys to move and X to interact.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 2 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("Use P or ESC to pause the game to save or load files.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("Practice social distancing with any nearby players.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 6 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("Try to reach 100 in strength, intelligence, or morale to", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 8 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
-        ctx.fillText("unlock the COVID-19 vaccine at the hospital to win!", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 10 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("Use WASD or Arrow Keys to move and X to interact.", MAX_WIDTH / 10 + 0 * UNIT_SIZE, MAX_HEIGHT / 3 + 2 * UNIT_SIZE, MAX_WIDTH - 5 * UNIT_SIZE, 4 * UNIT_SIZE);
+        ctx.fillText("Use P or ESC to pause the game to save or load files.", MAX_WIDTH / 10 + 0 * UNIT_SIZE, MAX_HEIGHT / 3 + 4 * UNIT_SIZE, MAX_WIDTH - 5 * UNIT_SIZE, 4 * UNIT_SIZE);
+        ctx.fillText("Practice social distancing with any nearby players.", MAX_WIDTH / 10 + 0 * UNIT_SIZE, MAX_HEIGHT / 3 + 6 * UNIT_SIZE, MAX_WIDTH - 5 * UNIT_SIZE, 4 * UNIT_SIZE);
+        ctx.fillText("Try to reach 100 in strength, intelligence, or morale to", MAX_WIDTH / 10 + 0 * UNIT_SIZE, MAX_HEIGHT / 3 + 8 * UNIT_SIZE, MAX_WIDTH - 5 * UNIT_SIZE, 4 * UNIT_SIZE);
+        ctx.fillText("unlock the COVID-19 vaccine at the hospital to win!", MAX_WIDTH / 10 + 0 * UNIT_SIZE, MAX_HEIGHT / 3 + 10 * UNIT_SIZE, MAX_WIDTH - 5 * UNIT_SIZE, 4 * UNIT_SIZE);
         ctx.textAlign = "center";
         ctx.font = '42px serif';
-        ctx.fillText("    Click anywhere to start...  ", MAX_WIDTH * 3 / 4 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 9 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, locations_module.UNIT_SIZE / 3);
+        ctx.fillText("    Click anywhere to start...  ", MAX_WIDTH * 3 / 4 + 1.5 * UNIT_SIZE, MAX_HEIGHT / 2 + 9 * UNIT_SIZE, MAX_WIDTH / 5 - 1 * UNIT_SIZE, UNIT_SIZE / 3);
         
         ctx.stroke();
     }
@@ -1643,67 +1645,67 @@ function COVID_SMASHER() {
         switch(sprite_no) {
             // Up
             case 1:
-                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 2:
-                ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+                ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 4, 64, 64);
                 break;
             case 3:
-                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 8, 64, 64);
                 break;
             case 4:
-                ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+                ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 8, 64, 64);
                 break;
             case 5:
-                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 4, 64, 64);
                 break;
             // Down
             case 6:
-                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 7:
-                ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+                ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 4, 64, 64);
                 break;
             case 8:
-                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 8, 64, 64);
                 break;
             case 9:
-                ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+                ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 8, 64, 64);
                 break;
             case 10:
-                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 4, 64, 64);
                 break;
             // Left
             case 11:
-                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 12:
-                ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 13:
-                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 14:
-                ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 15:
-                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             // Right
             case 16:
-                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 17:
-                ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 18:
-                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 19:
-                ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
             case 20:
-                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
                 break;
         }
     }
@@ -1751,67 +1753,67 @@ function COVID_SMASHER() {
     //     switch(sprite_no) {
     //         // Up
     //         case 1:
-    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 2:
-    //             ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 4, 64, 64);
     //             break;
     //         case 3:
-    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 8, 64, 64);
     //             break;
     //         case 4:
-    //             ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 8, 64, 64);
     //             break;
     //         case 5:
-    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 4, 64, 64);
     //             break;
     //         // Down
     //         case 6:
-    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 7:
-    //             ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 4, 64, 64);
     //             break;
     //         case 8:
-    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 8, 64, 64);
     //             break;
     //         case 9:
-    //             ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 8, 64, 64);
     //             break;
     //         case 10:
-    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 4, 64, 64);
     //             break;
     //         // Left
     //         case 11:
-    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 12:
-    //             ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 13:
-    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 14:
-    //             ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 15:
-    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         // Right
     //         case 16:
-    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 17:
-    //             ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 18:
-    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 19:
-    //             ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //         case 20:
-    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
     //             break;
     //     }
     // }
@@ -1911,17 +1913,17 @@ function COVID_SMASHER() {
                 // Get data for each of the save slots
                 const saveSlots = await getSavedSlots()
 
-                if (x > 2 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
+                if (x > 2 * UNIT_SIZE && x < 2 * UNIT_SIZE + 5.5 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + 1 * UNIT_SIZE) {
                     loadSlot(1, saveSlots[1] ?? null)
-                } else if (x > 7.5 * locations_module.UNIT_SIZE && x < 7.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
+                } else if (x > 7.5 * UNIT_SIZE && x < 7.5 * UNIT_SIZE + 5.5 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + 1 * UNIT_SIZE) {
                     saveToSlot(1, saveSlots[1] ?? null)
-                } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
+                } else if (x > MAX_WIDTH / 3 + 1 * UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * UNIT_SIZE + 5.5 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + 1 * UNIT_SIZE) {
                     loadSlot(2, saveSlots[2] ?? null);
-                } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
+                } else if (x > MAX_WIDTH / 3 + 1 * UNIT_SIZE + 5.5 * UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * UNIT_SIZE + 5.5 * UNIT_SIZE + 5.5 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + 1 * UNIT_SIZE) {
                     saveToSlot(2, saveSlots[2] ?? null);
-                } else if (x > MAX_WIDTH * 2 / 3 && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
+                } else if (x > MAX_WIDTH * 2 / 3 && x < MAX_WIDTH * 2 / 3 + 5.5 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + 1 * UNIT_SIZE) {
                     loadSlot(3, saveSlots[3] ?? null)
-                } else if (x > MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
+                } else if (x > MAX_WIDTH * 2 / 3 + 5.5 * UNIT_SIZE && x < MAX_WIDTH * 2 / 3 + 5.5 * UNIT_SIZE + 5.5 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + 1 * UNIT_SIZE) {
                     saveToSlot(3, saveSlots[3] ?? null);
                 };
                 break;
@@ -1957,25 +1959,25 @@ function COVID_SMASHER() {
                         }
                     });
                 };
-                if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(0);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(1);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(2);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(3);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(4);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(5);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(6);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 2 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(7);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 3 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(8);
-                } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
+                } else if (x > 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) && x < 2 * UNIT_SIZE + 0.5 * UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * UNIT_SIZE) + MAX_WIDTH / 5 - 1 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE + MAX_HEIGHT / 5 + 4 * UNIT_SIZE) {
                     character_selection(9);
                 };
                 start_game();
@@ -2105,7 +2107,7 @@ function COVID_SMASHER() {
                     <img src="/images/buildings/college_doormat.png" alt="College Doormat" id="college-doormat" style={{display: 'none'}}></img>
                 </td>
                 <td id="center-column">
-                    <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
+                    <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
                 </td>
                 <td id="right-column">
                     <h1> Inventory:</h1>
