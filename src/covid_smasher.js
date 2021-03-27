@@ -8,6 +8,8 @@ import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
 import * as items_module from './base_classes/items.js'
 
+import axios from 'axios'
+
 const location_objects = [
     new locations_module.Home(1, 4),
     new locations_module.Home(2, 4),
@@ -59,6 +61,7 @@ const player_selection = [
     new player_module.Role(2, 5, 100, 100, 10, 50, 40, 'Female Elderly Person'),
 ];
 
+// Global variables
 var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
 var animated = false;
 var animation_stage = 0;
@@ -1068,7 +1071,7 @@ function COVID_SMASHER() {
         setMoves(movequeue);
     };
 
-    function on_click(e) {
+    async function on_click(e) {
         let canvas = document.getElementById("game-canvas");
         let x = e.pageX - canvas.getBoundingClientRect().left;
         let y = e.pageY - canvas.getBoundingClientRect().top;
@@ -1076,20 +1079,22 @@ function COVID_SMASHER() {
             case 0:
                 break;
             case 1:
-                console.log(e);
-                console.log(x, y);
+                // Get data for each of the save slots
+                const saveSlots = await getSavedSlots()
+                console.log("Save slots are:", saveSlots)
+
                 if (x > 2 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Loaded Slot 1!");
+                    loadSlot(1, saveSlots[1] ?? null)
                 } else if (x > 7.5 * locations_module.UNIT_SIZE && x < 7.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Saved Slot 1!");
+                    saveToSlot(1, saveSlots[1] ?? null)
                 } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Loaded Slot 2!");
+                    loadSlot(2, saveSlots[2] ?? null);
                 } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Saved Slot 2!");
+                    saveToSlot(2, saveSlots[2] ?? null);
                 } else if (x > MAX_WIDTH * 2 / 3 && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Loaded Slot 3!");
+                    loadSlot(3, saveSlots[3] ?? null)
                 } else if (x > MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Saved Slot 3!");
+                    saveToSlot(3, saveSlots[3] ?? null);
                 };
                 break;
             case 2:
@@ -1267,5 +1272,179 @@ function COVID_SMASHER() {
         </table>
     );
 };
+
+// Get all saved slots for the user as a JS object
+async function getSavedSlots() {
+    const slots = (await axios.get('/save', { params: { username: 'Joe' }})).data
+    console.log('Slots from getSavedSlots()', slots)
+
+    // Convert slots, which is an array, to an object
+    const slotObj = {}
+    for (const save of slots) {
+        slotObj[save.slot] = save
+    }
+
+    return slotObj
+}
+
+// TO-DO: Update the display for the current slot after saving
+function saveToSlot(num, slotData) {
+    // No game exists on slot
+    if (slotData == null) {
+        saveGameState(num)
+        swal(`Saved Slot ${num}!`);
+    }
+    else {
+        swal("Confirm selection", `Overriding save on slot ${num}`, 'info', {
+            buttons: {
+                leave: {
+                    text: "No, don't override the save!",
+                    value: "leave",
+                },
+                enter: {
+                    text: `Override save on slot ${num}`,
+                    value: "enter",
+                }
+            }
+        }).then((value) => {
+            if (value == "enter") { 
+                saveGameState(num)
+                swal(`Saved Slot ${num}!`)
+            }
+        })
+    }
+}
+
+// Two possibilities: either there is already a save for this slot or isn't
+function loadSlot(num, slotData) {
+    // Game already exists on this slot
+    if (slotData != null) {
+        swal("Confirm selection", `Switching to game on slot ${num}`, 'info', {
+            buttons: {
+                leave: {
+                    text: "No, stay on this game!",
+                    value: "leave",
+                },
+                enter: {
+                    text: `Switch to slot ${num}`,
+                    value: "enter",
+                }
+            }
+        }).then((value) => {
+            if (value == "enter") { 
+                // 1. Save current game to current slot
+                saveGameState(player._slot)
+
+                // 2. Change game state to that of chosen slot
+                setGameState(slotData)
+            }
+        })
+    }
+    else {
+        swal("Confirm selection:", `Are you sure you want to start a new game on slot ${num}?`, "info", {
+            buttons: {
+                leave: {
+                    text: "No, stay on this game!",
+                    value: "leave",
+                },
+                enter: {
+                    text: "New game!",
+                    value: "enter",
+                }
+            }
+        }).then((value) => {
+            if (value === "leave") swal("OK, staying on this game!")
+            else { 
+                swal(`OK, starting a new game on slot ${num}!`)
+                // TO-DO: resetGameState() should probably let them pick the character lol?
+                resetGameState()
+            }
+        })
+    }
+}
+
+function resetGameState() {
+    player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
+    time = 6
+}
+
+// Change player state to the state in slot data
+function setPlayerState(slotData) {
+    player._slot = slotData.slot
+    player.x_pos = slotData.position.x
+    player.y_pos = slotData.position.y
+    player._type = slotData.playerType
+    player.direction = slotData.direction
+    player._intelligence = slotData.stats.intelligence
+    player._strength = slotData.stats.strength
+    player._morale = slotData.stats.morale
+    player._substenance = slotData.stats.sustenance // Note: Sustenance is spelled wrong here
+    player._hp = slotData.stats.health
+    player._cash = slotData.money
+    player._inventory = slotData.inventory
+}
+
+// Set all values to those that were in the save
+function setGameState(slotData) {
+    setPlayerState(slotData)
+
+    // Modify global game state
+    time = slotData.time
+}
+
+// Sends the game state to the backend
+async function saveGameState(specifiedSlot) {
+    const gameState = getGameState()
+    // Save for a specific slot, otherwise current slot
+    if (specifiedSlot != null) gameState.slot = specifiedSlot
+
+    axios.post('/save', gameState)
+}
+
+// Gets the full state of the game
+function getGameState() {
+    // TO-DO: Pass in username as well
+   const gameState = player.playerState()
+   gameState.time = time
+
+   return gameState
+}
+
+/*
+// TO-DO: Change this so that it fetches this from OAuth login
+function getUserName() { return userName }
+
+async function getSave(num) {
+  // 1. Get user ID stored somewhere
+  const userName = getUserName()
+
+  // 2. Send user ID to database, get back save
+  const gameSave = await Save.findOne({ userName, slot: num })
+  return gameSave
+}
+
+
+async function loadSlot(num) {
+  // 3. If slot is empty, confirm want to load new game
+  // Otherwise if slot is occupied, confirm want to load previous game
+  const gameSave = await getSave(num)
+
+  // swal(`Loaded Slot ${num}!`)
+}
+
+async function saveSlot(num) {
+    // 3. If slot occupied, confirm want to override save
+    const gameSave = await getSave(num)
+
+    // Slot successfully saved
+    swal(`Saved Slot ${num}!`)
+}
+
+
+// Get current game state
+function getGameState() {
+
+}
+*/
 
 export default COVID_SMASHER;
