@@ -13,18 +13,16 @@ const location_objects = [
     new locations_module.Home(2, 4),
     new locations_module.Neighbor(5, 4),
     new locations_module.Cityhall(12, 4),
-    /* include City Hall */
     new locations_module.Unary_Store(17, 4),
     new locations_module.Binary_Store(23, 4),
     new locations_module.Ternary_Store(28, 4),
     new locations_module.Mystery_Store(33, 4),
     new locations_module.Library(2, 13),
-    /* include Object Garden */
+    new locations_module.Object_Garden(23, 11),
     new locations_module.Cin_N_Cout(27, 11),
     new locations_module.Cin_N_Cout(28, 11),
     new locations_module.Cin_N_Cout(29, 11),
-    /* include FooBar */
-    /* include Game Corner */
+    new locations_module.Foobar(32, 11),
     new locations_module.HighSchool(7, 22),
     new locations_module.Work(14, 21),
     new locations_module.Gym(18, 21),
@@ -989,11 +987,194 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 23 && player.y_pos === 11) {
-                            swal("Arrived at Object Garden!");
+                            swal("You arrived at Object Garden! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy Breadstacks for $6?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy Copypasta for $20?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy Tiramisu for $8?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Where's the lamb sauce?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(2 * Math.random());
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Somebody toucha my spaghet?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(2 * Math.random());
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Delicious. Finally, some tiramisu.");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(Math.random());
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit Object-Garden.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit Object-Garden.");
+                                        break;
+                                };
+                            });
                         } else if ((player.x_pos === 27 || player.x_pos === 28 || player.x_pos === 29) && player.y_pos === 11) {
-                            swal("Arrived at Cin-n-cout!");
+                            swal("You arrived at Cin-N-Cout! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy Borger for $3?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy Header Fries for $2?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy soda for $1?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Mmm, Borger. Yum.");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(Math.random());
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Is this even French?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(Math.random());
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Soda? Candy pop? What's the difference?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(Math.random());
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit Cin-N-Out.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit Cin-N-Out.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 32 && player.y_pos === 11) {
-                            swal("Arrived at Foobar!");
+                            swal("You arrived at Foobar! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy Butterbeer for $2?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy Dry Martini for $3?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy spam and eggs for $5?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Did you get your permission slip signed for Hogsmeade?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(Math.random());
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Stirred, not shaken, right?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(Math.random());
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Wait, this is not pythonic...");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                        };
+                                        pass_time(Math.random());
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit Foobar.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit Foobar.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
                             swal("Arrived at Game Corner!");
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
