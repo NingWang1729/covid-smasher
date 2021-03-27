@@ -16,13 +16,16 @@
   }
   
   #left-column {
-    width: 25%;
+    width: 28%;
+    height: 816px;
     border: 1px;
     border-style: solid;
     border-color: black;
   }
   
   #center-column {
+    width: 1280px;
+    height: 816px;
     border: 1px;
     border-style: solid;
     border-color: black;
@@ -31,8 +34,17 @@
   }
   
   #right-column {
-    width: 25%;
+    /* width: 25%; */
+    height: 816px;
     border: 1px;
     border-style: solid;
     border-color: black;
+  }
+
+  table {
+    table-layout: fixed;
+  }
+
+  td {
+    word-wrap: break-word;
   }

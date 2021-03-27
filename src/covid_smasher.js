@@ -1172,7 +1172,7 @@ function COVID_SMASHER() {
                     <p>{player._inventory._item_array.length}</p>
                     <p style={{visibility: 'hidden'}}>{player.direction}</p>
                     <p style={{visibility: 'hidden'}}>({player.x_pos},{player.y_pos})</p>
-                    <table>
+                    <table style={{width: "80%"}}>
                         <tr>
                             {player._inventory._item_array.slice(0, 5).map((item) => {
                                 return (<td>{item._item_type}</td>);
