@@ -65,33 +65,81 @@ var animation_stage = 0;
 var time = 6;
 
 
-
+var dfs_map = [
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [0,2,2,0,0,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,],
+    [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,2,0,0,0,2,2,2,0,0,2,0,0,0,0,2,0,0,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,2,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+]
 
 // NPC
 // Numbers are inclusive
 const getRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+
+
+function moveableSpaces(grid) {
+    let row_col_arr = [];
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == 2) {
+                row_col_arr.push([i, j]);
+            }
+        }
+    }
+    return row_col_arr
+}
+
+
 // Sometimes this does not work
 let getRandomValidPosition = () => {
     for (;;) {
         let random_row = getRandomNumber(0, locations_module.WORLD_HEIGHT - 1)
         // 4 is for the buffer
-        let random_col = getRandomNumber(4, locations_module.WORLD_WIDTH - 1)
+        let random_col = getRandomNumber(0, locations_module.WORLD_WIDTH - 1)
         
         // If the start position is valid
         if (locations_module.WORLD_MAP[random_row][random_col] == 0) {
+            console.log("Map Locale", locations_module.WORLD_MAP[random_row][random_col]);
+            console.log(random_row, random_col);
             return [random_row, random_col]
         }
     }
 }
 
 // We get a random valid position for our npc to start
-const [rows, cols] = getRandomValidPosition();
+// const [rows, cols] = getRandomValidPosition();
+// const [rows, cols] = moveableSpaces(locations_module.WORLD_MAP)[getRandomNumber(0, moveableSpaces(locations_module.WORLD_MAP).length - 1)];
+let random_num = getRandomNumber(0, moveableSpaces(dfs_map).length - 1)
+const rows = moveableSpaces(dfs_map)[random_num][0];
+const cols = moveableSpaces(dfs_map)[random_num][1];
+console.log("coordinates", rows, cols);
 
-var npc1 = new player_module.Role(rows, cols, 100, 50, 30, 50, 30, 'Female Impoverished');
+var npc1 = new player_module.Role(cols, rows, 100, 50, 30, 50, 30, 'Female Impoverished');
 var animation_stage_npc = 0;
-var is_animated = true;
+var is_animated = false;
 var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
 
 
@@ -135,35 +183,10 @@ function randomMovement(character) {
 }
 
 var dfs_move_que = [];
-var dfs_map = [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [0,2,2,0,0,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,2,0,0,0,2,2,2,0,0,2,0,0,0,0,2,0,0,],
-    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,2,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-]
+
 
 function canMove(row, col) {
-    return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] == 0); 
+    return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] != 1); 
 }
 
 function bfs() {
@@ -174,7 +197,7 @@ function dfs(row, col) {
     // console.log(row, col);
     dfs_map[row][col] = 1;
 
-    if (dfs_map[row][col] == 3) {
+    if (dfs_map[row][col] == 4) {
         return 
     }
 
@@ -303,14 +326,14 @@ function COVID_SMASHER() {
     }
 
     // Function to reuse first made for NPC
-    function updateFacingDirection(a_stage, is_animated, character, queue=undefined) {
+    function updateFacingDirection(a_stage, is_animated, character, queue) {
         if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
-            pass_time(0.01);
             switch (queue[0]) {
                 case 0:
                     if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
                         is_animated = true;
                     } else {
+                        // alert("Facing left");
                         a_stage = 0;
                         is_animated = false;
                     };
@@ -319,6 +342,7 @@ function COVID_SMASHER() {
                     if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
                         is_animated = true;
                     } else {
+                        // alert("Facing right");
                         a_stage = 0;
                         is_animated = false;
                     };
@@ -327,6 +351,7 @@ function COVID_SMASHER() {
                     if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
                         is_animated = true;
                     } else {
+                        // alert("Facing up");
                         a_stage = 0;
                         is_animated = false;
                     };
@@ -335,6 +360,7 @@ function COVID_SMASHER() {
                     if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
                         is_animated = true;
                     } else {
+                        // alert("Facing down");
                         a_stage = 0;
                         is_animated = false;
                     };

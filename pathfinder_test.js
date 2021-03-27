@@ -64,10 +64,26 @@ function dfs(row, col) {
 
 }
 
-console.log(canMove(4,0));
-dfs(4,0);
+// console.log(canMove(4,0));
+// dfs(4,0);
 
-// console.dir(dfs_move_que, {'maxArrayLength': null});
-console.log(dfs_move_que);
+// // console.dir(dfs_move_que, {'maxArrayLength': null});
+// console.log(dfs_move_que);
 
 
+function moveableSpaces(grid) {
+    let row_col_arr = [];
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] != 1) {
+                row_col_arr.push({row: i, col: j});
+            }
+        }
+    }
+    return row_col_arr
+}
+
+console.log(moveableSpaces(WORLD_MAP));
+
+
+// console.log(WORLD_MAP[10][10]);
