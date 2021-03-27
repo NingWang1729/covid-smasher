@@ -7,26 +7,8 @@ const { Schema } = mongoose
 const { MongoClient } = require('mongodb')
 const URI = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}?retryWrites=true&w=majority`
 
-/*
-async function run() {
-  const client = new MongoClient(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  client
-    .connect()
-    .then(db => {
-      console.log('Connected to MongoDB!')
-    })
-    .catch(err => {
-      console.error(err)
-      console.log('Could not connect to MongoDB!')
-    })
-}
-*/
-
 mongoose.connect(URI, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
 })
 const db = mongoose.connection
 db.on('error', console.error)
@@ -48,21 +30,10 @@ const saveSchema = new Schema({
   },
   time: { type: Number, required: true, min: 0, max: 24 },
   money: { type: Number, required: true, min: 0, max: 99999 },
-  inventory: { type: Array, required: false } // Not required for now
+  inventory: { type: Array, required: false }, // Not required for now
 })
-const Save = mongoose.model('Save', saveSchema)
+export const Save = mongoose.model('Save', saveSchema)
 
-// Support basic CRUD operations for saving
-
-// Create OR update save
-async function createOrUpdateSave() {}
-
-// Delete save
-async function resetSave() {}
-
-// Read save
-async function loadSave() {
-  
-}
-
-run()
+/* Here's how you use this:
+(new Save(gameStateObject)).save().then(() => console.log('Success'))
+*/
