@@ -13,6 +13,7 @@ class Item {
             default:
                 break;
         }
+        this._item_type = "NONE";
     }
     use_effect(player) {
         player.delta_cash = -this._cost;
@@ -29,9 +30,10 @@ class Sustenance extends Item {
     }
 };
 
-class FidgetSpinner extends Item {
+export class FidgetSpinner extends Item {
     constructor(store_type) {
         super(store_type);
+        this._item_type = "FidgetSpinner";
     }
     use_effect(player) {
         super.use_effect(player);
