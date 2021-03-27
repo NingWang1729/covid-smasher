@@ -131,7 +131,6 @@ class Role extends player {
     // Need this to save to database
     playerState() { 
         return {
-          username: 'Joe',
           slot: this._slot,
           position: {
             x: this.x_pos,
