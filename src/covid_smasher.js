@@ -1579,7 +1579,7 @@ function COVID_SMASHER() {
         ctx.fillText("Try to reach 100 in strength, intelligence, or morale to", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 8 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.fillText("unlock the COVID-19 vaccine at the hospital to win!", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 10 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
         ctx.textAlign = "center";
-        ctx.font = '60px serif';
+        ctx.font = '42px serif';
         ctx.fillText("    Click anywhere to start...  ", MAX_WIDTH * 3 / 4 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 9 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, locations_module.UNIT_SIZE / 3);
         
         ctx.stroke();
