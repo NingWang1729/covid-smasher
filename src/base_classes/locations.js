@@ -203,12 +203,34 @@ export class Mystery_Store extends Location {
     };
 };
 
-export class Restaurant extends Location {
+export class Cin_N_Cout extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
     };
-    do_something(player) {
-        ;
+    do_something(player, item_no) {
+        switch (item_no) {
+            case 1:
+                if (player._cash > 3 && player.add_item(new items_module.Borger) === true) {
+                    player.delta_cash = -3;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 2:
+                if (player._cash > 2 && player.add_item(new items_module.HeaderFries) === true) {
+                    player.delta_cash = -2;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 3:
+                if (player._cash > 1 && player.add_item(new items_module.Soda) === true) {
+                    player.delta_cash = -1;
+                    return true;
+                } else {
+                    return false;
+                };
+        };
     };
 };
 
