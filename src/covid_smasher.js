@@ -2276,6 +2276,8 @@ function resetGameState() {
 
 // Change player state to the state in slot data
 function setPlayerState(slotData) {
+    console.log(player.playerState())
+
     player._slot = slotData.slot
     player.x_pos = slotData.position.x
     player.y_pos = slotData.position.y
@@ -2287,7 +2289,10 @@ function setPlayerState(slotData) {
     player._substenance = slotData.stats.sustenance // Note: Sustenance is spelled wrong here
     player._hp = slotData.stats.health
     player._cash = slotData.money
-    player._inventory = slotData.inventory
+    player._inventory._item_array = slotData.inventory.items
+    player._inventory._capacity = slotData.inventory.capacity
+
+    console.log(player.playerState())
 }
 
 // Set all values to those that were in the save
