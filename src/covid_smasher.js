@@ -1212,6 +1212,9 @@ function COVID_SMASHER() {
                             })()}
                         </tr>
                     </table>
+                    {/* Used for loading google sign in for OAuth */ }
+                    <script src="https://apis.google.com/js/platform.js" async defer></script>
+                    <meta name="google-signin-client_id" content="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com"></meta>
                     {/* This Cynthia is in public */}
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
@@ -1267,6 +1270,8 @@ function COVID_SMASHER() {
                 </td>
                 <td id="right-column">
                     <p>Right column</p>
+                    { /* Temp, move location later */ }
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
                 </td>
             </tr>
         </table>
@@ -1337,7 +1342,9 @@ function loadSlot(num, slotData) {
 
                 // 2. Change game state to that of chosen slot
                 setGameState(slotData)
+                swal(`Switched to slot ${num}`)
             }
+            else swal(`Staying on current slot (${num})`)
         })
     }
     else {
@@ -1358,6 +1365,7 @@ function loadSlot(num, slotData) {
                 swal(`OK, starting a new game on slot ${num}!`)
                 // TO-DO: resetGameState() should probably let them pick the character lol?
                 resetGameState()
+                saveGameState(num)
             }
         })
     }
@@ -1409,42 +1417,5 @@ function getGameState() {
 
    return gameState
 }
-
-/*
-// TO-DO: Change this so that it fetches this from OAuth login
-function getUserName() { return userName }
-
-async function getSave(num) {
-  // 1. Get user ID stored somewhere
-  const userName = getUserName()
-
-  // 2. Send user ID to database, get back save
-  const gameSave = await Save.findOne({ userName, slot: num })
-  return gameSave
-}
-
-
-async function loadSlot(num) {
-  // 3. If slot is empty, confirm want to load new game
-  // Otherwise if slot is occupied, confirm want to load previous game
-  const gameSave = await getSave(num)
-
-  // swal(`Loaded Slot ${num}!`)
-}
-
-async function saveSlot(num) {
-    // 3. If slot occupied, confirm want to override save
-    const gameSave = await getSave(num)
-
-    // Slot successfully saved
-    swal(`Saved Slot ${num}!`)
-}
-
-
-// Get current game state
-function getGameState() {
-
-}
-*/
 
 export default COVID_SMASHER;

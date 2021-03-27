@@ -6,7 +6,8 @@ import { Save } from './mongodb.js'
 
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const buildPath = path.join(__dirname, '../build')
+// const buildPath = path.join(__dirname, '../build')
+const buildPath = path.join(__dirname)
 
 const app = express()
 app.use(express.static(buildPath))
