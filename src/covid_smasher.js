@@ -141,7 +141,24 @@ var animation_stage_npc = 0;
 var is_animated = false;
 var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
 
-
+//   0     1     2    3  4  5   6
+// right right right up up up down
+function fixNPCMoveQueue(npc_queue) {
+    let join_arr = [];
+    if (npc_queue[0] != 3) {
+        npc_queue.unshift(npc_queue[0])
+    }
+    for (let i = 1; i < npc_queue.length - 1; i++) {
+        let prev = i - 1;
+        let next = i;
+        if (npc_queue[prev] != npc_queue[next]) {
+            console.log(npc_queue.join());
+            npc_queue.splice(next, 0, npc_queue[next]);
+            console.log(npc_queue.join());
+        }
+        
+    }
+} 
 
 function randomMovement(character) {
     let move_arr = [];
