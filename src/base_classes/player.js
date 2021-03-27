@@ -19,11 +19,11 @@ class Inventory {
         }
     }
     use_item(index, player) {
-        this._item_array[index].use_effect(player);
-        for (let i = index+1; i < this._item_array.length; ++i) {
-            this._item_array[i - 1] = this._item_array[i];
+        player._inventory._item_array[index].use_effect(player);
+        for (let i = index+1; i < player._inventory._item_array.length; ++i) {
+            player._inventory._item_array[i - 1] = player._inventory._item_array[i];
         }
-        this._item_array.pop();
+        player._inventory._item_array.pop();
     }
     convert_2D_array(nRows, nCols) {
         let item_2D_array = [];

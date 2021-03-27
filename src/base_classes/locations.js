@@ -248,7 +248,7 @@ export class Cin_N_Cout extends Location {
                     return false;
                 };
             case 2:
-                if (player._cash > 2 && player.add_item(new items_module.HeaderFries) === true) {
+                if (player._cash > 2 && player.add_item(new items_module.Header_Fries) === true) {
                     player.delta_cash = -2;
                     return true;
                 } else {
