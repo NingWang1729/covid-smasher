@@ -2011,44 +2011,6 @@ function COVID_SMASHER() {
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER: {player._type}</p>
                     <p>EMAIL: {email}</p>
-                    <p>{player._inventory._item_array.length}</p>
-                    <p style={{visibility: 'hidden'}}>{player.direction}</p>
-                    <p style={{visibility: 'hidden'}}>({player.x_pos},{player.y_pos})</p>
-                    <table>
-                        <tr>
-                            {player._inventory._item_array.slice(0, 5).map((item) => {
-                                return (<td>{item._item_type}</td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td>{item}</td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr>
-                            {player._inventory._item_array.slice(5, 10).map((item) => {
-                                return (<td>{item._item_type}</td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(5, 10).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td>{item}</td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr>
-                            {player._inventory._item_array.slice(10, 15).map((item) => {
-                                return (<td>{item._item_type}</td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(10, 15).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td>{item}</td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                    </table>
                     { /* Display OAuth 2.0 login */ }
                     <GoogleLogin 
                         clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com" 
