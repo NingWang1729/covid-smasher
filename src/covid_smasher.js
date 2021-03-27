@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import swal from '@sweetalert/with-react';
+import { GoogleLogin } from 'react-google-login'
 import './covid_smasher.css';
 
 import * as locations_module from './base_classes/locations.js'
@@ -66,6 +67,7 @@ var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College 
 var animated = false;
 var animation_stage = 0;
 var time = 6;
+var email = ''
 
 function character_selection(player_class) {
     player = player_selection[player_class];
@@ -1081,7 +1083,6 @@ function COVID_SMASHER() {
             case 1:
                 // Get data for each of the save slots
                 const saveSlots = await getSavedSlots()
-                console.log("Save slots are:", saveSlots)
 
                 if (x > 2 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
                     loadSlot(1, saveSlots[1] ?? null)
@@ -1162,6 +1163,12 @@ function COVID_SMASHER() {
         }
     };
 
+    // Used for dealing with Google OAuth
+    function onSignIn(googleUser) {
+        // Modify the global variable
+        email = googleUser.getBasicProfile().getEmail()
+    }
+
     return (
         <table id="game-table">
             <tr>
@@ -1174,6 +1181,7 @@ function COVID_SMASHER() {
                     <p>INTELLIGENCE: {player._intelligence}</p>
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER: {player._type}</p>
+                    <p>EMAIL: {email}</p>
                     <p>{player._inventory._item_array.length}</p>
                     <p style={{visibility: 'hidden'}}>{player.direction}</p>
                     <p style={{visibility: 'hidden'}}>({player.x_pos},{player.y_pos})</p>
@@ -1212,9 +1220,15 @@ function COVID_SMASHER() {
                             })()}
                         </tr>
                     </table>
-                    {/* Used for loading google sign in for OAuth */ }
-                    <script src="https://apis.google.com/js/platform.js" async defer></script>
-                    <meta name="google-signin-client_id" content="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com"></meta>
+                    { /* Display OAuth 2.0 login */ }
+                    <GoogleLogin 
+                        clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com" 
+                        buttonText="Login" 
+                        onSuccess={onSignIn} 
+                        onFailure={onSignIn} 
+                        cookiePolicy={'single_host_origin'} 
+                    />
+                
                     {/* This Cynthia is in public */}
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
@@ -1270,8 +1284,6 @@ function COVID_SMASHER() {
                 </td>
                 <td id="right-column">
                     <p>Right column</p>
-                    { /* Temp, move location later */ }
-                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
                 </td>
             </tr>
         </table>
@@ -1280,20 +1292,19 @@ function COVID_SMASHER() {
 
 // Get all saved slots for the user as a JS object
 async function getSavedSlots() {
-    const slots = (await axios.get('/save', { params: { username: 'Joe' }})).data
-    console.log('Slots from getSavedSlots()', slots)
+    const slots = (await axios.get('/save', { params: { email }})).data
 
     // Convert slots, which is an array, to an object
     const slotObj = {}
-    for (const save of slots) {
-        slotObj[save.slot] = save
-    }
+    for (const save of slots) slotObj[save.slot] = save
 
     return slotObj
 }
 
 // TO-DO: Update the display for the current slot after saving
 function saveToSlot(num, slotData) {
+    if (email === '') return swal("You must sign in before you can save to a slot!")
+
     // No game exists on slot
     if (slotData == null) {
         saveGameState(num)
@@ -1322,6 +1333,9 @@ function saveToSlot(num, slotData) {
 
 // Two possibilities: either there is already a save for this slot or isn't
 function loadSlot(num, slotData) {
+    // User is not logged in
+    if (email === '') return swal("You must sign in before you can load a save!")
+
     // Game already exists on this slot
     if (slotData != null) {
         swal("Confirm selection", `Switching to game on slot ${num}`, 'info', {
@@ -1405,6 +1419,7 @@ async function saveGameState(specifiedSlot) {
     const gameState = getGameState()
     // Save for a specific slot, otherwise current slot
     if (specifiedSlot != null) gameState.slot = specifiedSlot
+    gameState.email = email
 
     axios.post('/save', gameState)
 }

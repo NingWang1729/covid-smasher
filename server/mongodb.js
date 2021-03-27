@@ -16,8 +16,8 @@ db.once('open', () => console.log('Connected to Mongoose!'))
 // Structure that all save objects need to follow
 const saveSchema = new Schema({
   savedAt: { type: Date, default: Date.now },
-  username: { type: String }, // TO-DO: Make required later on
-  slot: { type: Number, required: false, min: 1, max: 3 }, // TO-DO: Change to required later on
+  email: { type: String, required: true },
+  slot: { type: Number, required: true, min: 1, max: 3 },
   position: {
     x: { type: Number, required: true, min: 0, max: 39 },
     y: { type: Number, required: true, min: 0, max: 23 },
