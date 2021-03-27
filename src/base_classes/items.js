@@ -201,7 +201,7 @@ export class Borger extends Item {
     }
 };
 
-export class HeaderFries extends Item {
+export class Header_Fries extends Item {
     constructor(store_type) {
         super(store_type);
         this._item_type = "Header_Fries";

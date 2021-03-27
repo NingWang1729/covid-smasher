@@ -1990,34 +1990,34 @@ function COVID_SMASHER() {
                     <table style={{width: "80%"}}>
                         <tr>
                             {player._inventory._item_array.slice(0, 5).map((item) => {
-                                return (<td>{item._item_type}</td>);
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.length))).fill("Empty");
                                 return (<React.Fragment>
-                                            {empty.map((item) => <td>{item}</td>)}
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
                                         </React.Fragment>);
                             })()}
                         </tr>
                         <tr>
                             {player._inventory._item_array.slice(5, 10).map((item) => {
-                                return (<td>{item._item_type}</td>);
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(5, 10).length))).fill("Empty");
                                 return (<React.Fragment>
-                                            {empty.map((item) => <td>{item}</td>)}
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
                                         </React.Fragment>);
                             })()}
                         </tr>
                         <tr>
                             {player._inventory._item_array.slice(10, 15).map((item) => {
-                                return (<td>{item._item_type}</td>);
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(10, 15).length))).fill("Empty");
                                 return (<React.Fragment>
-                                            {empty.map((item) => <td>{item}</td>)}
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
                                         </React.Fragment>);
                             })()}
                         </tr>
@@ -2076,7 +2076,64 @@ function COVID_SMASHER() {
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
                 </td>
                 <td id="right-column">
-                    <p>Right column</p>
+                    <h1>Inventory:</h1>
+                    <table id="inventory" style={{width: "90%"}}>
+                        <tr id="inventory">
+                            {player._inventory._item_array.slice(0, 3).map((item) => {
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr id="inventory">
+                            {player._inventory._item_array.slice(3, 6).map((item) => {
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(3, 6).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr id="inventory">
+                            {player._inventory._item_array.slice(6, 9).map((item) => {
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(6, 9).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(9, 12).map((item) => {
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(9, 12).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(12, 15).map((item) => {
+                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(12, 15).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
