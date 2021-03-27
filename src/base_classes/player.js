@@ -107,51 +107,50 @@ class Role extends player {
         this._morale = morale;
         this._type = type;
         this._substenance = 100;
+        this._slot = 1; // TO-DO: Remove later? Sets default slot for player
     }
-    get type() {
-        return this._type;
-    }
+    // Getters to get all sorts of info about the player
+    get type() { return this._type; }
+    get health() { return this._hp; }
+    get hp() { return this._hp; }
+    get cash() { return this._cash; }
+    get strength() { return this._strength; }
+    get intelligence() { return this._intelligence; }
+    get morale() { return this._morale; }
+    get substenance() { return this._substenance; }
 
-    get health() {
-        return this._hp;
-    }
+    // Add/decrement values by a certain amount
+    set delta_health(val) { this._hp += val; }
+    set delta_cash(val) { this._cash += val; }
+    set delta_strength(val) { this._strength += val; }
+    set delta_intelligence(val) { this._intelligence += val; }
+    set delta_morale(val) { this._morale += val; }
+    set delta_substenance(val) { this._substenance += val; }
 
-    get hp() {
-        return this._hp;
-    }
-    get cash() {
-        return this._cash;
-    }
-
-    get strength() {
-        return this._strength;
-    }
-    get intelligence() {
-        return this._intelligence;
-    }
-    get morale() {
-        return this._morale;
-    }
-    get substenance() {
-        return this._substenance;
-    }
-    set delta_health(val) {
-        this._hp += val;
-    }
-    set delta_cash(val) {
-        this._cash += val;
-    }
-    set delta_strength(val) {
-        this._strength += val;
-    }
-    set delta_intelligence(val) {
-        this._intelligence += val;
-    }
-    set delta_morale(val) {
-        this._morale += val;
-    }
-    set delta_substenance(val) {
-        this._substenance += val;
+    // Get all the stats of the player
+    // Need this to save to database
+    playerState() { 
+        return {
+          username: 'Joe',
+          slot: this._slot,
+          position: {
+            x: this.x_pos,
+            y: this.y_pos,
+          },
+          playerType: this._type,
+          direction: this.direction,
+          stats: {
+            intelligence: this._intelligence,
+            strength: this._strength,
+            morale: this._morale,
+            sustenance: this._substenance, // TO-DO: Change substenance to sustenance
+            health: this._hp,
+          },
+          
+          // time: Player does not track time
+          money: this._cash,
+          inventory: this._inventory,
+        }
     }
 };
 

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import swal from '@sweetalert/with-react';
+import { GoogleLogin } from 'react-google-login'
 import './covid_smasher.css';
 
 import * as locations_module from './base_classes/locations.js'
 import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
 import * as items_module from './base_classes/items.js'
+
+import axios from 'axios'
 
 const location_objects = [
     new locations_module.Home(1, 4),
@@ -56,10 +59,12 @@ const player_selection = [
     new player_module.Role(2, 5, 100, 100, 10, 50, 40, 'Female Elderly Person'),
 ];
 
+// Global variables
 var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
 var animated = false;
 var animation_stage = 0;
 var time = 6;
+var email = ''
 
 
 var dfs_map = [
@@ -1895,7 +1900,7 @@ function COVID_SMASHER() {
         setMoves(movequeue);
     };
 
-    function on_click(e) {
+    async function on_click(e) {
         let canvas = document.getElementById("game-canvas");
         let x = e.pageX - canvas.getBoundingClientRect().left;
         let y = e.pageY - canvas.getBoundingClientRect().top;
@@ -1903,20 +1908,21 @@ function COVID_SMASHER() {
             case 0:
                 break;
             case 1:
-                console.log(e);
-                console.log(x, y);
+                // Get data for each of the save slots
+                const saveSlots = await getSavedSlots()
+
                 if (x > 2 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Loaded Slot 1!");
+                    loadSlot(1, saveSlots[1] ?? null)
                 } else if (x > 7.5 * locations_module.UNIT_SIZE && x < 7.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Saved Slot 1!");
+                    saveToSlot(1, saveSlots[1] ?? null)
                 } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Loaded Slot 2!");
+                    loadSlot(2, saveSlots[2] ?? null);
                 } else if (x > MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH / 3 + 1 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Saved Slot 2!");
+                    saveToSlot(2, saveSlots[2] ?? null);
                 } else if (x > MAX_WIDTH * 2 / 3 && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Loaded Slot 3!");
+                    loadSlot(3, saveSlots[3] ?? null)
                 } else if (x > MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE && x < MAX_WIDTH * 2 / 3 + 5.5 * locations_module.UNIT_SIZE + 5.5 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE + 1 * locations_module.UNIT_SIZE) {
-                    swal("Saved Slot 3!");
+                    saveToSlot(3, saveSlots[3] ?? null);
                 };
                 break;
             case 2:
@@ -1984,6 +1990,12 @@ function COVID_SMASHER() {
         }
     };
 
+    // Used for dealing with Google OAuth
+    function onSignIn(googleUser) {
+        // Modify the global variable
+        email = googleUser.getBasicProfile().getEmail()
+    }
+
     return (
         <table id="game-table">
             <tr>
@@ -1996,8 +2008,55 @@ function COVID_SMASHER() {
                     <p>INTELLIGENCE: {player._intelligence}</p>
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER: {player._type}</p>
+                    <p>EMAIL: {email}</p>
+                    <p>{player._inventory._item_array.length}</p>
                     <p style={{visibility: 'hidden'}}>{player.direction}</p>
                     <p style={{visibility: 'hidden'}}>({player.x_pos},{player.y_pos})</p>
+                    <table>
+                        <tr>
+                            {player._inventory._item_array.slice(0, 5).map((item) => {
+                                return (<td>{item._item_type}</td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td>{item}</td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(5, 10).map((item) => {
+                                return (<td>{item._item_type}</td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(5, 10).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td>{item}</td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(10, 15).map((item) => {
+                                return (<td>{item._item_type}</td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(10, 15).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td>{item}</td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                    </table>
+                    { /* Display OAuth 2.0 login */ }
+                    <GoogleLogin 
+                        clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com" 
+                        buttonText="Login" 
+                        onSuccess={onSignIn} 
+                        onFailure={onSignIn} 
+                        cookiePolicy={'single_host_origin'} 
+                    />
+                
+                    {/* This Cynthia is in public */}
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
@@ -2112,5 +2171,148 @@ function COVID_SMASHER() {
         </table>
     );
 };
+
+// Get all saved slots for the user as a JS object
+async function getSavedSlots() {
+    const slots = (await axios.get('/save', { params: { email }})).data
+
+    // Convert slots, which is an array, to an object
+    const slotObj = {}
+    for (const save of slots) slotObj[save.slot] = save
+
+    return slotObj
+}
+
+// TO-DO: Update the display for the current slot after saving
+function saveToSlot(num, slotData) {
+    if (email === '') return swal("You must sign in before you can save to a slot!")
+
+    // No game exists on slot
+    if (slotData == null) {
+        saveGameState(num)
+        swal(`Saved Slot ${num}!`);
+    }
+    else {
+        swal("Confirm selection", `Overriding save on slot ${num}`, 'info', {
+            buttons: {
+                leave: {
+                    text: "No, don't override the save!",
+                    value: "leave",
+                },
+                enter: {
+                    text: `Override save on slot ${num}`,
+                    value: "enter",
+                }
+            }
+        }).then((value) => {
+            if (value == "enter") { 
+                saveGameState(num)
+                swal(`Saved Slot ${num}!`)
+            }
+        })
+    }
+}
+
+// Two possibilities: either there is already a save for this slot or isn't
+function loadSlot(num, slotData) {
+    // User is not logged in
+    if (email === '') return swal("You must sign in before you can load a save!")
+
+    // Game already exists on this slot
+    if (slotData != null) {
+        swal("Confirm selection", `Switching to game on slot ${num}`, 'info', {
+            buttons: {
+                leave: {
+                    text: "No, stay on this game!",
+                    value: "leave",
+                },
+                enter: {
+                    text: `Switch to slot ${num}`,
+                    value: "enter",
+                }
+            }
+        }).then((value) => {
+            if (value == "enter") { 
+                // 1. Save current game to current slot
+                saveGameState(player._slot)
+
+                // 2. Change game state to that of chosen slot
+                setGameState(slotData)
+                swal(`Switched to slot ${num}`)
+            }
+            else swal(`Staying on current slot (${num})`)
+        })
+    }
+    else {
+        swal("Confirm selection:", `Are you sure you want to start a new game on slot ${num}?`, "info", {
+            buttons: {
+                leave: {
+                    text: "No, stay on this game!",
+                    value: "leave",
+                },
+                enter: {
+                    text: "New game!",
+                    value: "enter",
+                }
+            }
+        }).then((value) => {
+            if (value === "leave") swal("OK, staying on this game!")
+            else { 
+                swal(`OK, starting a new game on slot ${num}!`)
+                // TO-DO: resetGameState() should probably let them pick the character lol?
+                resetGameState()
+                saveGameState(num)
+            }
+        })
+    }
+}
+
+function resetGameState() {
+    player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
+    time = 6
+}
+
+// Change player state to the state in slot data
+function setPlayerState(slotData) {
+    player._slot = slotData.slot
+    player.x_pos = slotData.position.x
+    player.y_pos = slotData.position.y
+    player._type = slotData.playerType
+    player.direction = slotData.direction
+    player._intelligence = slotData.stats.intelligence
+    player._strength = slotData.stats.strength
+    player._morale = slotData.stats.morale
+    player._substenance = slotData.stats.sustenance // Note: Sustenance is spelled wrong here
+    player._hp = slotData.stats.health
+    player._cash = slotData.money
+    player._inventory = slotData.inventory
+}
+
+// Set all values to those that were in the save
+function setGameState(slotData) {
+    setPlayerState(slotData)
+
+    // Modify global game state
+    time = slotData.time
+}
+
+// Sends the game state to the backend
+async function saveGameState(specifiedSlot) {
+    const gameState = getGameState()
+    // Save for a specific slot, otherwise current slot
+    if (specifiedSlot != null) gameState.slot = specifiedSlot
+    gameState.email = email
+
+    axios.post('/save', gameState)
+}
+
+// Gets the full state of the game
+function getGameState() {
+    // TO-DO: Pass in username as well
+   const gameState = player.playerState()
+   gameState.time = time
+
+   return gameState
+}
 
 export default COVID_SMASHER;
