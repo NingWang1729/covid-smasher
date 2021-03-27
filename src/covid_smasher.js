@@ -2236,7 +2236,7 @@ function loadSlot(num, slotData) {
         }).then((value) => {
             if (value == "enter") { 
                 // 1. Save current game to current slot
-                saveGameState(player._slot)
+                // saveGameState(player._slot)
 
                 // 2. Change game state to that of chosen slot
                 setGameState(slotData)
