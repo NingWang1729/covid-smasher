@@ -24,7 +24,7 @@ class Sustenance extends Item {
         super(store_type);
     }
     use_effect(player) {
-        super(use_effect(player));
+        super.use_effect(player);
         player.delta_morale = -1;
     }
 };
@@ -84,3 +84,60 @@ class Wurd extends Item {
         player.delta_cash = Math.floor(player.cash / 2); // equivalent to bitshift right
     }
 };
+
+class Borger extends Item {
+    constructor(store_type) {
+        super(store_type);
+    }
+    use_effect(player) {
+        super(use_effect(player));
+        alert("This borger sure was good.");
+        player.delta_health = 5;
+    }
+};
+
+class HeaderFries extends Item {
+    constructor(store_type) {
+        super(store_type);
+    }
+    use_effect(player) {
+        super(use_effect(player));
+        alert("These were pretty ok.");
+        player.delta_health = 2;
+    }
+};
+
+class Alcohol extends Item {
+    constructor(store_type) {
+        super(store_type);
+    }
+    use_effect(player) {
+        super.use_effect(player);
+        alert("Are you sure you should be drinking this?");
+        player.delta_health = -10;
+        player.delta_intelligence = -5;
+        player.delta_morale = 5;
+    }
+};
+
+class BreadStacks extends Item {
+    constructor(store_type) {
+        super(store_type);
+    }
+    use_effect(player) {
+        super.use_effect(player);
+        alert("These are unlimited until stack overflow.");
+        player.delta_health = 5;
+    }
+};
+
+class Copypasta extends Item {
+    constructor(store_type) {
+        super(store_type);
+    }
+    use_effect(player) {
+        super.use_effect(player);
+        alert("Mmm. Fresh pasta.");
+        player.delta_morale = 10;
+    }
+}
