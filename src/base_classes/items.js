@@ -189,25 +189,38 @@ export class Wurd extends Item {
     }
 };
 
-class Borger extends Item {
+export class Borger extends Item {
     constructor(store_type) {
         super(store_type);
+        this._item_type = "Borger";
     }
     use_effect(player) {
         super.use_effect(player);
-        alert("This borger sure was good.");
-        player.delta_health = 5;
+        player.delta_substenance = 20;
+        player.delta_morale = 2;
     }
 };
 
-class HeaderFries extends Item {
+export class HeaderFries extends Item {
     constructor(store_type) {
         super(store_type);
+        this._item_type = "Header_Fries";
+    }
+    use_effect(player) {
+        player.delta_substenance = 10;
+        player.delta_morale = 1;
+    }
+};
+
+export class Soda extends Item {
+    constructor(store_type) {
+        super(store_type);
+        this._item_type = "Soda";
     }
     use_effect(player) {
         super.use_effect(player);
-        alert("These were pretty ok.");
-        player.delta_health = 2;
+        player.delta_substenance = 5;
+        player.delta_morale = 1;
     }
 };
 

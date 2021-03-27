@@ -20,10 +20,9 @@ const location_objects = [
     new locations_module.Mystery_Store(33, 4),
     new locations_module.Library(2, 13),
     /* include Object Garden */
-    new locations_module.Restaurant(27, 11),
-    new locations_module.Restaurant(27, 11),
-    new locations_module.Restaurant(28, 11),
-    new locations_module.Restaurant(29, 11),
+    new locations_module.Cin_N_Cout(27, 11),
+    new locations_module.Cin_N_Cout(28, 11),
+    new locations_module.Cin_N_Cout(29, 11),
     /* include FooBar */
     /* include Game Corner */
     new locations_module.HighSchool(7, 22),
