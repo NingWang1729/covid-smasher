@@ -16,19 +16,16 @@ const location_objects = [
     new locations_module.Home(2, 4),
     new locations_module.Neighbor(5, 4),
     new locations_module.Cityhall(12, 4),
-    /* include City Hall */
-    new locations_module.Store1(17, 4),
-    new locations_module.Store1(23, 4),
-    new locations_module.Store1(28, 4),
-    new locations_module.Store1(33, 4),
+    new locations_module.Unary_Store(17, 4),
+    new locations_module.Binary_Store(23, 4),
+    new locations_module.Ternary_Store(28, 4),
+    new locations_module.Mystery_Store(33, 4),
     new locations_module.Library(2, 13),
-    /* include Object Garden */
-    new locations_module.Restaurant(27, 11),
-    new locations_module.Restaurant(27, 11),
-    new locations_module.Restaurant(28, 11),
-    new locations_module.Restaurant(29, 11),
-    /* include FooBar */
-    /* include Game Corner */
+    new locations_module.Object_Garden(23, 11),
+    new locations_module.Cin_N_Cout(27, 11),
+    new locations_module.Cin_N_Cout(28, 11),
+    new locations_module.Cin_N_Cout(29, 11),
+    new locations_module.Foobar(32, 11),
     new locations_module.HighSchool(7, 22),
     new locations_module.Work(14, 21),
     new locations_module.Gym(18, 21),
@@ -68,6 +65,195 @@ var animated = false;
 var animation_stage = 0;
 var time = 6;
 var email = ''
+
+
+var dfs_map = [
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [0,2,2,0,0,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,],
+    [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,2,0,0,0,2,2,2,0,0,2,0,0,0,0,2,0,0,],
+    [1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [0,0,2,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+    [1,1,1,1,1,1,1,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+]
+
+// NPC
+// Numbers are inclusive
+const getRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+
+
+function moveableSpaces(grid) {
+    let row_col_arr = [];
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == 2) {
+                row_col_arr.push([i, j]);
+            }
+        }
+    }
+    return row_col_arr
+}
+
+
+// Sometimes this does not work
+let getRandomValidPosition = () => {
+    for (;;) {
+        let random_row = getRandomNumber(0, locations_module.WORLD_HEIGHT - 1)
+        // 4 is for the buffer
+        let random_col = getRandomNumber(0, locations_module.WORLD_WIDTH - 1)
+        
+        // If the start position is valid
+        if (locations_module.WORLD_MAP[random_row][random_col] == 0) {
+            console.log("Map Locale", locations_module.WORLD_MAP[random_row][random_col]);
+            console.log(random_row, random_col);
+            return [random_row, random_col]
+        }
+    }
+}
+
+// We get a random valid position for our npc to start
+// const [rows, cols] = getRandomValidPosition();
+// const [rows, cols] = moveableSpaces(locations_module.WORLD_MAP)[getRandomNumber(0, moveableSpaces(locations_module.WORLD_MAP).length - 1)];
+let random_num = getRandomNumber(0, moveableSpaces(dfs_map).length - 1)
+const rows = moveableSpaces(dfs_map)[random_num][0];
+const cols = moveableSpaces(dfs_map)[random_num][1];
+console.log("coordinates", rows, cols);
+
+var npc1 = new player_module.Role(cols, rows, 100, 50, 30, 50, 30, 'Female Impoverished');
+var animation_stage_npc = 0;
+var is_animated = true;
+var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
+
+//   0     1     2    3  4  5   6
+// right right right up up up down
+function fixNPCMoveQueue(npc_queue) {
+    let join_arr = [];
+    if (npc_queue[0] != 3) {
+        npc_queue.unshift(npc_queue[0])
+    }
+    for (let i = 1; i < npc_queue.length - 1; i++) {
+        let prev = i - 1;
+        let next = i;
+        if (npc_queue[prev] != npc_queue[next]) {
+            console.log(npc_queue.join());
+            npc_queue.splice(next, 0, npc_queue[next]);
+            console.log(npc_queue.join());
+        }
+        
+    }
+    return npc_queue;
+} 
+
+function randomMovement(character) {
+    let move_arr = [];
+    // let curr_row = character.get_y_pos;
+    // let curr_col = character.get_x_pos;
+
+    for (let i = 0; i < 101; i++) {
+        let direction_int = getRandomNumber(0,3);
+        let append_count = getRandomNumber(1,10);
+        for (let j = 0; j < append_count; j++) {
+            // if (direction_int === 0) {
+            //     if (locations_module.WORLD_MAP[curr_row][curr_col - 1] != 0) {
+            //         continue;
+            //     }
+            //     curr_col -= 1;
+            // } else if (direction_int === 1) {
+            //     if (locations_module.WORLD_MAP[curr_row][curr_col + 1] != 0) {
+            //         continue;
+            //     }
+            //     curr_col += 1;
+            // } else if (direction_int === 2) {
+            //     if (locations_module.WORLD_MAP[curr_row - 1][curr_col] != 0) {
+            //         continue;
+            //     }
+            //     curr_row -= 1;
+            // } else if (direction_int === 3) {
+            //     if (locations_module.WORLD_MAP[curr_row + 1][curr_col] != 0) {
+            //         continue;
+            //     }
+            //     curr_row += 1;
+            // }
+            
+            move_arr.push(direction_int)
+        }    
+    }
+
+    return move_arr;
+}
+
+var dfs_move_que = [];
+
+
+function canMove(row, col) {
+    return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] != 1); 
+}
+
+function bfs() {
+    return;
+}
+
+function dfs(row, col) {
+    // console.log(row, col);
+    dfs_map[row][col] = 1;
+
+    if (dfs_map[row][col] == 4) {
+        return 
+    }
+
+    if (canMove(row - 1, col)) {
+        dfs_move_que.push(2);
+        dfs(row - 1, col);
+    }
+    if (canMove(row, col + 1)) {
+        dfs_move_que.push(1);
+        dfs(row, col + 1);
+    }
+    if (canMove(row + 1, col)) {
+        dfs_move_que.push(3);
+        dfs(row + 1, col);
+    }
+    if (canMove(row, col - 1)) {
+        dfs_move_que.push(0);
+        dfs(row, col - 1);
+    }
+
+
+}
+
+// Comment Out One of these to choose type of pathfinder algo
+// Comment Out all algos to set pre-made path
+
+// Random Algo
+// move_directions = randomMovement(npc1);
+
+// DFS Algo
+dfs(rows, cols);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+move_directions = dfs_move_que;
+
+
+
 
 function character_selection(player_class) {
     player = player_selection[player_class];
@@ -164,8 +350,67 @@ function COVID_SMASHER() {
         setTicks(ticks + 1)
     }
 
+    // Function to reuse first made for NPC
+    function updateFacingDirection(a_stage, is_animated, character, queue) {
+        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
+            switch (queue[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                        is_animated = true;
+                    } else {
+                        // alert("Facing left");
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || locations_module.WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                        is_animated = true;
+                    } else {
+                        // alert("Facing right");
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                        is_animated = true;
+                    } else {
+                        // alert("Facing up");
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || locations_module.WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                        is_animated = true;
+                    } else {
+                        // alert("Facing down");
+                        a_stage = 0;
+                        is_animated = false;
+                    };
+                    break;
+                default:
+                    break;
+            };
+        };
+    }
     // WORLD MAP
     function update_game_0 () {
+        if (player._substenance <= 0 && ticks % 20 === 0) {
+            swal("Game Over!", "You died from starvation!", "error").then(() => {
+                swal(<p>The UN warns of <a href="https://townhall.com/tipsheet/bronsonstocking/2020/04/22/so-130-million-people-could-starve-because-of-the-lockdowns-n2567446" target="_blank">Mass Starvation</a> due to COVID-19.</p>);
+            });
+        } else if (player._hp <= 0 && ticks % 20 === 0) {
+            swal("Game Over!", "You died from injuries!", "error").then(() => {
+                swal(<p><a href="https://www.worldometers.info/coronavirus/" target="_blank">Millions of people</a> have died from COVID-19.</p>);
+            });
+        } else if ((player._substenance > 0 && player._substenance <= 50 || player._hp > 0 && player._hp <= 50) && ticks % 200 === 0) {
+            swal("You're not looking so good!", "Try increasing your substenance and hp.", "info")
+        }
+        // Same as code below
+        updateFacingDirection(animation_stage_npc, is_animated, npc1, move_directions);
+
         let movequeue = moves;
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 4)) {
             pass_time(0.01);
@@ -206,6 +451,7 @@ function COVID_SMASHER() {
                     break;
             };
         };
+
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears entire canvas
@@ -299,6 +545,10 @@ function COVID_SMASHER() {
         // Draw player
         draw_sprite(ctx, player.direction, player._type, player);
 
+        // Draw npc
+        draw_sprite_npc(ctx, npc1.direction, npc1._type, npc1);
+        
+
         let college = document.getElementById("college-without-doormat");
         ctx.drawImage(college, 768, 456 + locations_module.TOP_BUFFER);
 
@@ -311,6 +561,9 @@ function COVID_SMASHER() {
             ctx.fillStyle = `rgba(0, 0, 0, ${light})`;
         }
         ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT + locations_module.TOP_BUFFER);
+
+        // Moves NPC same as code below
+        move_npc(npc1);
 
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 3)) {
             switch (movequeue[0]) {
@@ -395,8 +648,8 @@ function COVID_SMASHER() {
                                         });
                                         if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            pass_time(0.5);
                                         };
-                                        pass_time(0.5);
                                         break;
                                     case "leave":
                                         swal("You decided not to visit your neighbor.");
@@ -436,8 +689,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("Nothing!", "You don't qualify for social security yet! You were fined $10.", "error");
                                             };
+                                            pass_time(2 + Math.random());
                                         };
-                                        pass_time(2 + Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit the government. Taxation is theft, anyways.");
@@ -448,53 +701,276 @@ function COVID_SMASHER() {
                                 }
                             });
                         } else if (player.x_pos === 17 && player.y_pos === 4) {
-                            swal("Arrived at Store 1!");
-                            swal("You arrived at the Unary-store! What do you want to do?", {
+                            swal("You arrived at the Unary-Store! What do you want to do?", {
                                 buttons: {
                                   leave: {
                                     text: "Leave for now...",
                                     value: "leave",
                                   },
                                   item1: {
-                                    text: "n/a...",
-                                    value: "enter",
+                                    text: "Buy plastic meat for $1?",
+                                    value: "item1",
                                   },
                                   item2: {
-                                    text: "n/a...",
-                                    value: "enter",
+                                    text: "Buy plastic water for $1?",
+                                    value: "item2",
                                   },
                                   item3: {
-                                    text: "Buy spidget finner...",
+                                    text: "Buy spidget finner for $1?",
                                     value: "item3",
                                   },
                                 },
                             }).then((value) => {
                                 switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Hey, you got a plastic meat(ball? clump?)! (Sounds... edible?)");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Hey, you got a plastic water! (Aside: What's a plastic water?)");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
                                                 swal("Hey, you got a spidget finner! *nice*");
                                             } else {
-                                                swal("inventory full!");
+                                                swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(2 + Math.random());
                                         break;
                                     case "leave":
-                                        swal("You decided not to visit the unary store.");
+                                        swal("You decided not to visit the Unary Store.");
                                         break;
                                     default:
-                                        swal("You decided not to visit the unary store.");
+                                        swal("You decided not to visit the Unary Store.");
                                         break;
                                 }
                             });
                         } else if (player.x_pos === 23 && player.y_pos === 4) {
-                            swal("Arrived at Store 2!");
+                            swal("You arrived at the Binary-Store! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy cooked chicken for $2?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy cooked bistec for $4?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy lawn mower for $8?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Hey, you got a cooked chicken!");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Hey, you got a cooked bistec!");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Hey, you got a lawn mower! (But why tho...)");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit the Binary Store.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit the Binary Store.");
+                                        break;
+                                }
+                            });
                         } else if (player.x_pos === 28 && player.y_pos === 4) {
-                            swal("Arrived at Store 3!");
+                            swal("You arrived at the Ternary-Store! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy pizza for $3?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy lemon for $9?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy shell script for $27?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Hey, you got a pizza! (Wanna share?)");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Hey, life gave you a lemon! (Make life take the lemon back!))");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Hey, you got a shell script! #!/bin/bash; cd ~/;");
+                                            } else {
+                                                swal("You were unable to purchase this item! (Can your inventory even be too full for a shell script? It's just a few bytes!)");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit the Ternary Store.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit the Ternary Store.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 33 && player.y_pos === 4) {
-                            swal("Arrived at Store 4!");
+                            swal("You arrived at the Mystery-Store! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy hard to swallow pills for $10?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy vim for $5?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy EMACS for $20?",
+                                    value: "item3",
+                                  },
+                                  item4: {
+                                    text: "Buy Wurd for $15?",
+                                    value: "item4",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("How will you swallow these?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Vim?", "idk, let's look it up", "info").then(() => {
+                                                    swal(<a href="https://www.google.com/search?q=vi" target="_blank">https://www.google.com/search?q=vi</a>)
+                                                });
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Emacs?", "idk, let's look it up", "info").then(() => {
+                                                    swal(<a href="https://www.google.com/search?q=emacs" target="_blank">https://www.google.com/search?q=emacs</a>)
+                                                });
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item4":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 4);
+                                            if (result) {
+                                                swal("Bird is the wurd!");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit the Mystery Store. (Are you sure it's not a gym?)");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit the Mystery Store.");
+                                        break;
+                                }
+                            });
                         } else if (player.x_pos === 2 && player.y_pos === 13) {
                             swal("You arrived at the library! What do you want to do?", {
                                 buttons: {
@@ -515,8 +991,8 @@ function COVID_SMASHER() {
                                         });
                                         if (obj_pos_map.has(hashedPos))  {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            pass_time(1.5);
                                         };
-                                        pass_time(1.5);
                                         break;
                                     case "leave":
                                         swal("You decided not to enter the library.");
@@ -527,11 +1003,194 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 23 && player.y_pos === 11) {
-                            swal("Arrived at Object Garden!");
+                            swal("You arrived at Object Garden! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy Breadstacks for $6?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy Copypasta for $20?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy Tiramisu for $8?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Where's the lamb sauce?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Somebody toucha my spaghet?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(3 / 2 * Math.random());
+                                        };
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Delicious. Finally, some tiramisu.");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit Object-Garden.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit Object-Garden.");
+                                        break;
+                                };
+                            });
                         } else if ((player.x_pos === 27 || player.x_pos === 28 || player.x_pos === 29) && player.y_pos === 11) {
-                            swal("Arrived at Cin-n-cout!");
+                            swal("You arrived at Cin-N-Cout! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy Borger for $3?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy Header Fries for $2?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy soda for $1?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Mmm, Borger. Yum.");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Is this even French?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Soda? Candy pop? What's the difference?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random());
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit Cin-N-Out.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit Cin-N-Out.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 32 && player.y_pos === 11) {
-                            swal("Arrived at Foobar!");
+                            swal("You arrived at Foobar! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  item1: {
+                                    text: "Buy Butterbeer for $2?",
+                                    value: "item1",
+                                  },
+                                  item2: {
+                                    text: "Buy Dry Martini for $3?",
+                                    value: "item2",
+                                  },
+                                  item3: {
+                                    text: "Buy spam and eggs for $5?",
+                                    value: "item3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "item1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result) {
+                                                swal("Did you get your permission slip signed for Hogsmeade?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random() / 2);
+                                        };
+                                        break;
+                                    case "item2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result) {
+                                                swal("Stirred, not shaken, right?");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random() / 2);
+                                        };
+                                        break;
+                                    case "item3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result) {
+                                                swal("Wait, this is not pythonic...");
+                                            } else {
+                                                swal("You were unable to purchase this item!");
+                                            };
+                                            pass_time(Math.random() / 2);
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit Foobar.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit Foobar.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
                             swal("Arrived at Game Corner!");
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
@@ -647,6 +1306,7 @@ function COVID_SMASHER() {
                                                 swal("Phew!", "What a great workout!", "success").then(() => {
                                                     swal(<p>With an uneasy economy, learn more about how <a href="https://kmph.com/news/local/governor-newsom-shuts-down-gyms-and-hair-salons-again" target="_blank">COVID-19 shutdowns</a> further hurt struggling, small businesses.</p>);
                                                 });
+                                                pass_time(2);
                                             } else {
                                                 swal("Uh-oh", "You don't have enough cash!", "error")};
                                         };
@@ -659,7 +1319,6 @@ function COVID_SMASHER() {
                                         break;
                                 };
                             });
-                            pass_time(2);
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
                             swal("You arrived at the hospital! What do you want to do?", {
                                 buttons: {
@@ -681,6 +1340,7 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal(<p>Check again when you have 100 in strength, intelligence, or morale, and <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/expect.html" target="_blank">learn more</a> about <a href="https://www.defense.gov/Explore/Spotlight/Coronavirus/Operation-Warp-Speed/" target="_blank">the COVID-19 vaccine.</a></p>);
                                             };
+                                            pass_time(0.1);
                                         };
                                         break;
                                     case "leave":
@@ -743,6 +1403,42 @@ function COVID_SMASHER() {
             movequeue.shift();
             setMoves(movequeue);
         };
+    }
+
+    function move_npc(character) {
+        if (move_directions.length > 0 && (animation_stage_npc === 0 || animation_stage_npc === 3)) {
+            switch (move_directions[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT) {
+                        character.move_left();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.LEFT);
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT) {
+                        character.move_right();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.RIGHT);
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP) {
+                        character.move_up();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.UP);
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN) {
+                        character.move_down();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.DOWN);
+                    };
+                    break;
+                }
+            move_directions.shift();
+        }
     }
 
     // PAUSE MENU
@@ -818,7 +1514,7 @@ function COVID_SMASHER() {
         ctx.beginPath();
         ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
 
-        // Character selection menu pause text
+        // Character selection menu text
         ctx.font = '48px serif';
         ctx.fillStyle = "black";
         ctx.textAlign = "center"; 
@@ -827,7 +1523,7 @@ function COVID_SMASHER() {
         // Character selection menu text border
         ctx.rect(MAX_WIDTH / 2 - 4 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
 
-        // Save Slot 1 text border
+        // Character slots
         ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE);
         ctx.fillText("    Highschool Teen", MAX_WIDTH / 10 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
         ctx.drawImage(document.getElementById("Male Highschool Teen"), 128, 64, 64, 64, 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2.5 * locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 256, 256);
@@ -869,125 +1565,256 @@ function COVID_SMASHER() {
         // Clears most of the canvas
         ctx.clearRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
         
-        // Character selection menu background color
+        // Load menu background color
         ctx.fillStyle = "beige";
         ctx.fillRect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
         
-        // Character selection menu border
+        // Load menu border
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
         
+        // Load menu top text
+        ctx.font = '48px serif';
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center"; 
+        ctx.fillText(" COVID SMASHER! ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
 
+        // Load menu text border
+        ctx.rect(MAX_WIDTH / 2 - 4 * locations_module.UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * locations_module.UNIT_SIZE, 8 * locations_module.UNIT_SIZE, 2 * locations_module.UNIT_SIZE);
+
+        // Instructions menu
+        ctx.font = '60px serif';
+        ctx.rect(2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, MAX_HEIGHT * 2 / 5 + 8 * locations_module.UNIT_SIZE);
+        ctx.fillText("    Instructions:  ", MAX_WIDTH / 10 + 2 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 0.25 * locations_module.UNIT_SIZE, MAX_WIDTH / 5, 3 * locations_module.UNIT_SIZE);
+        ctx.textAlign = "left";
+        ctx.font = '48px serif';
+        ctx.fillText("Use WASD or Arrow Keys to move and X to interact.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 2 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("Use P or ESC to pause the game to save or load files.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 4 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("Practice social distancing with any nearby players.", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 6 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("Try to reach 100 in strength, intelligence, or morale to", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 8 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.fillText("unlock the COVID-19 vaccine at the hospital to win!", MAX_WIDTH / 10 + 0 * locations_module.UNIT_SIZE, MAX_HEIGHT / 3 + 10 * locations_module.UNIT_SIZE, MAX_WIDTH - 5 * locations_module.UNIT_SIZE, 4 * locations_module.UNIT_SIZE);
+        ctx.textAlign = "center";
+        ctx.font = '42px serif';
+        ctx.fillText("    Click anywhere to start...  ", MAX_WIDTH * 3 / 4 + 1.5 * locations_module.UNIT_SIZE, MAX_HEIGHT / 2 + 9 * locations_module.UNIT_SIZE, MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE, locations_module.UNIT_SIZE / 3);
         
         ctx.stroke();
     }
 
-        // Sprite drawer
-        function draw_sprite(ctx, direction, sprite_sheet_type, player) {
-            let sprite_sheet = document.getElementById(sprite_sheet_type);
-            switch (direction) {
-                case locations_module.DIRECTION.UP:
-                    draw_animation(ctx, 1 + animation_stage, sprite_sheet, player);
-                    break;
-                case locations_module.DIRECTION.DOWN:
-                    draw_animation(ctx, 6 + animation_stage, sprite_sheet, player);
-                    break;
-                case locations_module.DIRECTION.LEFT:
-                    draw_animation(ctx, 11 + animation_stage, sprite_sheet, player);
-                    break;
-                case locations_module.DIRECTION.RIGHT:
-                    draw_animation(ctx, 16 + animation_stage, sprite_sheet, player);
-                    break;
-                default:
-                    break;
-            }
-            if (moves.length === 0) {
-                animation_stage = 0
-                animated = false;
-            }
-            if (animated) {
-                if (animation_stage === 1) {
-                    animation_stage = 2;
-                } else if (animation_stage === 2) {
-                    animation_stage = 3;
-                } else if (animation_stage === 3) {
-                    animation_stage = 4;
-                } else {
-                    animation_stage = 1;
-                }
+
+    // Sprite drawer
+    function draw_sprite(ctx, direction, sprite_sheet_type, player) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                draw_animation(ctx, 1 + animation_stage, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                draw_animation(ctx, 6 + animation_stage, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                draw_animation(ctx, 11 + animation_stage, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                draw_animation(ctx, 16 + animation_stage, sprite_sheet, player);
+                break;
+            default:
+                break;
+        }
+        if (moves.length === 0) {
+            animation_stage = 0
+            animated = false;
+        }
+        if (animated) {
+            if (animation_stage === 1) {
+                animation_stage = 2;
+            } else if (animation_stage === 2) {
+                animation_stage = 3;
+            } else if (animation_stage === 3) {
+                animation_stage = 4;
+            } else {
+                animation_stage = 1;
             }
         }
+    }
+
+    // For draw_sprite()
+    function draw_animation(ctx, sprite_no, sprite_sheet, sprite) {
+        switch(sprite_no) {
+            // Up
+            case 1:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 2:
+                ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+                break;
+            case 3:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+                break;
+            case 4:
+                ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+                break;
+            case 5:
+                ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+                break;
+            // Down
+            case 6:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 7:
+                ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+                break;
+            case 8:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+                break;
+            case 9:
+                ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+                break;
+            case 10:
+                ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+                break;
+            // Left
+            case 11:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 12:
+                ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 13:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 14:
+                ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 15:
+                ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            // Right
+            case 16:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 17:
+                ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 18:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 19:
+                ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+            case 20:
+                ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+                break;
+        }
+    }
+
+    // Draw NPC
+    function draw_sprite_npc(ctx, direction, sprite_sheet_type, player) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                draw_animation(ctx, 1 + animation_stage_npc, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                draw_animation(ctx, 6 + animation_stage_npc, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                draw_animation(ctx, 11 + animation_stage_npc, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                draw_animation(ctx, 16 + animation_stage_npc, sprite_sheet, player);
+                break;
+            default:
+                break;
+        }
+
+        if (move_directions.length === 0) {
+            animation_stage_npc = 0
+            is_animated = false;
+        }
+
+        if (is_animated) {
+            if (animation_stage_npc === 1) {
+                animation_stage_npc = 2;
+            } else if (animation_stage_npc === 2) {
+                animation_stage_npc = 3;
+            } else if (animation_stage_npc === 3) {
+                animation_stage_npc = 4;
+            } else {
+                animation_stage_npc = 1;
+            }
+        }
+    }
     
-        // For draw_sprite()
-        function draw_animation(ctx, sprite_no, sprite_sheet, sprite) {
-            switch(sprite_no) {
-                // Up
-                case 1:
-                    ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 2:
-                    ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
-                    break;
-                case 3:
-                    ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
-                    break;
-                case 4:
-                    ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
-                    break;
-                case 5:
-                    ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
-                    break;
-                // Down
-                case 6:
-                    ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 7:
-                    ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
-                    break;
-                case 8:
-                    ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
-                    break;
-                case 9:
-                    ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
-                    break;
-                case 10:
-                    ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
-                    break;
-                // Left
-                case 11:
-                    ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 12:
-                    ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 13:
-                    ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 14:
-                    ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 15:
-                    ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                // Right
-                case 16:
-                    ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 17:
-                    ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 18:
-                    ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 19:
-                    ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-                case 20:
-                    ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
-                    break;
-            }
-        }
+    // // For draw_sprite()
+    // function draw_animation(ctx, sprite_no, sprite_sheet, sprite) {
+    //     switch(sprite_no) {
+    //         // Up
+    //         case 1:
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 2:
+    //             ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+    //             break;
+    //         case 3:
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+    //             break;
+    //         case 4:
+    //             ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+    //             break;
+    //         case 5:
+    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+    //             break;
+    //         // Down
+    //         case 6:
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 7:
+    //             ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 4, 64, 64);
+    //             break;
+    //         case 8:
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER + 8, 64, 64);
+    //             break;
+    //         case 9:
+    //             ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 8, 64, 64);
+    //             break;
+    //         case 10:
+    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER - 4, 64, 64);
+    //             break;
+    //         // Left
+    //         case 11:
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 12:
+    //             ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 13:
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 14:
+    //             ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 15:
+    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         // Right
+    //         case 16:
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 17:
+    //             ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 18:
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 + 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 19:
+    //             ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 8, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //         case 20:
+    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE / 2 - 4, sprite.get_y_pos() * locations_module.UNIT_SIZE - locations_module.UNIT_SIZE + locations_module.TOP_BUFFER, 64, 64);
+    //             break;
+    //     }
+    // }
 
     // To increment in-game time
     function pass_time(time_passed) {
@@ -1246,44 +2073,99 @@ function COVID_SMASHER() {
                     <img src="images/sprite_sheets/Volkner.png" alt="Volkner" id="NPC" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
-                    <img src="/images/environment/dirt_path.png" alt="Cynthia not here wtf" id="dirt-path" style={{display: 'none'}}></img>
-                    <img src="/images/environment/grass.png" alt="Cynthia not here wtf" id="grass" style={{display: 'none'}}></img>
-                    <img src="/images/environment/tree_2.png" alt="Cynthia not here wtf" id="tree-2" style={{display: 'none'}}></img>
-
-
-                    <img src="/images/buildings/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/city_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store1.png" alt="Cynthia not here wtf" id="store-1" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store4.png" alt="Cynthia not here wtf" id="store-4" style={{display: 'none'}}></img>
-                    <img src="/images/environment/tree.png" alt="Cynthia not here wtf" id="tree-1" style={{display: 'none'}}></img>
+                    <img src="/images/environment/dirt_path.png" alt="Dirt Path" id="dirt-path" style={{display: 'none'}}></img>
+                    <img src="/images/environment/grass.png" alt="Grass" id="grass" style={{display: 'none'}}></img>
+                    <img src="/images/environment/tree_2.png" alt="Tree 2" id="tree-2" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/homes/apartment.png" alt="apartment" id="home" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/neighbor.png" alt="neighbor" id="neighbor" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/city_hall.png" alt="City Hall" id="city-hall" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store1.png" alt="Unary Store" id="store-1" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store2.png" alt="Binary Store" id="store-2" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store3.png" alt="Ternary Store" id="store-3" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store4.png" alt="Mystery Store" id="store-4" style={{display: 'none'}}></img>
+                    <img src="/images/environment/tree.png" alt="Tree" id="tree-1" style={{display: 'none'}}></img>
                     {/* Row two buildings */}
-                    <img src="/images/environment/park.png" alt="Cynthia not here wtf" id="park" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/object_garden.png" alt="Cynthia not here wtf" id="object-garden" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/cin_n_cout.png" alt="Cynthia not here wtf" id="cin-n-cout" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/foobar.png" alt="Cynthia not here wtf" id="foobar" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/casino.png" alt="Cynthia not here wtf" id="casino" style={{display: 'none'}}></img>
+                    <img src="/images/environment/park.png" alt="Park" id="park" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/object_garden.png" alt="Object Garden" id="object-garden" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/cin_n_cout.png" alt="Cin-N-Cout" id="cin-n-cout" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/foobar.png" alt="Foobar" id="foobar" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/casino.png" alt="Casino" id="casino" style={{display: 'none'}}></img>
                     {/* Row Three buildings (Just the library) */}
-                    <img src="/images/buildings/library.png" alt="Cynthia not here wtf" id="library" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/library.png" alt="Library" id="library" style={{display: 'none'}}></img>
                     {/* Row Four buildings (Just the park one) */}
                     {/* We have no park building yet... */}
                     {/* Row Five buildings (NOT COLLEGE) */}
-                    <img src="/images/buildings/highschool.png" alt="Cynthia not here wtf" id="highschool" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/work.png" alt="Cynthia not here wtf" id="work" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/gym.png" alt="Cynthia not here wtf" id="gym" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/highschool.png" alt="Highschool" id="highschool" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/work.png" alt="Work" id="work" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/gym.png" alt="Gym" id="gym" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/hospital.png" alt="Hospital" id="hospital" style={{display: 'none'}}></img>
                     {/* Row Six building (College has different left side than others) */}
-                    <img src="/images/buildings/college.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/college2.png" alt="Cynthia not here wtf" id="college-without-doormat" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/college_doormat.png" alt="Cynthia not here wtf" id="college-doormat" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college.png" alt="College" id="college" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college2.png" alt="College without doormat" id="college-without-doormat" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college_doormat.png" alt="College Doormat" id="college-doormat" style={{display: 'none'}}></img>
                 </td>
                 <td id="center-column">
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
                 </td>
                 <td id="right-column">
-                    <p>Right column</p>
+                    <h1> Inventory:</h1>
+                    <table id="inventory" style={{width: "90%"}}>
+                        <tr id="inventory">
+                            {player._inventory._item_array.slice(0, 3).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr id="inventory">
+                            {player._inventory._item_array.slice(3, 6).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 3, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(3, 6).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr id="inventory">
+                            {player._inventory._item_array.slice(6, 9).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 6, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(6, 9).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(9, 12).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 9, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(9, 12).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                        <tr>
+                            {player._inventory._item_array.slice(12, 15).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 12, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            })}
+                            {(() => {
+                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(12, 15).length))).fill("Empty");
+                                return (<React.Fragment>
+                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
+                                        </React.Fragment>);
+                            })()}
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
