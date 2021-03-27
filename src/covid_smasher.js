@@ -632,8 +632,8 @@ function COVID_SMASHER() {
                                         });
                                         if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            pass_time(0.5);
                                         };
-                                        pass_time(0.5);
                                         break;
                                     case "leave":
                                         swal("You decided not to visit your neighbor.");
@@ -673,8 +673,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("Nothing!", "You don't qualify for social security yet! You were fined $10.", "error");
                                             };
+                                            pass_time(2 + Math.random());
                                         };
-                                        pass_time(2 + Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit the government. Taxation is theft, anyways.");
@@ -714,8 +714,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item2":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -725,8 +725,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -736,8 +736,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit the Unary Store.");
@@ -777,8 +777,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item2":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -788,8 +788,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -799,8 +799,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit the Binary Store.");
@@ -840,8 +840,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item2":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -851,8 +851,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -862,8 +862,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item! (Can your inventory even be too full for a shell script? It's just a few bytes!)");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit the Ternary Store.");
@@ -907,8 +907,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item2":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -920,8 +920,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -933,8 +933,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item4":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -944,8 +944,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit the Mystery Store. (Are you sure it's not a gym?)");
@@ -975,8 +975,8 @@ function COVID_SMASHER() {
                                         });
                                         if (obj_pos_map.has(hashedPos))  {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            pass_time(1.5);
                                         };
-                                        pass_time(1.5);
                                         break;
                                     case "leave":
                                         swal("You decided not to enter the library.");
@@ -1016,8 +1016,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(2 * Math.random());
                                         break;
                                     case "item2":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -1027,8 +1027,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(3 / 2 * Math.random());
                                         };
-                                        pass_time(2 * Math.random());
                                         break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -1038,8 +1038,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit Object-Garden.");
@@ -1079,8 +1079,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item2":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -1090,8 +1090,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -1101,8 +1101,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random());
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit Cin-N-Out.");
@@ -1142,8 +1142,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random() / 2);
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item2":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -1153,8 +1153,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random() / 2);
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "item3":
                                         if (obj_pos_map.has(hashedPos)) {
@@ -1164,8 +1164,8 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal("You were unable to purchase this item!");
                                             };
+                                            pass_time(Math.random() / 2);
                                         };
-                                        pass_time(Math.random());
                                         break;
                                     case "leave":
                                         swal("You decided not to visit Foobar.");
@@ -1290,6 +1290,7 @@ function COVID_SMASHER() {
                                                 swal("Phew!", "What a great workout!", "success").then(() => {
                                                     swal(<p>With an uneasy economy, learn more about how <a href="https://kmph.com/news/local/governor-newsom-shuts-down-gyms-and-hair-salons-again" target="_blank">COVID-19 shutdowns</a> further hurt struggling, small businesses.</p>);
                                                 });
+                                                pass_time(2);
                                             } else {
                                                 swal("Uh-oh", "You don't have enough cash!", "error")};
                                         };
@@ -1302,7 +1303,6 @@ function COVID_SMASHER() {
                                         break;
                                 };
                             });
-                            pass_time(2);
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
                             swal("You arrived at the hospital! What do you want to do?", {
                                 buttons: {
@@ -1324,6 +1324,7 @@ function COVID_SMASHER() {
                                             } else {
                                                 swal(<p>Check again when you have 100 in strength, intelligence, or morale, and <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/expect.html" target="_blank">learn more</a> about <a href="https://www.defense.gov/Explore/Spotlight/Coronavirus/Operation-Warp-Speed/" target="_blank">the COVID-19 vaccine.</a></p>);
                                             };
+                                            pass_time(0.1);
                                         };
                                         break;
                                     case "leave":
@@ -2005,8 +2006,6 @@ function COVID_SMASHER() {
                     <img src="/images/environment/dirt_path.png" alt="Dirt Path" id="dirt-path" style={{display: 'none'}}></img>
                     <img src="/images/environment/grass.png" alt="Grass" id="grass" style={{display: 'none'}}></img>
                     <img src="/images/environment/tree_2.png" alt="Tree 2" id="tree-2" style={{display: 'none'}}></img>
-
-
                     <img src="/images/buildings/homes/apartment.png" alt="apartment" id="home" style={{display: 'none'}}></img>
                     <img src="/images/buildings/neighbor.png" alt="neighbor" id="neighbor" style={{display: 'none'}}></img>
                     <img src="/images/buildings/city_hall.png" alt="City Hall" id="city-hall" style={{display: 'none'}}></img>

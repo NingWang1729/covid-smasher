@@ -37,6 +37,7 @@ export class Home extends Location {
             player.delta_health = 10;
             player.delta_morale = 1;
         };
+        player.delta_substenance = -10;
     };
 };
 
