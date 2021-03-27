@@ -1984,45 +1984,8 @@ function COVID_SMASHER() {
                     <p>INTELLIGENCE: {player._intelligence}</p>
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER: {player._type}</p>
-                    <p>{player._inventory._item_array.length}</p>
                     <p style={{visibility: 'hidden'}}>{player.direction}</p>
                     <p style={{visibility: 'hidden'}}>({player.x_pos},{player.y_pos})</p>
-                    <table style={{width: "80%"}}>
-                        <tr>
-                            {player._inventory._item_array.slice(0, 5).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr>
-                            {player._inventory._item_array.slice(5, 10).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(5, 10).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr>
-                            {player._inventory._item_array.slice(10, 15).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 5 - player._inventory._item_array.slice(10, 15).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                    </table>
-                    {/* This Cynthia is in public */}
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
@@ -2039,48 +2002,48 @@ function COVID_SMASHER() {
                     <img src="images/sprite_sheets/Volkner.png" alt="Volkner" id="NPC" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
-                    <img src="/images/environment/dirt_path.png" alt="Cynthia not here wtf" id="dirt-path" style={{display: 'none'}}></img>
-                    <img src="/images/environment/grass.png" alt="Cynthia not here wtf" id="grass" style={{display: 'none'}}></img>
-                    <img src="/images/environment/tree_2.png" alt="Cynthia not here wtf" id="tree-2" style={{display: 'none'}}></img>
+                    <img src="/images/environment/dirt_path.png" alt="Dirt Path" id="dirt-path" style={{display: 'none'}}></img>
+                    <img src="/images/environment/grass.png" alt="Grass" id="grass" style={{display: 'none'}}></img>
+                    <img src="/images/environment/tree_2.png" alt="Tree 2" id="tree-2" style={{display: 'none'}}></img>
 
 
-                    <img src="/images/buildings/homes/apartment.png" alt="Cynthia not here wtf" id="home" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/neighbor.png" alt="Cynthia not here wtf" id="neighbor" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/city_hall.png" alt="Cynthia not here wtf" id="city-hall" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store1.png" alt="Cynthia not here wtf" id="store-1" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store2.png" alt="Cynthia not here wtf" id="store-2" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store3.png" alt="Cynthia not here wtf" id="store-3" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store4.png" alt="Cynthia not here wtf" id="store-4" style={{display: 'none'}}></img>
-                    <img src="/images/environment/tree.png" alt="Cynthia not here wtf" id="tree-1" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/homes/apartment.png" alt="apartment" id="home" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/neighbor.png" alt="neighbor" id="neighbor" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/city_hall.png" alt="City Hall" id="city-hall" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store1.png" alt="Unary Store" id="store-1" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store2.png" alt="Binary Store" id="store-2" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store3.png" alt="Ternary Store" id="store-3" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/store4.png" alt="Mystery Store" id="store-4" style={{display: 'none'}}></img>
+                    <img src="/images/environment/tree.png" alt="Tree" id="tree-1" style={{display: 'none'}}></img>
                     {/* Row two buildings */}
-                    <img src="/images/environment/park.png" alt="Cynthia not here wtf" id="park" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/object_garden.png" alt="Cynthia not here wtf" id="object-garden" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/cin_n_cout.png" alt="Cynthia not here wtf" id="cin-n-cout" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/foobar.png" alt="Cynthia not here wtf" id="foobar" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/casino.png" alt="Cynthia not here wtf" id="casino" style={{display: 'none'}}></img>
+                    <img src="/images/environment/park.png" alt="Park" id="park" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/object_garden.png" alt="Object Garden" id="object-garden" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/cin_n_cout.png" alt="Cin-N-Cout" id="cin-n-cout" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/foobar.png" alt="Foobar" id="foobar" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/casino.png" alt="Casino" id="casino" style={{display: 'none'}}></img>
                     {/* Row Three buildings (Just the library) */}
-                    <img src="/images/buildings/library.png" alt="Cynthia not here wtf" id="library" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/library.png" alt="Library" id="library" style={{display: 'none'}}></img>
                     {/* Row Four buildings (Just the park one) */}
                     {/* We have no park building yet... */}
                     {/* Row Five buildings (NOT COLLEGE) */}
-                    <img src="/images/buildings/highschool.png" alt="Cynthia not here wtf" id="highschool" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/work.png" alt="Cynthia not here wtf" id="work" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/gym.png" alt="Cynthia not here wtf" id="gym" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/hospital.png" alt="Cynthia not here wtf" id="hospital" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/highschool.png" alt="Highschool" id="highschool" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/work.png" alt="Work" id="work" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/gym.png" alt="Gym" id="gym" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/hospital.png" alt="Hospital" id="hospital" style={{display: 'none'}}></img>
                     {/* Row Six building (College has different left side than others) */}
-                    <img src="/images/buildings/college.png" alt="Cynthia not here wtf" id="college" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/college2.png" alt="Cynthia not here wtf" id="college-without-doormat" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/college_doormat.png" alt="Cynthia not here wtf" id="college-doormat" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college.png" alt="College" id="college" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college2.png" alt="College without doormat" id="college-without-doormat" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/college_doormat.png" alt="College Doormat" id="college-doormat" style={{display: 'none'}}></img>
                 </td>
                 <td id="center-column">
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + locations_module.TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
                 </td>
                 <td id="right-column">
-                    <h1>Inventory:</h1>
+                    <h1> Inventory:</h1>
                     <table id="inventory" style={{width: "90%"}}>
                         <tr id="inventory">
-                            {player._inventory._item_array.slice(0, 3).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            {player._inventory._item_array.slice(0, 3).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.length))).fill("Empty");
@@ -2090,8 +2053,8 @@ function COVID_SMASHER() {
                             })()}
                         </tr>
                         <tr id="inventory">
-                            {player._inventory._item_array.slice(3, 6).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            {player._inventory._item_array.slice(3, 6).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 3, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(3, 6).length))).fill("Empty");
@@ -2101,8 +2064,8 @@ function COVID_SMASHER() {
                             })()}
                         </tr>
                         <tr id="inventory">
-                            {player._inventory._item_array.slice(6, 9).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            {player._inventory._item_array.slice(6, 9).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 6, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(6, 9).length))).fill("Empty");
@@ -2112,8 +2075,8 @@ function COVID_SMASHER() {
                             })()}
                         </tr>
                         <tr>
-                            {player._inventory._item_array.slice(9, 12).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            {player._inventory._item_array.slice(9, 12).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 9, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(9, 12).length))).fill("Empty");
@@ -2123,8 +2086,8 @@ function COVID_SMASHER() {
                             })()}
                         </tr>
                         <tr>
-                            {player._inventory._item_array.slice(12, 15).map((item) => {
-                                return (<td><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
+                            {player._inventory._item_array.slice(12, 15).map((item, item_index) => {
+                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 12, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
                             {(() => {
                                 let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(12, 15).length))).fill("Empty");

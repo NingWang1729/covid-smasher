@@ -1,4 +1,5 @@
 import swal from '@sweetalert/with-react'
+import * as locations_module from './locations.js'
 
 class Item {
     constructor(store_type) { // store_type = unary, binary, ternary
@@ -131,8 +132,9 @@ export class Shell_Script extends Item {
         super.use_effect(player);
         player.x_pos = 2;
         player.y_pos = 5;
-        player.delta_health = 100;
+        player._hp = 100;
         player._substenance = 100;
+        player.direction = locations_module.DIRECTION.DOWN;
     }
 };
 
