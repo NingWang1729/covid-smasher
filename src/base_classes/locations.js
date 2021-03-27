@@ -72,21 +72,129 @@ export class Cityhall extends Location {
     };
 };
 
-export class Store1 extends Location {
+export class Unary_Store extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
     };
     do_something(player, item_no) {
         switch (item_no) {
             case 1:
-                player.delta_morale = -1;
-                break;
-            case 2:
-                player.delta_morale = 1;
-                break;
-            case 3:
-                if (player._cash > 1 && player.add_item(new items_module.FidgetSpinner) === true) {
+                if (player._cash > 1 && player.add_item(new items_module.Plastic_Meat) === true) {
                     player.delta_cash = -1;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 2:
+                if (player._cash > 1 && player.add_item(new items_module.Plastic_Water) === true) {
+                    player.delta_cash = -1;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 3:
+                if (player._cash > 1 && player.add_item(new items_module.Fidget_Spinner) === true) {
+                    player.delta_cash = -1;
+                    return true;
+                } else {
+                    return false;
+                };
+        };
+    };
+};
+
+export class Binary_Store extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    };
+    do_something(player, item_no) {
+        switch (item_no) {
+            case 1:
+                if (player._cash > 2 && player.add_item(new items_module.Cooked_Chicken) === true) {
+                    player.delta_cash = -2;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 2:
+                if (player._cash > 4 && player.add_item(new items_module.Cooked_Bistec) === true) {
+                    player.delta_cash = -4;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 3:
+                if (player._cash > 8 && player.add_item(new items_module.Lawn_Mower) === true) {
+                    player.delta_cash = -8;
+                    return true;
+                } else {
+                    return false;
+                };
+        };
+    };
+};
+
+export class Ternary_Store extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    };
+    do_something(player, item_no) {
+        switch (item_no) {
+            case 1:
+                if (player._cash > 3 && player.add_item(new items_module.Pizza) === true) {
+                    player.delta_cash = -3;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 2:
+                if (player._cash > 9 && player.add_item(new items_module.Lemon) === true) {
+                    player.delta_cash = -9;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 3:
+                if (player._cash > 27 && player.add_item(new items_module.Shell_Script) === true) {
+                    player.delta_cash = -27;
+                    return true;
+                } else {
+                    return false;
+                };
+        };
+    };
+};
+
+export class Mystery_Store extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    };
+    do_something(player, item_no) {
+        switch (item_no) {
+            case 1:
+                if (player._cash > 10 && player.add_item(new items_module.Hard_To_Swallow_Pills) === true) {
+                    player.delta_cash = -10;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 2:
+                if (player._cash > 5 && player.add_item(new items_module.Vim) === true) {
+                    player.delta_cash = -5;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 3:
+                if (player._cash > 20 && player.add_item(new items_module.Emacs) === true) {
+                    player.delta_cash = -20;
+                    return true;
+                } else {
+                    return false;
+                };
+            case 4:
+                if (player._cash > 15 && player.add_item(new items_module.Wurd) === true) {
+                    player.delta_cash = -15;
                     return true;
                 } else {
                     return false;
