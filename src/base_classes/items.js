@@ -1,6 +1,6 @@
 class Item {
     constructor(store_type) { // store_type = unary, binary, ternary
-        switch (store_type) {
+        switch (store_type) { // Will prob change up....
             case "unary":
                 this._cost = 1;
                 break;
@@ -34,7 +34,7 @@ class FidgetSpinner extends Item {
         super(store_type);
     }
     use_effect(player) {
-        super(use_effect(player));
+        super.use_effect(player);
         player.delta_morale = 1;
     }
 };
@@ -44,7 +44,7 @@ class Pill extends Item {
         super(store_type);
     }
     use_effect(player) {
-        super(use_effect(player));
+        super.use_effect(player);
         alert("You could not swallow these pills! You lost 50% of your current hp.");
         player.delta_health = -Math.floor(player.health / 2);
     }
@@ -55,7 +55,7 @@ class Vim extends Item {
         super(store_type);
     }
     use_effect(player) {
-        super(use_effect(player));
+        super.use_effect(player);
         alert("Vim is built in. Why did you buy this?");
         player.delta_intelligence = -1;
         player.delta_morale = -10;
@@ -67,7 +67,7 @@ class Emacs extends Item {
         super(store_type);
     }
     use_effect(player) {
-        super(use_effect(player));
+        super.use_effect(player);
         alert("Eggert was here. GNU is open source.");
         player.delta_health = -10;
         player.delta_intelligence = -1;

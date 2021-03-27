@@ -58,7 +58,6 @@ const player_selection = [
     new player_module.Role(2, 5, 100, 100, 10, 50, 40, 'Female Elderly Person'),
 ];
 
-// var player = new player_module.player(2, 5);
 var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
 var animated = false;
 var animation_stage = 0;
@@ -113,14 +112,15 @@ function COVID_SMASHER() {
     const [play, setPlay] = useState(false);
     // ticks decide in game movement etc.
     const [ticks, setTicks] = useState(0);
-    // Use 24hr clock, for easy modding, for in game time
-    // const [time, setTime] = useState(6);
     // Movequeue for storing keyboard inputs
     const [moves, setMoves] = useState([]);
     // Game state
-    const [game_state, setGameState] = useState(2);
+    const [game_state, setGameState] = useState(3); // 0 = World Map, 1 = Pause Menu, 2 = Character Selection, 3 = Load Screen
     // Setup
     const [setup, setSetup] = useState(true);
+    // Library
+    const [books, setBooks] = useState(["graph theory", "algebra", "digital art", "lucid dreams", "baking bread",
+                                        "alchemy", "philosophy", "pistachio farming", "literacy rates", "books"]);
     
     // Initializes display screen
     useEffect(()=>{
@@ -130,7 +130,7 @@ function COVID_SMASHER() {
 
     // Game Clock
     useEffect(()=>{
-        setTimeout(counter, 150);
+        setTimeout(counter, 100);
     }, [ticks]);
 
     // Game Clock
@@ -145,6 +145,9 @@ function COVID_SMASHER() {
                 break;
             case 2: // CHARACTER SELECTION SCREEN
                 update_game_2();
+                break;
+            case 3: // LOAD SCREEN
+                update_game_3();
                 break;
             default:
                 pass_time(0.001);
@@ -337,7 +340,7 @@ function COVID_SMASHER() {
                     if (locations_module.WORLD_MAP[player.y_pos][player.x_pos] === 2) {
                         let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
                         console.log(obj_pos_map.get(hashedPos));
-                        if (player.x_pos === 1 && player.y_pos === 4 || player.x_pos === 2 && player.y_pos === 4) {
+                        if ((player.x_pos === 1 || player.x_pos === 2) && player.y_pos === 4) {
                             swal("You arrived home! What do you want to do?", {
                                 buttons: {
                                   leave: {
@@ -353,10 +356,9 @@ function COVID_SMASHER() {
                                 switch (value) {
                                     case "rest":
                                         swal("ZZZZZ", "You took a nice long nap!", "success");
-                                        if (obj_pos_map.has(hashedPos))  {
-                                            console.log("ARRIVED");
+                                        if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                        }
+                                        };
                                         time = 6;
                                         break;
                                     case "leave":
@@ -382,11 +384,12 @@ function COVID_SMASHER() {
                             }).then((value) => {
                                 switch (value) {
                                     case "enter":
-                                        swal("Achoo!", "You were infected and took damage!", "error");
-                                        if (obj_pos_map.has(hashedPos))  {
-                                            console.log("ARRIVED");
+                                        swal("Achoo!", "You were infected and took damage!", "error").then(()=>{
+                                            swal(<p>Here are some reasons why <a href="https://www.forbes.com/sites/startswithabang/2020/04/24/these-are-the-dangers-of-visiting-even-one-friend-during-the-covid-19-pandemic/?sh=2102feb91783" target="_blank">you shouldn't visit your neighbors</a> during the middle of a pandemic.</p>)
+                                        });
+                                        if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                        }
+                                        };
                                         pass_time(0.5);
                                         break;
                                     case "leave":
@@ -412,8 +415,7 @@ function COVID_SMASHER() {
                             }).then((value) => {
                                 switch (value) {
                                     case "enter":
-                                        if (obj_pos_map.has(hashedPos))  {
-                                            console.log("ARRIVED");
+                                        if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
                                             if (result === 1) {
                                                 swal("Memories!", "You recall your days of old!", "info").then(()=>{
@@ -422,7 +424,7 @@ function COVID_SMASHER() {
                                             } else if (result === 0) {
                                                 swal("Memories!", "You recall your days of old!", "info").then(()=>{
                                                     swal("Hxppy Thxxghts", "You recall traumatic events...", "error").then(() => {
-                                                        swal(<p>The average wait time at the DMV is 2-3 hours! This is a huge issue for the elderly and disabled. Find your <a href="https://www.house.gov/representatives/find-your-representative">representative</a> and let them know your concern!</p>);
+                                                        swal(<p>The average wait time at the DMV is 2-3 hours! This is a huge issue for the elderly, disabled, and impatient. Find your <a href="https://www.house.gov/representatives/find-your-representative" target="_blank">representative</a> and let them know your concern!</p>);
                                                     });
                                                 });
                                             } else {
@@ -448,31 +450,244 @@ function COVID_SMASHER() {
                         } else if (player.x_pos === 33 && player.y_pos === 4) {
                             swal("Arrived at Store 4!");
                         } else if (player.x_pos === 2 && player.y_pos === 13) {
-                            swal("Arrived at Library!");
+                            swal("You arrived at the library! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Read a book...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        swal("Success!", `You read a book about ${books[Math.trunc(10 * Math.random())]}...`, "success").then(()=>{
+                                            swal(<p>With libraries no longer open in person, you can checkout over 60,000 free ebooks at the <a href="http://www.gutenberg.org/" target="_blank">Gutenberg Project!</a></p>);
+                                        });
+                                        if (obj_pos_map.has(hashedPos))  {
+                                            location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                        };
+                                        pass_time(1.5);
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the library.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the library.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 23 && player.y_pos === 11) {
                             swal("Arrived at Object Garden!");
-                        } else if (player.x_pos === 27 && player.y_pos === 11) {
-                            swal("Arrived at Cin-n-cout!");
-                        } else if (player.x_pos === 28 && player.y_pos === 11) {
-                            swal("Arrived at Cin-n-cout!");
-                        } else if (player.x_pos === 29 && player.y_pos === 11) {
+                        } else if ((player.x_pos === 27 || player.x_pos === 28 || player.x_pos === 29) && player.y_pos === 11) {
                             swal("Arrived at Cin-n-cout!");
                         } else if (player.x_pos === 32 && player.y_pos === 11) {
                             swal("Arrived at Foobar!");
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
                             swal("Arrived at Game Corner!");
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
-                            swal("Arrived at High School!");
+                            swal("You arrived at the highschool! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Go to class...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            if (result === 1) {
+                                                swal("Success!", "You went to class as usual.", "success");
+                                                pass_time(1.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You were unable to concentrate.", "error").then(() => {
+                                                    swal(<p>Remote learning has made education more difficult all around the country, with <a href="https://www.cbsnews.com/news/coronavirus-pandemic-students-grades-suffering-all-remote-learning/" target="_blank">higher rates of failing classes</a>. This has been significantly worse in more rural and poorer areas.</p>);
+                                                });
+                                                pass_time(1.5);
+                                            } else {
+                                                swal("Hold up...", "You are not a highschooler! What a silly mistake...", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the highschool.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the highschool.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 14 && player.y_pos === 21) {
-                            swal("Arrived at DayJob!");
+                            swal("You arrived at work! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Go to work...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            switch (result) {
+                                                case 0:
+                                                    swal(<p>You worked <a href="https://www.investopedia.com/articles/markets-economy/090516/what-are-pros-and-cons-raising-minimum-wage.asp" target="_blank">minimum wage</a>!</p>);
+                                                    pass_time(1);
+                                                    break;
+                                                case 1:
+                                                    swal(<p>You worked at an <a href="https://technologyadvice.com/blog/human-resources/company-needs-start-paying-interns/" target ="_blank">unpaid internship</a>!</p>);
+                                                    pass_time(3);
+                                                    break;
+                                                case 2:
+                                                    swal(<p>You worked at a <a href="https://www.thebalancecareers.com/the-pros-and-cons-of-working-at-a-startup-company-3859588" target="_blank">tech startup</a>!</p>);
+                                                    pass_time(3);
+                                                    break;
+                                                case 3:
+                                                    swal(<p>You lost your job due to <a href="https://www.thebalance.com/how-outsourcing-jobs-affects-the-u-s-economy-3306279" target="_blank">outsourcing</a>! (In game hint: Try raising your intelligence stat! This is harder in real life.)</p>);
+                                                    pass_time(2);
+                                                    break;
+                                                case 4:
+                                                    swal(<p>You received <a href="https://www.youtube.com/watch?v=iik25wqIuFo" target="_blank">a small loan of $100</a>!</p>);
+                                                    pass_time(2);
+                                                    break;
+                                                case 5:
+                                                    swal(<p>You remember that you are retired and should go collect <a href="https://abcnews.go.com/Politics/social-security-running-money-benefits-track-reduced-2035/story?id=62557507" target="_blank">social security benefits</a> from the city hall while it lasts!</p>)
+                                                    pass_time(1);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to go to work.");
+                                        break;
+                                    default:
+                                        swal("You decided not to go to work.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 18 && player.y_pos === 21) {
-                            swal("Arrived at Gymnasium!");
+                            swal("You arrived at the gym! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Workout ($10 fine for violation!)",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            if (location_objects[obj_pos_map.get(hashedPos)].do_something(player)) {
+                                                swal("Phew!", "What a great workout!", "success").then(() => {
+                                                    swal(<p>With an uneasy economy, learn more about how <a href="https://kmph.com/news/local/governor-newsom-shuts-down-gyms-and-hair-salons-again" target="_blank">COVID-19 shutdowns</a> further hurt struggling, small businesses.</p>);
+                                                });
+                                            } else {
+                                                swal("Uh-oh", "You don't have enough cash!", "error")};
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                };
+                            });
+                            pass_time(2);
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
-                            swal("Arrived at Hospital!");
-                        } else if (player.x_pos === 24 && player.y_pos === 21) {
-                            swal("Arrived at College!");
-                        } else if (player.x_pos === 24 && player.y_pos === 22) {
-                            swal("Arrived at College!");
+                            swal("You arrived at the hospital! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Check vaccine progress...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            if (location_objects[obj_pos_map.get(hashedPos)].do_something(player)) {
+                                                swal("You Win!", "You received the vaccine!.", "success");
+                                            } else {
+                                                swal(<p>Check again when you have 100 in strength, intelligence, or morale, and <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/expect.html" target="_blank">learn more</a> about <a href="https://www.defense.gov/Explore/Spotlight/Coronavirus/Operation-Warp-Speed/" target="_blank">the COVID-19 vaccine.</a></p>);
+                                            };
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the hospital.");
+                                        break;
+                                };
+                            });
+                        } else if (player.x_pos === 24 && (player.y_pos === 21 || player.y_pos === 22)) {
+                            swal("You arrived at the college! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  enter: {
+                                    text: "Enter college...",
+                                    value: "enter",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "enter":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            switch (result) {
+                                                case 0:
+                                                    swal(<p>You went to college and paid part of your <a href="https://www.investopedia.com/student-loan-debt-2019-statistics-and-outlook-4772007" target="_blank">tuition</a>!</p>);
+                                                    pass_time(2);
+                                                    break;
+                                                case 1:
+                                                    swal(<p>You could not afford a guided tour of the campus!</p>);
+                                                    pass_time(1);
+                                                    break;
+                                                case 2:
+                                                    swal(<p>You went on a guided tour of the beautiful campus.</p>)
+                                                    pass_time(1);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to visit the college.");
+                                        break;
+                                    default:
+                                        swal("You decided not to visit the college.");
+                                        break;
+                                };
+                            });
                         }
                     }
                     break;
@@ -601,7 +816,7 @@ function COVID_SMASHER() {
         ctx.stroke();
     }
 
-    // Neighbor pop_up
+    // Game Menu pop_up
     function update_game_3() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
@@ -616,6 +831,9 @@ function COVID_SMASHER() {
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.rect(locations_module.UNIT_SIZE, locations_module.UNIT_SIZE, MAX_WIDTH - 2 * locations_module.UNIT_SIZE, MAX_HEIGHT + locations_module.TOP_BUFFER - 2 * locations_module.UNIT_SIZE);
+        
+
+        
         ctx.stroke();
     }
 
@@ -727,7 +945,8 @@ function COVID_SMASHER() {
 
     // To increment in-game time
     function pass_time(time_passed) {
-        time = (time + time_passed) % 24
+        time = (time + time_passed) % 24;
+        player.delta_substenance = - (10 - player._morale / 100) * time_passed;
     };
 
     // Keyboard inputs
@@ -791,6 +1010,17 @@ function COVID_SMASHER() {
                     }
                 }
                 break;
+            case 86: // V
+                if (setup) {
+                    if (game_state === 3) {
+                        setGameState(0);
+                        setPlay(true);
+                    } else {
+                        setGameState(3);
+                        setPlay(false);
+                    }
+                }
+                break;
             default: 
                 return; // exit this handler for other keys
         }
@@ -824,6 +1054,35 @@ function COVID_SMASHER() {
             case 2:
                 console.log(e);
                 console.log(x, y);
+                function start_game() {
+                    swal("Confirm selection:", "Are you sure about your character class? (This action cannot be undone.)", "info", {
+                        buttons: {
+                          leave: {
+                            text: "Not sure...",
+                            value: "leave",
+                          },
+                          enter: {
+                            text: "Let's start!",
+                            value: "enter",
+                          },
+                        }
+                    }).then((value)=>{
+                        switch (value) {
+                            case "leave":
+                                swal("OK, take your time.");
+                                break;
+                            case "enter":
+                                swal("Let's go!", "Starting game...", "success").then(() => {
+                                    setGameState(0);
+                                    setPlay(true);
+                                });
+                                break;
+                            default:
+                                swal("Leave")
+                                break;
+                        }
+                    });
+                };
                 if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
                     character_selection(0);
                 } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 1 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
@@ -845,6 +1104,12 @@ function COVID_SMASHER() {
                 } else if (x > 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) && x < 2 * locations_module.UNIT_SIZE + 0.5 * locations_module.UNIT_SIZE + 4 * (MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE) + MAX_WIDTH / 5 - 1 * locations_module.UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE && y < MAX_HEIGHT / 3 - 2 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE + MAX_HEIGHT / 5 + 4 * locations_module.UNIT_SIZE) {
                     character_selection(9);
                 };
+                start_game();
+                break;
+            case 3:
+                swal("Alright!", "Let's select your character...").then(()=>{
+                    setGameState(2);
+                });
                 break;
             default:
                 break;
@@ -857,6 +1122,7 @@ function COVID_SMASHER() {
                 <td id="left-column">
                     <p>TIME: {Math.trunc(time).toString().padStart(2, "0")}:{Math.trunc((time - Math.trunc(time)) * 60).toString().padStart(2, "0")}</p>
                     <p>HEALTH POINTS: {player._hp}</p>
+                    <p>SUBSTENANCE: {Math.trunc(player._substenance)}</p>
                     <p>CASH: ${player._cash}</p>
                     <p>STRENGTH: {player._strength}</p>
                     <p>INTELLIGENCE: {player._intelligence}</p>
