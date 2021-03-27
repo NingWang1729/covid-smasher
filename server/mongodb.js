@@ -33,7 +33,10 @@ const saveSchema = new Schema({
   },
   time: { type: Number, required: true, min: 0, max: 24 },
   money: { type: Number, required: true, min: 0, max: 99999 },
-  inventory: { type: Object, required: true },
+  inventory: { 
+    items: { type: Array, required: true },
+    capacity: { type: Number, required: true, min: 1 }
+  }
 })
 export const Save = mongoose.model('Save', saveSchema)
 

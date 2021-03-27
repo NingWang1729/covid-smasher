@@ -135,7 +135,10 @@ class Role extends Player {
             health: this._hp,
           },
           money: this._cash,
-          inventory: this._inventory,
+          inventory: {
+              items: this._inventory._item_array,
+              capacity: this._inventory._capacity,
+          }
         }
     }
 };
