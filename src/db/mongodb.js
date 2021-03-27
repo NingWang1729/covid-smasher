@@ -1,33 +1,14 @@
-require('dotenv').config()
-const { DB_USERNAME, DB_PASSWORD, DB_URL, DB_NAME } = process.env
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
 
-const mongoose = require('mongoose')
+dotenv.config()
+
 const { Schema } = mongoose
-
-const { MongoClient } = require('mongodb')
+const { DB_USERNAME, DB_PASSWORD, DB_URL, DB_NAME } = process.env
 const URI = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}?retryWrites=true&w=majority`
 
-/*
-async function run() {
-  const client = new MongoClient(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  client
-    .connect()
-    .then(db => {
-      console.log('Connected to MongoDB!')
-    })
-    .catch(err => {
-      console.error(err)
-      console.log('Could not connect to MongoDB!')
-    })
-}
-*/
-
-mongoose.connect(URI, {
-  useNewUrlParser: true
-})
+// Connect to our MongoDB database
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
 db.on('error', console.error)
 db.once('open', () => console.log('Connected to Mongoose!'))
@@ -48,21 +29,37 @@ const saveSchema = new Schema({
   },
   time: { type: Number, required: true, min: 0, max: 24 },
   money: { type: Number, required: true, min: 0, max: 99999 },
-  inventory: { type: Array, required: false } // Not required for now
+  inventory: { type: Array, required: false }, // Not required for now
 })
-const Save = mongoose.model('Save', saveSchema)
+export const Save = mongoose.model('Save', saveSchema)
 
-// Support basic CRUD operations for saving
-
-// Create OR update save
-async function createOrUpdateSave() {}
-
-// Delete save
-async function resetSave() {}
-
-// Read save
-async function loadSave() {
-  
+/*
+Here is an example of how you would use this:
+1. Create a save object like this:
+const defaultSave = {
+  position: {
+    x: 0,
+    y: 0,
+  },
+  direction: 0,
+  stats: {
+    intelligence: 0,
+    strength: 0,
+    morale: 0,
+    sustenance: 0,
+    health: 0,
+  },
+  time: 0,
+  money: 0,
+  // inventory: []
 }
 
-run()
+2. Use the Save() constructor and call it on that JS object
+const mySave = new Save(defaultSave)
+
+3. Use mongoose methods to save and log success/error
+You can find the full list here: 
+
+Here is an example of saving:
+mySave.save().then(() => console.log('Saved a save!'))
+*/
