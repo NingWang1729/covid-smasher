@@ -2276,24 +2276,69 @@ function resetGameState() {
 
 // Change player state to the state in slot data
 function setPlayerState(slotData) {
-    console.log(player.playerState())
-
-    player._slot = slotData.slot
-    player.x_pos = slotData.position.x
-    player.y_pos = slotData.position.y
-    player._type = slotData.playerType
-    player.direction = slotData.direction
-    player._intelligence = slotData.stats.intelligence
-    player._strength = slotData.stats.strength
-    player._morale = slotData.stats.morale
-    player._substenance = slotData.stats.sustenance // Note: Sustenance is spelled wrong here
-    player._hp = slotData.stats.health
-    player._cash = slotData.money
-    player._inventory._item_array = slotData.inventory.items
-    player._inventory._capacity = slotData.inventory.capacity
-
-    console.log(player.playerState())
-}
+    console.log(player.playerState());
+    player._slot = slotData.slot;
+    player.x_pos = slotData.position.x;
+    player.y_pos = slotData.position.y;
+    player._type = slotData.playerType;
+    player.direction = slotData.direction;
+    player._intelligence = slotData.stats.intelligence;
+    player._strength = slotData.stats.strength;
+    player._morale = slotData.stats.morale;
+    player._substenance = slotData.stats.sustenance; // Note: Sustenance is spelled wrong here
+    player._hp = slotData.stats.health;
+    player._cash = slotData.money;
+    player._inventory._item_array = slotData.inventory.items;
+    for (let i = 0; i < player._inventory._item_array.length; i++) {
+        if (player._inventory._item_array[i]._item_type === "Plastic_Meat") {
+            player._inventory._item_array[i] = new items_module.Plastic_Meat;
+        } else if (player._inventory._item_array[i]._item_type === "Plastic_Water") {
+            player._inventory._item_array[i] = new items_module.Plastic_Water;
+        } else if (player._inventory._item_array[i]._item_type === "Fidget_Spinner") {
+            player._inventory._item_array[i] = new items_module.Fidget_Spinner;
+        } else if (player._inventory._item_array[i]._item_type === "Cooked_Chicken") {
+            player._inventory._item_array[i] = new items_module.Cooked_Chicken;
+        } else if (player._inventory._item_array[i]._item_type === "Cooked_Bistec") {
+            player._inventory._item_array[i] = new items_module.Cooked_Bistec;
+        } else if (player._inventory._item_array[i]._item_type === "Lawn_Mower") {
+            player._inventory._item_array[i] = new items_module.Lawn_Mower;
+        } else if (player._inventory._item_array[i]._item_type === "Pizza") {
+            player._inventory._item_array[i] = new items_module.Pizza;
+        } else if (player._inventory._item_array[i]._item_type === "Lemon") {
+            player._inventory._item_array[i] = new items_module.Lemon;
+        } else if (player._inventory._item_array[i]._item_type === "Shell_Script") {
+            player._inventory._item_array[i] = new items_module.Shell_Script;
+        } else if (player._inventory._item_array[i]._item_type === "Hard_To_Swallow_Pills") {
+            player._inventory._item_array[i] = new items_module.Hard_To_Swallow_Pills;
+        } else if (player._inventory._item_array[i]._item_type === "Vim") {
+            player._inventory._item_array[i] = new items_module.Vim;
+        } else if (player._inventory._item_array[i]._item_type === "Emacs") {
+            player._inventory._item_array[i] = new items_module.Emacs;
+        } else if (player._inventory._item_array[i]._item_type === "Wurd") {
+            player._inventory._item_array[i] = new items_module.Wurd;
+        } else if (player._inventory._item_array[i]._item_type === "Borger") {
+            player._inventory._item_array[i] = new items_module.Borger;
+        } else if (player._inventory._item_array[i]._item_type === "Header_Fries") {
+            player._inventory._item_array[i] = new items_module.Header_Fries;
+        } else if (player._inventory._item_array[i]._item_type === "Soda") {
+            player._inventory._item_array[i] = new items_module.Soda;
+        } else if (player._inventory._item_array[i]._item_type === "Butterbeer") {
+            player._inventory._item_array[i] = new items_module.Butterbeer;
+        } else if (player._inventory._item_array[i]._item_type === "Dry_Martini") {
+            player._inventory._item_array[i] = new items_module.Dry_Martini;
+        } else if (player._inventory._item_array[i]._item_type === "Spam_and_eggs") {
+            player._inventory._item_array[i] = new items_module.Spam_and_eggs;
+        } else if (player._inventory._item_array[i]._item_type === "Bread_Stacks") {
+            player._inventory._item_array[i] = new items_module.Bread_Stacks;
+        } else if (player._inventory._item_array[i]._item_type === "Copypasta") {
+            player._inventory._item_array[i] = new items_module.Copypasta;
+        } else if (player._inventory._item_array[i]._item_type === "Tiramisu") {
+            player._inventory._item_array[i] = new items_module.Tiramisu;
+        };
+    };
+    player._inventory._capacity = slotData.inventory.capacity;
+    console.log(player.playerState());
+};
 
 // Set all values to those that were in the save
 function setGameState(slotData) {
