@@ -1,6 +1,15 @@
 // ALAN: Set up base location class, with different children classes
 import * as items_module from './items.js'
 
+// TO-DO: Refactor this using enums (JS objects) rather than hardcoded values
+const playerTypes = {
+    teen: "Teen",
+    student: "Student",
+    impoverished: "Impoverished",
+    brat: "Brat",
+    elderly: "Elderly Person",
+}
+
 class Location {
     constructor(x_pos, y_pos) {
         this._x_pos = x_pos;
@@ -19,23 +28,23 @@ export class Home extends Location {
         super(x_pos, y_pos);
     };
     do_something(player) {
-        if (player._type === "Male Highschool Teen" || player._type === "Female Highschool Teen") {
+        if (player._type.endsWith(playerTypes.teen)) {
             player._hp = 100;
             player.delta_morale = 1;
-        } else if (player._type === "Male College Student" || player._type === "Female College Student") {
+        } else if (player._type.endsWith(playerTypes.student)) {
             if (player._hp < 96) {
                 player.delta_health = 5;
             }
-        } else if (player._type === "Male Impoverished" || player._type === "Female Impoverished") {
+        } else if (player._type.endsWith(playerTypes.impoverished)) {
             if (player._hp < 96) {
                 player.delta_health = 5;
             }
-        } else if (player._type === "Male Spoiled Brat" || player._type === "Female Spoiled Brat") {
+        } else if (player._type.endsWith(playerTypes.brat)) {
             player._hp = 110;
             player.delta_morale = 2;
-        } else if (player._type === "Male Elderly Person" || player._type === "Female Elderly Person") {
-            player.delta_health = 10;
-            player.delta_morale = 1;
+        } else if (player._type.endsWith(playerTypes.elderly)) {
+          player.delta_health = 10
+          player.delta_morale = 1
         };
         player.delta_substenance = -10;
     };
@@ -145,24 +154,19 @@ export class Ternary_Store extends Location {
                 if (player._cash > 3 && player.add_item(new items_module.Pizza) === true) {
                     player.delta_cash = -3;
                     return true;
-                } else {
-                    return false;
-                };
+                }
             case 2:
                 if (player._cash > 9 && player.add_item(new items_module.Lemon) === true) {
                     player.delta_cash = -9;
                     return true;
-                } else {
-                    return false;
-                };
+                }
             case 3:
                 if (player._cash > 27 && player.add_item(new items_module.Shell_Script) === true) {
                     player.delta_cash = -27;
                     return true;
-                } else {
-                    return false;
-                };
+                }
         };
+        return false;
     };
 };
 

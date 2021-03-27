@@ -1,29 +1,34 @@
-import * as locations_module from './locations.js';
+import { WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP, DIRECTION } from './locations.js';
 import * as items_module from './items.js';
 
-const _INVENTORY_ROWS = 3;
-const _INVENTORY_COLS = 5;
+const INVENTORY_ROWS = 3;
+const INVENTORY_COLS = 5;
+const INVENTORY_LENGTH = INVENTORY_ROWS * INVENTORY_COLS;
 
 class Inventory {
-    constructor(maxSize) {
+    constructor(capacity) {
         this._item_array = [];
-        this._max_size = maxSize;
+        this._capacity = capacity;
     }
     add_item(item) {
-        // inventory maxed out
-        if (this._item_array.length >= this._max_size) {
-            return false;
-        } else {
-            this._item_array.push(item);
-            return true;
-        }
+        // Inventory reached max capacity; cannot add more
+        if (this._item_array.length >= this._capacity) return false
+
+        // Add item to array
+        this._item_array.push(item)
+        return true
     }
     use_item(index, player) {
         player._inventory._item_array[index].use_effect(player);
+
         for (let i = index+1; i < player._inventory._item_array.length; ++i) {
             player._inventory._item_array[i - 1] = player._inventory._item_array[i];
         }
         player._inventory._item_array.pop();
+
+        // TO-DO: Refactor to use splice() instead
+        // Delete 1 item at the index
+        // player._inventory._item_array.splice(index, 1);
     }
     convert_2D_array(nRows, nCols) {
         let item_2D_array = [];
@@ -39,65 +44,49 @@ class Inventory {
 };
 
 // Player character
-class player {
+class Player {
     constructor(x_pos, y_pos) {
         this.x_pos = x_pos;
         this.y_pos = y_pos;
-        this.direction = locations_module.DIRECTION.DOWN;
+        this.direction = DIRECTION.DOWN;
         this.img = new Image();
         this.img.src = "images/sprite_sheets/Cynthia.png"
-        this._inventory = new Inventory(_INVENTORY_ROWS * _INVENTORY_COLS);
+        this._inventory = new Inventory(INVENTORY_LENGTH);
     };
 
-    add_item(item) {
-        return this._inventory.add_item(item);
-    };
+    // Add/use item at a given index
+    add_item(item) { return this._inventory.add_item(item); };
+    use_item(index) { this._inventory.use_item(index, this); }
 
-    use_item(index) {
-        this._inventory.use_item(index, this);
+    // Getters for getting position, direction
+    get_x_pos() { return this.x_pos; };
+    get_y_pos() { return this.y_pos; };
+    get_directon() { return this.direction; };
+    set_direction(newDirection) { this.direction = newDirection; };
+
+    canMoveHere(x, y) {
+        // Out of bounds on the x-axis
+        if (x <= 0 || x >= WORLD_WIDTH - 1) return false
+
+        // Out of bounds on the y-axis
+        if (y <= 0 || y >= WORLD_HEIGHT - 1) return false
+
+        // Check if player can move here on the map
+        // TO-DO: Why is locations_module [y][x] and not [x][y] wtf
+        const locationValue = WORLD_MAP[y][x]
+
+        // Return true if it matches a valid location value
+        if (locationValue === 0 || locationValue === 2) return true
+        else return false
     }
 
-    get_x_pos() {
-        return this.x_pos;
-    };
-
-    get_y_pos() {
-        return this.y_pos;
-    };
-
-    get_directon() {
-        return this.direction;
-    };
-
-    set_direction(new_direction) {
-        this.direction = new_direction;
-    };
-
-    move_right() {
-        if (this.x_pos < locations_module.WORLD_WIDTH - 1 && (locations_module.WORLD_MAP[this.y_pos][this.x_pos + 1] === 0 || locations_module.WORLD_MAP[this.y_pos][this.x_pos + 1] === 2)) {
-            this.x_pos += 1;
-        };
-    };
-    move_left() {
-        if (this.x_pos > 0 && (locations_module.WORLD_MAP[this.y_pos][this.x_pos - 1] === 0 || locations_module.WORLD_MAP[this.y_pos][this.x_pos - 1] === 2)) {
-            this.x_pos -= 1;
-        };
-    };
-
-    move_up() {
-        if (this.y_pos > 0 && (locations_module.WORLD_MAP[this.y_pos - 1][this.x_pos] === 0 || locations_module.WORLD_MAP[this.y_pos - 1][this.x_pos] === 2)) {
-            this.y_pos -= 1;
-        };
-    };
-
-    move_down() {
-        if (this.y_pos < locations_module.WORLD_HEIGHT - 1 && (locations_module.WORLD_MAP[this.y_pos + 1][this.x_pos] === 0 || locations_module.WORLD_MAP[this.y_pos + 1][this.x_pos] === 2)) {
-            this.y_pos += 1;
-        }
-    };
+    move_right() { if (this.canMoveHere(this.x_pos + 1, this.y_pos)) this.x_pos += 1; };
+    move_left() { if (this.canMoveHere(this.x_pos - 1, this.y_pos)) this.x_pos -= 1 };
+    move_up() { if (this.canMoveHere(this.x_pos, this.y_pos - 1)) this.y_pos -= 1};
+    move_down() { if (this.canMoveHere(this.x_pos, this.y_pos + 1)) this.y_pos += 1 };
 };
 
-class Role extends player {
+class Role extends Player {
     constructor(x_pos, y_pos, hp, cash, strength, intelligence, morale, type) {
         super(x_pos, y_pos);
         this._hp = hp;
@@ -107,7 +96,7 @@ class Role extends player {
         this._morale = morale;
         this._type = type;
         this._substenance = 100;
-        this._slot = 1; // TO-DO: Remove later? Sets default slot for player
+        this._slot = 1;
     }
     // Getters to get all sorts of info about the player
     get type() { return this._type; }
@@ -145,14 +134,14 @@ class Role extends player {
             sustenance: this._substenance, // TO-DO: Change substenance to sustenance
             health: this._hp,
           },
-          
-          // time: Player does not track time
           money: this._cash,
           inventory: this._inventory,
         }
     }
 };
 
+// TO-DO: All of this here is unused code, remove it?
+/*
 class HSTeen extends Role {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos, 100, 100, 40, 45, 50, 'HSTeen');
@@ -188,5 +177,6 @@ class Pedestrian extends player {
         super(x_pos, y_pos);
     }
 }
+*/
 
-export { player, Role };
+export { Player, Role };
