@@ -206,9 +206,9 @@ function fixNPCMoveQueue(npc_queue) {
         let prev = i - 1;
         let next = i;
         if (npc_queue[prev] != npc_queue[next]) {
-            console.log(npc_queue.join());
+            npc_queue.join();
             npc_queue.splice(next, 0, npc_queue[next]);
-            console.log(npc_queue.join());
+            npc_queue.join();
         }
         
     }
