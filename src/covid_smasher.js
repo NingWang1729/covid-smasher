@@ -345,6 +345,13 @@ function dfs(row, col) {
 
 }
 
+function isTooClose(player, npc, distance) {
+    // console.log(player.get_x_pos,npc.get_x_pos, player.get_y_pos,npc.get_y_pos)
+    if (Math.hypot(player.get_x_pos()-npc.get_x_pos(), player.get_y_pos()-npc.get_y_pos()) <= distance) {
+        alert("You are not social distancing!");
+    }
+}
+
 // Comment Out One of these to choose type of pathfinder algo
 // Comment Out all algos to set pre-made path
 
@@ -1550,6 +1557,8 @@ function COVID_SMASHER() {
             movequeue.shift();
             setMoves(movequeue);
         };
+
+        isTooClose(player, npc1, 2);
     }
 
     function move_npc(character) {
