@@ -1,5 +1,6 @@
 import { WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP, DIRECTION } from './locations.js';
 import * as items_module from './items.js';
+import * as COVID_SMASHER from '../covid_smasher.js'
 
 const INVENTORY_ROWS = 3;
 const INVENTORY_COLS = 5;
@@ -25,7 +26,7 @@ class Inventory {
             player._inventory._item_array[i - 1] = player._inventory._item_array[i];
         }
         player._inventory._item_array.pop();
-
+        COVID_SMASHER.play_item_consumed_audio();
         // TO-DO: Refactor to use splice() instead
         // Delete 1 item at the index
         // player._inventory._item_array.splice(index, 1);

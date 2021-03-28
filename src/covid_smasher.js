@@ -743,6 +743,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a plastic meat(ball? clump?)! (Sounds... edible?)");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -754,6 +755,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a plastic water! (Aside: What's a plastic water?)");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -765,6 +767,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a spidget finner! *nice*");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -806,6 +809,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a cooked chicken!");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -817,6 +821,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a cooked bistec!");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -828,6 +833,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a lawn mower! (But why tho...)");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -869,6 +875,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a pizza! (Wanna share?)");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -880,6 +887,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, life gave you a lemon! (Make life take the lemon back!))");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -891,6 +899,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Hey, you got a shell script! #!/bin/bash; cd ~/;");
                                             } else {
                                                 swal("You were unable to purchase this item! (Can your inventory even be too full for a shell script? It's just a few bytes!)");
@@ -936,6 +945,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("How will you swallow these?");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -947,6 +957,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Vim?", "idk, let's look it up", "info").then(() => {
                                                     swal(<a href="https://www.google.com/search?q=vi" target="_blank">https://www.google.com/search?q=vi</a>)
                                                 });
@@ -960,6 +971,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Emacs?", "idk, let's look it up", "info").then(() => {
                                                     swal(<a href="https://www.google.com/search?q=emacs" target="_blank">https://www.google.com/search?q=emacs</a>)
                                                 });
@@ -973,6 +985,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 4);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Bird is the wurd!");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1045,6 +1058,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Where's the lamb sauce?");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1056,6 +1070,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Somebody toucha my spaghet?");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1067,6 +1082,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Delicious. Finally, some tiramisu.");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1108,6 +1124,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Mmm, Borger. Yum.");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1119,6 +1136,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Is this even French?");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1130,6 +1148,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Soda? Candy pop? What's the difference?");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1171,6 +1190,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Did you get your permission slip signed for Hogsmeade?");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1182,6 +1202,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Stirred, not shaken, right?");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1193,6 +1214,7 @@ function COVID_SMASHER() {
                                         if (obj_pos_map.has(hashedPos)) {
                                             let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
                                             if (result) {
+                                                play_item_received_audio();
                                                 swal("Wait, this is not pythonic...");
                                             } else {
                                                 swal("You were unable to purchase this item!");
@@ -1904,7 +1926,6 @@ function COVID_SMASHER() {
                         setPlay(false);
                     }
                 }
-                play_item_audio();
                 break;
             case 86: // V
                 if (setup) {
@@ -2019,31 +2040,7 @@ function COVID_SMASHER() {
         email = googleUser.getBasicProfile().getEmail()
     }
 
-    function resume_background() {
-        let background_audio = document.getElementById("background_audio");
-        background_audio.volume = 0.025;
-        background_audio.play();
-    }
-
-    function play_item_audio() {
-        let background_audio = document.getElementById("background_audio");
-        background_audio.pause();
-        let item_audio = document.getElementById("item_audio");
-        item_audio.volume = 0.025;
-        item_audio.play();
-    };
-
-    function play_wall_bump_audio() {
-        let item_audio = document.getElementById("wall_bump_audio");
-        item_audio.volume = 0.1;
-        item_audio.play();
-    };
-
-    function play_interact_audio() {
-        let item_audio = document.getElementById("interact_audio");
-        item_audio.volume = 0.1;
-        item_audio.play();
-    };
+    
 
     return (
         <table id="game-table">
@@ -2071,7 +2068,8 @@ function COVID_SMASHER() {
 
                     {/* Hidden elements for special effects */}
                     <audio controls id="background_audio" src="/audio/Twinleaf_Town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
-                    <audio controls id="item_audio" src="/audio/item.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="item_received_audio" src="/audio/item_received.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="item_consumed_audio" src="/audio/item_consumed.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="wall_bump_audio" src="/audio/wall_bump.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="interact_audio" src="/audio/interact.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
@@ -2128,6 +2126,7 @@ function COVID_SMASHER() {
                     <h1> Inventory:</h1>
                     <table id="inventory" style={{width: "90%"}}>
                         <tr id="inventory">
+                            {/* player._inventory.use_item.bind(this, item_index, player) */}
                             {player._inventory._item_array.slice(0, 3).map((item, item_index) => {
                                 return (<td onClick={player._inventory.use_item.bind(this, item_index, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
                             })}
@@ -2187,6 +2186,40 @@ function COVID_SMASHER() {
             </tr>
         </table>
     );
+};
+
+function resume_background() {
+    let background_audio = document.getElementById("background_audio");
+    background_audio.volume = 0.025;
+    background_audio.play();
+}
+
+function play_item_received_audio() {
+    let background_audio = document.getElementById("background_audio");
+    background_audio.pause();
+    let item_audio = document.getElementById("item_received_audio");
+    item_audio.volume = 0.025;
+    item_audio.play();
+};
+
+export function play_item_consumed_audio() {
+    let background_audio = document.getElementById("background_audio");
+    background_audio.pause();
+    let item_audio = document.getElementById("item_consumed_audio");
+    item_audio.volume = 0.025;
+    item_audio.play();
+};
+
+function play_wall_bump_audio() {
+    let item_audio = document.getElementById("wall_bump_audio");
+    item_audio.volume = 0.1;
+    item_audio.play();
+};
+
+function play_interact_audio() {
+    let item_audio = document.getElementById("interact_audio");
+    item_audio.volume = 0.1;
+    item_audio.play();
 };
 
 // Get all saved slots for the user as a JS object
