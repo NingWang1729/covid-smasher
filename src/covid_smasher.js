@@ -186,14 +186,27 @@ let getRandomSpawnPoint = () => {
 
 // console.log("coordinates", rows, cols);
 const [rows, cols] = getRandomSpawnPoint();
+const [rows2, cols2] = getRandomSpawnPoint();
+const [rows3, cols3] = getRandomSpawnPoint();
+const [rows4, cols4] = getRandomSpawnPoint();
 
 var npc1 = new player_module.Role(cols, rows, 100, 50, 30, 50, 30, 'Female Impoverished');
 var animation_stage_npc = 0;
 var is_animated = true;
 var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
 
-// const [rows2, cols2] = getRandomSpawnPoint();
-// var npc2 = new player_module.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
+var npc2 = new player_module.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
+var animation_stage_npc2 = 0;
+var is_animated2 = true;
+
+var npc3 = new player_module.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
+var animation_stage_npc2 = 0;
+var is_animated2 = true;
+
+var npc4 = new player_module.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
+var animation_stage_npc2 = 0;
+var is_animated2 = true;
+
 
 //   0     1     2    3  4  5   6
 // right right right up up up down
@@ -252,8 +265,6 @@ function randomMovement(character) {
 
     return move_arr;
 }
-
-var dfs_move_que = [];
 
 
 function canMove(row, col) {
@@ -318,6 +329,7 @@ function bfs(row, col, grid) {
     return move_input
 }
 
+var dfs_move_que = [];
 function dfs(row, col) {
     // console.log(row, col);
     dfs_map[row][col] = 1;
@@ -346,10 +358,13 @@ function dfs(row, col) {
 
 }
 
-function isTooClose(player, npc, distance) {
+function isTooClose(player, npc, distance, ticks) {
     // console.log(player.get_x_pos,npc.get_x_pos, player.get_y_pos,npc.get_y_pos)
     if (Math.hypot(player.get_x_pos()-npc.get_x_pos(), player.get_y_pos()-npc.get_y_pos()) <= distance) {
-        alert("You are not social distancing!");
+        // alert("You are not social distancing!");
+        if (ticks % 2 === 0) {
+            player.delta_health = -1;
+        }
     }
 }
 
@@ -362,7 +377,27 @@ function isTooClose(player, npc, distance) {
 // DFS Algo
 dfs(rows, cols);
 dfs_move_que = fixNPCMoveQueue(dfs_move_que);
-move_directions = dfs_move_que;
+move_directions = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
+
+dfs(rows2, cols2);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+let move_directions2 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
+
+dfs(rows3, cols3);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+let move_directions3 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
+
+dfs(rows4, cols4);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+let move_directions4 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
 
 // BFS Algo
 // let bfs_move_que = fixNPCMoveQueue(bfs(rows,cols, bfs_map1));
@@ -671,7 +706,7 @@ function COVID_SMASHER() {
         draw_sprite(ctx, player.direction, player._type, player);
 
         // Draw npc
-        draw_sprite_npc(ctx, npc1.direction, npc1._type, npc1);
+        draw_sprite_npc(ctx, npc1.direction, "NPC1", npc1);
         
 
         let college = document.getElementById("college-without-doormat");
@@ -1559,7 +1594,7 @@ function COVID_SMASHER() {
             setMoves(movequeue);
         };
 
-        isTooClose(player, npc1, 2);
+        isTooClose(player, npc1, 1.5, ticks);
     }
 
     function move_npc(character) {
@@ -2232,10 +2267,10 @@ function COVID_SMASHER() {
                     <img src="images/sprite_sheets/Candice.png" alt="Candice" id="Female Spoiled Brat" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Bertha.png" alt="Bertha" id="Female Elderly Person" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Dawn.png" alt="Smol" id="Smol" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Fantina.png" alt="Fantina" id="NPC" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Palmer.png" alt="Palmer" id="NPC" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Volkner.png" alt="Volkner" id="NPC" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Fantina.png" alt="Fantina" id="NPC1" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Palmer.png" alt="Palmer" id="NPC2" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Volkner.png" alt="Volkner" id="NPC3" style={{display: 'none'}}></img>
+                    <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC4" style={{display: 'none'}}></img>
                     {/* Top row buildings */}
                     <img src="/images/environment/dirt_path.png" alt="Dirt Path" id="dirt-path" style={{display: 'none'}}></img>
                     <img src="/images/environment/grass.png" alt="Grass" id="grass" style={{display: 'none'}}></img>
