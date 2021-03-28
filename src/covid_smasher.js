@@ -2147,7 +2147,7 @@ function COVID_SMASHER() {
                     />
 
                     {/* Hidden elements for special effects */}
-                    <audio controls id="background_audio" src="/audio/Twinleaf_Town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="background_audio" src="/audio/twinleaf_town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="item_received_audio" src="/audio/item_received.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="item_consumed_audio" src="/audio/item_consumed.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="wall_bump_audio" src="/audio/wall_bump.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
