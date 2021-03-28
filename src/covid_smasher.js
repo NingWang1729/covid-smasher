@@ -2615,25 +2615,34 @@ function COVID_SMASHER() {
         <table id="game-table">
             <tr>
                 <td id="left-column">
-                    <p>TIME: {formatTime(time)}</p>
-                    <p>HEALTH POINTS: {player._hp}</p>
-                    <p>SUSTENANCE: {Math.trunc(player._substenance)}</p>
-                    <p>CASH: ${player._cash}</p>
-                    <p>STRENGTH: {player._strength}</p>
-                    <p>INTELLIGENCE: {player._intelligence}</p>
-                    <p>MORALE:{player._morale}</p>
-                    <p>PLAYER: {player._type}</p>
-                    <p>EMAIL: {email}</p>
-                    <p>{player.x_pos}, {player.y_pos}</p>
+          <td
+            id="left-column"
+            style={{ textAlign: 'left', paddingLeft: '10px' }}
+          >
+            <p>
+              <b>Stats:</b>
+            </p>
+            <p>🕒 Time: {formatTime(time)}</p>
+            <p>❤️ Health points: {player._hp}</p>
+            <p>🥩 Sustenance: {Math.trunc(player._substenance)}</p>
+            <p>💵 Cash: ${player._cash}</p>
+            <p>💪 Strength: {player._strength}</p>
+            <p>🧠 Intelligence: {player._intelligence}</p>
+            <p>🧭 Morale: {player._morale}</p>
+            <p>🧍 Character: {player._type}</p>
+            <p>✉️ Email: {email === '' ? "Not signed in" : email}</p>
+            
+            {/* <p>{player.x_pos}, {player.y_pos}</p> */}
 
-                    { /* Display OAuth 2.0 login */ }
-                    <GoogleLogin 
-                        clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com" 
-                        buttonText="Login" 
-                        onSuccess={onSignIn} 
-                        onFailure={onSignIn} 
-                        cookiePolicy={'single_host_origin'} 
-                    />
+            {/* Display OAuth 2.0 login */}
+            <p style={{ paddingTop: "20px", }}><b>Sign in:</b></p>
+            <GoogleLogin
+              clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com"
+              buttonText="Sign in"
+              onSuccess={onSignIn}
+              onFailure={onSignIn}
+              cookiePolicy={'single_host_origin'}
+            />
 
                     {/* Hidden elements for special effects */}
                     <audio controls id="background_audio" src="/audio/twinleaf_town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
