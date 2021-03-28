@@ -1529,9 +1529,24 @@ function COVID_SMASHER() {
         }
     }
 
+    function addSlotText(x, slotData, ctx) {
+        const y = MAX_HEIGHT / 3 - 2 * UNIT_SIZE
+        const width = MAX_WIDTH / 4 + 1 * UNIT_SIZE
+        const height = MAX_HEIGHT / 2 + 4 * UNIT_SIZE
+
+        ctx.textAlign = 'left'
+        ctx.fillText(`  ${new Date(slotData.savedAt).toDateString()}`, x + UNIT_SIZE * 2, y + UNIT_SIZE * 3, width, height)
+        ctx.fillText(`  Character: ${slotData.playerType}  `, x, y + UNIT_SIZE * 4, width, height)
+        ctx.fillText(`  Time: ${formatTime(slotData.time)} | Money: $${slotData.money}`, x, y + UNIT_SIZE * 5, width, height)
+        // ctx.fillText(`  `, x + UNIT_SIZE * 3, y + UNIT_SIZE * 6, width, height)
+        ctx.fillText(`  Health: ${slotData.stats.health} | Strength: ${slotData.stats.strength}`, x, y + UNIT_SIZE * 6, width, height)
+        ctx.fillText(`  Sustenance: ${Math.floor(slotData.stats.sustenance)} | Morale: ${slotData.stats.morale}`, x, y + UNIT_SIZE * 7, width, height)
+        ctx.fillText(`  Intelligence: ${slotData.stats.intelligence}`, x + UNIT_SIZE * 2, y + UNIT_SIZE * 8, width, height)
+        ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
+    }
+
     // PAUSE MENU
     async function update_game_1() {
-        let slotData;
         // gameSaves = await getSavedSlots()
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
@@ -1559,23 +1574,13 @@ function COVID_SMASHER() {
         ctx.font = '30px serif';
         ctx.textAlign = "left";
 
+        // Add text/stats for all the slots
+        const xPositions = [2 * UNIT_SIZE, MAX_WIDTH / 3 + 1 * UNIT_SIZE, (MAX_WIDTH * 2) / 3]
+        for (let x = 0; x < 3; x++) if (gameSaves[x+1]) addSlotText(xPositions[x], gameSaves[x+1], ctx)
+
         // Save Slot 1 text border
-        const x = [2 * UNIT_SIZE, MAX_WIDTH / 3 + 1 * UNIT_SIZE, (MAX_WIDTH * 2) / 3]
-
-        const y = MAX_HEIGHT / 3 - 2 * UNIT_SIZE
-        const width = MAX_WIDTH / 4 + 1 * UNIT_SIZE
-        const height = MAX_HEIGHT / 2 + 4 * UNIT_SIZE
-
-        ctx.rect(x[0], y, width, height);
-        // ctx.textAlign = 'center'
-        slotData = gameSaves[1]
-        if (slotData) {
-            ctx.fillText(`  ${new Date(slotData.savedAt).toDateString()}`, x[0] + UNIT_SIZE * 2, y + UNIT_SIZE * 3, width, height)
-            ctx.fillText(`  Character: ${slotData.playerType}  `, x[0], y + UNIT_SIZE * 5, width, height)
-            ctx.fillText(`  Time: ${formatTime(slotData.time)}`, x[0] + UNIT_SIZE * 3, y + UNIT_SIZE * 7, width, height)
-            ctx.fillText(`  Money: $${slotData.money}`, x[0] + UNIT_SIZE * 3, y + UNIT_SIZE * 9, width, height)
-            ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x[0] + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
-        }
+        // TO-DO: Replace y, width, and height with constants for all of these
+        ctx.rect(xPositions[0], MAX_HEIGHT / 3 - 2 * UNIT_SIZE,  MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
     
         // Save/Load for Slot 1
         ctx.font = '30px serif';
@@ -1586,16 +1591,7 @@ function COVID_SMASHER() {
         ctx.fillText("  Save Slot 1", 7.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Save Slot 2 text border
-        ctx.rect(x[1], MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
-        // ctx.textAlign = 'center'
-        slotData = gameSaves[2]
-        if (slotData) {
-            ctx.fillText(`  ${new Date(slotData.savedAt).toDateString()}`, x[1] + UNIT_SIZE * 2, y + UNIT_SIZE * 3, width, height)
-            ctx.fillText(`  Character: ${slotData.playerType}  `, x[1], y + UNIT_SIZE * 5, width, height)
-            ctx.fillText(`  Time: ${formatTime(slotData.time)}`, x[1] + UNIT_SIZE * 3, y + UNIT_SIZE * 7, width, height)
-            ctx.fillText(`  Money: $${slotData.money}`, x[1] + UNIT_SIZE * 3, y + UNIT_SIZE * 9, width, height)
-            ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x[1] + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
-        }
+        ctx.rect(xPositions[1], MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
 
         // Save/Load for Slot 2
         ctx.textAlign = 'left'
@@ -1605,16 +1601,7 @@ function COVID_SMASHER() {
         ctx.fillText("  Save Slot 2", MAX_WIDTH / 3 + 1 * UNIT_SIZE + 5.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Save Slot 3 text border
-        ctx.rect(MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
-        // ctx.textAlign = 'center'
-        slotData = gameSaves[3]
-        if (slotData) {
-            ctx.fillText(`  ${new Date(slotData.savedAt).toDateString()}`, x[2] + UNIT_SIZE * 2, y + UNIT_SIZE * 3, width, height)
-            ctx.fillText(`  Character: ${slotData.playerType}  `, x[2], y + UNIT_SIZE * 5, width, height)
-            ctx.fillText(`  Time: ${formatTime(slotData.time)}`, x[2] + UNIT_SIZE * 3, y + UNIT_SIZE * 7, width, height)
-            ctx.fillText(`  Money: $${slotData.money}`, x[2] + UNIT_SIZE * 3, y + UNIT_SIZE * 9, width, height)
-            ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x[2] + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
-        }
+        ctx.rect(xPositions[2], MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
 
         // Save/Load for Slot 3
         ctx.textAlign = 'left'
@@ -2481,11 +2468,12 @@ function setPlayerState(slotData) {
 };
 
 // Set all values to those that were in the save
-function setGameState(slotData) {
+async function setGameState(slotData) {
     setPlayerState(slotData)
 
     // Modify global game state
     time = slotData.time
+    gameSaves = await getSavedSlots()
 }
 
 // Sends the game state to the backend
@@ -2495,7 +2483,7 @@ async function saveGameState(specifiedSlot) {
     if (specifiedSlot != null) gameState.slot = specifiedSlot
     gameState.email = email
 
-    axios.post('/save', gameState)
+    await axios.post('/save', gameState)
     gameSaves = await getSavedSlots()
 }
 
