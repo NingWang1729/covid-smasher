@@ -259,8 +259,62 @@ function canMove(row, col) {
     return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] != 1); 
 }
 
-function bfs() {
-    return;
+// BFS Implementation
+function exploreNeighbors(r, c, rq, cq, visited, move_input, grid) {
+    // NSEW Change Coordinates
+    const dr = [-1, 1, 0, 0];
+    const dc = [0, 0, 1, -1];
+    for (let i = 0; i < 4; i++) {
+        let rr = r + dr[i];
+        let cc = c + dc[i];
+
+        if (!canMove(rr, cc, grid)) {
+            continue;
+        }
+
+        // Adding unvisited Nodes to visited
+        rq.unshift(rr);
+        cq.unshift(cc);
+        visited.push([rr,cc]);
+        grid[rr][cc] = 1;
+
+        // Pushing movement input
+        if (i == 0) {
+            move_input.push(2);
+        } else if (i == 1) {
+            move_input.push(3);
+        } else if (i == 2) {
+            move_input.push(0);
+        } else if (i == 3) {
+            move_input.push(1);
+        } 
+
+        
+    }
+}
+
+function bfs(row, col, grid) {
+    var rq = [row];
+    var cq = [col];
+    var visited = [[row, col]]
+    var move_input = []
+    grid[row][col] = 1;
+    
+    while (rq.length > 0) {
+        let r = rq.shift();
+        let c = cq.shift();
+
+        if (grid[r][c] === 4) {
+            return;
+        }
+
+        exploreNeighbors(r, c, rq, cq, visited, move_input, grid);
+        // console.log(rq, cq);
+        // console.log(visited);
+        // console.dir(visited, {'maxArrayLength': null});
+    }
+
+    return move_input
 }
 
 function dfs(row, col) {
@@ -301,6 +355,12 @@ function dfs(row, col) {
 dfs(rows, cols);
 dfs_move_que = fixNPCMoveQueue(dfs_move_que);
 move_directions = dfs_move_que;
+
+// BFS Algo
+// let bfs_move_que = fixNPCMoveQueue(bfs(rows,cols, bfs_map1));
+// move_directions = bfs_move_que;
+
+
 
 
 
