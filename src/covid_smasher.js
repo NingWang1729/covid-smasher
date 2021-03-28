@@ -28,6 +28,7 @@ const location_objects = [
     new locations_module.Cin_N_Cout(28, 11),
     new locations_module.Cin_N_Cout(29, 11),
     new locations_module.Foobar(32, 11),
+    new locations_module.Casino(37, 11),
     new locations_module.HighSchool(7, 22),
     new locations_module.Work(14, 21),
     new locations_module.Gym(18, 21),
@@ -1280,7 +1281,77 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
-                            swal("Arrived at Game Corner!");
+                            swal("You arrived at the Game Corner! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  slots: {
+                                    text: "Play slots...",
+                                    value: "1",
+                                  },
+                                  blackjack: {
+                                    text: "Play blackjack...",
+                                    value: "2",
+                                  },
+                                  roulette: {
+                                    text: "Play roulette...",
+                                    value: "3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result === 1) {
+                                                swal("Success!", "You won $2!", "success");
+                                                pass_time(0.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You lost your money!", "error");
+                                                pass_time(0.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result === 1) {
+                                                swal("Success!", "House pays 3 to 2.", "success");
+                                                pass_time(1.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You went bust!", "error");
+                                                pass_time(1.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result === 1) {
+                                                swal("Success!", "You pulled a blank. (What, did you expect money?)", "success");
+                                                pass_time(2.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You lost Russian Roulette! (Didn't see that one coming.)", "error");
+                                                pass_time(2.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the Game Corner.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the Game Corner.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
                             swal("You arrived at the highschool! What do you want to do?", {
                                 buttons: {
@@ -1400,10 +1471,10 @@ function COVID_SMASHER() {
                                         };
                                         break;
                                     case "leave":
-                                        swal("You decided not to enter the hospital.");
+                                        swal("You decided not to enter the gym.");
                                         break;
                                     default:
-                                        swal("You decided not to enter the hospital.");
+                                        swal("You decided not to enter the gym.");
                                         break;
                                 };
                             });

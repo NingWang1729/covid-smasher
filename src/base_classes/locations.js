@@ -301,6 +301,52 @@ export class Foobar extends Location {
     };
 };
 
+export class Casino extends Location {
+    constructor(x_pos, y_pos) {
+        super(x_pos, y_pos);
+    };
+    do_something(player, item_no) {
+        switch (item_no) {
+            case 1:
+                if (player._cash > 1) {
+                    if (Math.random() > 0.9) {
+                        player.delta_cash = 2;
+                        return 1;
+                    } else {
+                        player.delta_cash = -1;
+                        return 0;
+                    }
+                } else {
+                    return -1;
+                };
+            case 2:
+                if (player._cash > 2) {
+                    if (Math.random() > 0.6) {
+                        player.delta_cash = 3;
+                        return 1;
+                    } else {
+                        player.delta_cash = -2;
+                        return 0;
+                    }
+                } else {
+                    return -1;
+                };
+            case 3:
+                if (player._cash > 5) {
+                    if (Math.random() > 0.16) {
+                        player.delta_cash = -5;
+                        return 1;
+                    } else {
+                        player._hp = 1;
+                        return 0;
+                    }
+                } else {
+                    return -1;
+                };
+        };
+    };
+};
+
 export class HighSchool extends Location {
     constructor(x_pos, y_pos) {
         super(x_pos, y_pos);
@@ -474,15 +520,6 @@ export class Hospital extends Location {
         if (player.strength >= 100 || player.intelligence >= 100 || player.morale >= 100) {
             return true;
         };
-    };
-};
-
-export class Casino extends Location {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos);
-    };
-    do_something(player) {
-        ;
     };
 };
 
