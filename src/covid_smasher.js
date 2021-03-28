@@ -320,6 +320,9 @@ function COVID_SMASHER() {
     useEffect(()=>{
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
+        var audio = document.getElementById("my_audio");
+        audio.volume = 0.025;
+        audio.play();
     }, []);
 
     // Game Clock
@@ -329,6 +332,10 @@ function COVID_SMASHER() {
 
     // Game Clock
     function counter () {
+        var audio = document.getElementById("my_audio");
+        if (audio.currentTime >= 75.4) {
+            audio.currentTime = 0.5;
+        };
         switch (game_state) {
             case 0: // WORLD MAP
                 pass_time(0.001);
@@ -2021,7 +2028,7 @@ function COVID_SMASHER() {
                         cookiePolicy={'single_host_origin'} 
                     />
                 
-                    {/* This Cynthia is in public */}
+                    <audio controls id="my_audio" src="/audio/Twinleaf_Town.wav"> Your browser does not support the <code>audio</code> element. </audio>
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
