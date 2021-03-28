@@ -67,6 +67,7 @@ var animated = false;
 var animation_stage = 0;
 var time = 6;
 var email = ''
+let gameSaves = {}
 
 
 var dfs_map = [
@@ -1481,7 +1482,9 @@ function COVID_SMASHER() {
     }
 
     // PAUSE MENU
-    function update_game_1() {
+    async function update_game_1() {
+        let slotData;
+        // gameSaves = await getSavedSlots()
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         // Clears most of the canvas
@@ -1505,21 +1508,49 @@ function COVID_SMASHER() {
         // Pause menu pause text border
         ctx.rect(MAX_WIDTH / 2 - 3 * UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * UNIT_SIZE, 6 * UNIT_SIZE, 2 * UNIT_SIZE);
 
+        ctx.font = '30px serif';
+        ctx.textAlign = "left";
+
         // Save Slot 1 text border
-        ctx.rect(2 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
+        const x = [2 * UNIT_SIZE, MAX_WIDTH / 3 + 1 * UNIT_SIZE, (MAX_WIDTH * 2) / 3]
+
+        const y = MAX_HEIGHT / 3 - 2 * UNIT_SIZE
+        const width = MAX_WIDTH / 4 + 1 * UNIT_SIZE
+        const height = MAX_HEIGHT / 2 + 4 * UNIT_SIZE
+
+        ctx.rect(x[0], y, width, height);
+        // ctx.textAlign = 'center'
+        slotData = gameSaves[1]
+        if (slotData) {
+            ctx.fillText(`  ${new Date(slotData.savedAt).toDateString()}`, x[0] + UNIT_SIZE * 2, y + UNIT_SIZE * 3, width, height)
+            ctx.fillText(`  Character: ${slotData.playerType}  `, x[0], y + UNIT_SIZE * 5, width, height)
+            ctx.fillText(`  Time: ${formatTime(slotData.time)}`, x[0] + UNIT_SIZE * 3, y + UNIT_SIZE * 7, width, height)
+            ctx.fillText(`  Money: $${slotData.money}`, x[0] + UNIT_SIZE * 3, y + UNIT_SIZE * 9, width, height)
+            ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x[0] + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
+        }
     
         // Save/Load for Slot 1
         ctx.font = '30px serif';
-        ctx.textAlign = "left";
+        ctx.textAlign = 'left'
         ctx.rect(2 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
         ctx.fillText("  Load Slot 1", 2 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
         ctx.rect(7.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
         ctx.fillText("  Save Slot 1", 7.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Save Slot 2 text border
-        ctx.rect(MAX_WIDTH / 3 + 1 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
+        ctx.rect(x[1], MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
+        // ctx.textAlign = 'center'
+        slotData = gameSaves[2]
+        if (slotData) {
+            ctx.fillText(`  ${new Date(slotData.savedAt).toDateString()}`, x[1] + UNIT_SIZE * 2, y + UNIT_SIZE * 3, width, height)
+            ctx.fillText(`  Character: ${slotData.playerType}  `, x[1], y + UNIT_SIZE * 5, width, height)
+            ctx.fillText(`  Time: ${formatTime(slotData.time)}`, x[1] + UNIT_SIZE * 3, y + UNIT_SIZE * 7, width, height)
+            ctx.fillText(`  Money: $${slotData.money}`, x[1] + UNIT_SIZE * 3, y + UNIT_SIZE * 9, width, height)
+            ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x[1] + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
+        }
 
         // Save/Load for Slot 2
+        ctx.textAlign = 'left'
         ctx.rect(MAX_WIDTH / 3 + 1 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
         ctx.fillText("  Load Slot 2", MAX_WIDTH / 3 + 1 * UNIT_SIZE, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
         ctx.rect(MAX_WIDTH / 3 + 1 * UNIT_SIZE + 5.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
@@ -1527,8 +1558,18 @@ function COVID_SMASHER() {
 
         // Save Slot 3 text border
         ctx.rect(MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, MAX_WIDTH / 4 + 1 * UNIT_SIZE, MAX_HEIGHT / 2 + 4 * UNIT_SIZE);
-        
+        // ctx.textAlign = 'center'
+        slotData = gameSaves[3]
+        if (slotData) {
+            ctx.fillText(`  ${new Date(slotData.savedAt).toDateString()}`, x[2] + UNIT_SIZE * 2, y + UNIT_SIZE * 3, width, height)
+            ctx.fillText(`  Character: ${slotData.playerType}  `, x[2], y + UNIT_SIZE * 5, width, height)
+            ctx.fillText(`  Time: ${formatTime(slotData.time)}`, x[2] + UNIT_SIZE * 3, y + UNIT_SIZE * 7, width, height)
+            ctx.fillText(`  Money: $${slotData.money}`, x[2] + UNIT_SIZE * 3, y + UNIT_SIZE * 9, width, height)
+            ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x[2] + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
+        }
+
         // Save/Load for Slot 3
+        ctx.textAlign = 'left'
         ctx.rect(MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
         ctx.fillText("  Load Slot 3", MAX_WIDTH * 2 / 3, MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
         ctx.rect(MAX_WIDTH * 2 / 3 + 5.5 * UNIT_SIZE, MAX_HEIGHT / 3 - 2 * UNIT_SIZE, 5.5 * UNIT_SIZE, 2 * UNIT_SIZE);
@@ -1953,7 +1994,8 @@ function COVID_SMASHER() {
                 break;
             case 1:
                 // Get data for each of the save slots
-                const saveSlots = await getSavedSlots()
+                gameSaves = await getSavedSlots()
+                const saveSlots = gameSaves
 
                 if (x > 2 * UNIT_SIZE && x < 2 * UNIT_SIZE + 5.5 * UNIT_SIZE && y > MAX_HEIGHT / 3 - 2 * UNIT_SIZE && y < MAX_HEIGHT / 3 - 0.75 * UNIT_SIZE + 1 * UNIT_SIZE) {
                     loadSlot(1, saveSlots[1] ?? null)
@@ -2035,18 +2077,21 @@ function COVID_SMASHER() {
     };
 
     // Used for dealing with Google OAuth
-    function onSignIn(googleUser) {
+    async function onSignIn(googleUser) {
         // Modify the global variable
         email = googleUser.getBasicProfile().getEmail()
+        gameSaves = await getSavedSlots()
     }
 
-    
+    function formatTime(time) {
+        return `${Math.trunc(time).toString().padStart(2, "0")}:${Math.trunc((time - Math.trunc(time)) * 60).toString().padStart(2, "0")}`
+    }
 
     return (
         <table id="game-table">
             <tr>
                 <td id="left-column">
-                    <p>TIME: {Math.trunc(time).toString().padStart(2, "0")}:{Math.trunc((time - Math.trunc(time)) * 60).toString().padStart(2, "0")}</p>
+                    <p>TIME: {formatTime(time)}</p>
                     <p>HEALTH POINTS: {player._hp}</p>
                     <p>SUSTENANCE: {Math.trunc(player._substenance)}</p>
                     <p>CASH: ${player._cash}</p>
@@ -2233,7 +2278,6 @@ async function getSavedSlots() {
     return slotObj
 }
 
-// TO-DO: Update the display for the current slot after saving
 function saveToSlot(num, slotData) {
     if (email === '') return swal("You must sign in before you can save to a slot!")
 
@@ -2404,6 +2448,7 @@ async function saveGameState(specifiedSlot) {
     gameState.email = email
 
     axios.post('/save', gameState)
+    gameSaves = await getSavedSlots()
 }
 
 // Gets the full state of the game
