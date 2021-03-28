@@ -27,6 +27,7 @@ const location_objects = [
     new locations_module.Cin_N_Cout(28, 11),
     new locations_module.Cin_N_Cout(29, 11),
     new locations_module.Foobar(32, 11),
+    new locations_module.Casino(37, 11),
     new locations_module.HighSchool(7, 22),
     new locations_module.Work(14, 21),
     new locations_module.Gym(18, 21),
@@ -185,14 +186,27 @@ let getRandomSpawnPoint = () => {
 
 // console.log("coordinates", rows, cols);
 const [rows, cols] = getRandomSpawnPoint();
+const [rows2, cols2] = getRandomSpawnPoint();
+const [rows3, cols3] = getRandomSpawnPoint();
+const [rows4, cols4] = getRandomSpawnPoint();
 
 var npc1 = new player_module.Role(cols, rows, 100, 50, 30, 50, 30, 'Female Impoverished');
 var animation_stage_npc = 0;
 var is_animated = true;
 var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
 
-// const [rows2, cols2] = getRandomSpawnPoint();
-// var npc2 = new player_module.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
+var npc2 = new player_module.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
+var animation_stage_npc2 = 0;
+var is_animated2 = true;
+
+var npc3 = new player_module.Role(cols3, rows3, 100, 50, 30, 50, 30, 'Male Impoverished');
+var animation_stage_npc3 = 0;
+var is_animated3 = true;
+
+var npc4 = new player_module.Role(cols4, rows4, 100, 50, 30, 50, 30, 'Male Impoverished');
+var animation_stage_npc4 = 0;
+var is_animated4 = true;
+
 
 //   0     1     2    3  4  5   6
 // right right right up up up down
@@ -205,9 +219,9 @@ function fixNPCMoveQueue(npc_queue) {
         let prev = i - 1;
         let next = i;
         if (npc_queue[prev] != npc_queue[next]) {
-            console.log(npc_queue.join());
+            npc_queue.join();
             npc_queue.splice(next, 0, npc_queue[next]);
-            console.log(npc_queue.join());
+            npc_queue.join();
         }
         
     }
@@ -252,17 +266,70 @@ function randomMovement(character) {
     return move_arr;
 }
 
-var dfs_move_que = [];
-
 
 function canMove(row, col) {
     return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] != 1); 
 }
 
-function bfs() {
-    return;
+// BFS Implementation
+function exploreNeighbors(r, c, rq, cq, visited, move_input, grid) {
+    // NSEW Change Coordinates
+    const dr = [-1, 1, 0, 0];
+    const dc = [0, 0, 1, -1];
+    for (let i = 0; i < 4; i++) {
+        let rr = r + dr[i];
+        let cc = c + dc[i];
+
+        if (!canMove(rr, cc, grid)) {
+            continue;
+        }
+
+        // Adding unvisited Nodes to visited
+        rq.unshift(rr);
+        cq.unshift(cc);
+        visited.push([rr,cc]);
+        grid[rr][cc] = 1;
+
+        // Pushing movement input
+        if (i == 0) {
+            move_input.push(2);
+        } else if (i == 1) {
+            move_input.push(3);
+        } else if (i == 2) {
+            move_input.push(0);
+        } else if (i == 3) {
+            move_input.push(1);
+        } 
+
+        
+    }
 }
 
+function bfs(row, col, grid) {
+    var rq = [row];
+    var cq = [col];
+    var visited = [[row, col]]
+    var move_input = []
+    grid[row][col] = 1;
+    
+    while (rq.length > 0) {
+        let r = rq.shift();
+        let c = cq.shift();
+
+        if (grid[r][c] === 4) {
+            return;
+        }
+
+        exploreNeighbors(r, c, rq, cq, visited, move_input, grid);
+        // console.log(rq, cq);
+        // console.log(visited);
+        // console.dir(visited, {'maxArrayLength': null});
+    }
+
+    return move_input
+}
+
+var dfs_move_que = [];
 function dfs(row, col) {
     // console.log(row, col);
     dfs_map[row][col] = 1;
@@ -291,6 +358,16 @@ function dfs(row, col) {
 
 }
 
+function isTooClose(player, npc, distance, ticks) {
+    // console.log(player.get_x_pos,npc.get_x_pos, player.get_y_pos,npc.get_y_pos)
+    if (Math.hypot(player.get_x_pos()-npc.get_x_pos(), player.get_y_pos()-npc.get_y_pos()) <= distance) {
+        // alert("You are not social distancing!");
+        if (ticks % 2 === 0) {
+            player.delta_health = -1;
+        }
+    }
+}
+
 // Comment Out One of these to choose type of pathfinder algo
 // Comment Out all algos to set pre-made path
 
@@ -300,7 +377,39 @@ function dfs(row, col) {
 // DFS Algo
 dfs(rows, cols);
 dfs_move_que = fixNPCMoveQueue(dfs_move_que);
-move_directions = dfs_move_que;
+move_directions = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
+
+dfs(rows2, cols2);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+var move_directions2 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
+
+dfs(rows3, cols3);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+var move_directions3 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
+
+dfs(rows4, cols4);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+var move_directions4 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(locations_module.WORLD_MAP);
+
+// var move_directions = deepCopy(move_directions);
+// var move_directions2 = deepCopy(move_directions);
+// var move_directions3 = deepCopy(move_directions);
+// var move_directions4 = deepCopy(move_directions);
+
+
+// BFS Algo
+// let bfs_move_que = fixNPCMoveQueue(bfs(rows,cols, bfs_map1));
+// move_directions = bfs_move_que;
+
+
 
 
 
@@ -452,6 +561,141 @@ function COVID_SMASHER() {
             };
         };
     }
+
+    function updateFacingDirection2(a_stage, is_animated2, character, queue) {
+        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
+            switch (queue[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                        is_animated2 = true;
+                    } else {
+                        // alert("Facing left");
+                        a_stage = 0;
+                        is_animated2 = false;
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                        is_animated2 = true;
+                    } else {
+                        // alert("Facing right");
+                        a_stage = 0;
+                        is_animated2 = false;
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                        is_animated2 = true;
+                    } else {
+                        // alert("Facing up");
+                        a_stage = 0;
+                        is_animated2 = false;
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                        is_animated2 = true;
+                    } else {
+                        // alert("Facing down");
+                        a_stage = 0;
+                        is_animated2 = false;
+                    };
+                    break;
+                default:
+                    break;
+            };
+        };
+    }
+
+        function updateFacingDirection3(a_stage, is_animated3, character, queue) {
+        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
+            switch (queue[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                        is_animated3 = true;
+                    } else {
+                        // alert("Facing left");
+                        a_stage = 0;
+                        is_animated3 = false;
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                        is_animated3 = true;
+                    } else {
+                        // alert("Facing right");
+                        a_stage = 0;
+                        is_animated3 = false;
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                        is_animated3 = true;
+                    } else {
+                        // alert("Facing up");
+                        a_stage = 0;
+                        is_animated3 = false;
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                        is_animated3 = true;
+                    } else {
+                        // alert("Facing down");
+                        a_stage = 0;
+                        is_animated3 = false;
+                    };
+                    break;
+                default:
+                    break;
+            };
+        };
+    }
+
+        function updateFacingDirection4(a_stage, is_animated4, character, queue) {
+        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
+            switch (queue[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                        is_animated4 = true;
+                    } else {
+                        // alert("Facing left");
+                        a_stage = 0;
+                        is_animated4 = false;
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                        is_animated4 = true;
+                    } else {
+                        // alert("Facing right");
+                        a_stage = 0;
+                        is_animated4 = false;
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                        is_animated4 = true;
+                    } else {
+                        // alert("Facing up");
+                        a_stage = 0;
+                        is_animated4 = false;
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                        is_animated4 = true;
+                    } else {
+                        // alert("Facing down");
+                        a_stage = 0;
+                        is_animated4 = false;
+                    };
+                    break;
+                default:
+                    break;
+            };
+        };
+    }
     // WORLD MAP
     function update_game_0 () {
         if (player._substenance <= 0 && ticks % 20 === 0) {
@@ -467,6 +711,9 @@ function COVID_SMASHER() {
         }
         // Same as code below
         updateFacingDirection(animation_stage_npc, is_animated, npc1, move_directions);
+        updateFacingDirection2(animation_stage_npc2, is_animated2, npc2, move_directions2);
+        updateFacingDirection3(animation_stage_npc3, is_animated3, npc3, move_directions3);
+        updateFacingDirection4(animation_stage_npc4, is_animated4, npc4, move_directions4);
 
         let movequeue = moves;
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 4)) {
@@ -540,8 +787,16 @@ function COVID_SMASHER() {
 
 
         // Buildings
-        let home = document.getElementById("home");
-        ctx.drawImage(home, 0, -48 + TOP_BUFFER);
+        if (player._type === "Male Impoverished" || player._type === "Female Impoverished") {
+            let apartment = document.getElementById("apartment");
+            ctx.drawImage(apartment, 0, -48 + TOP_BUFFER);
+        } else if (player._type === "Male Spoiled Brat" || player._type === "Female Spoiled Brat") {
+            let home = document.getElementById("villa");
+            ctx.drawImage(home, 0, 0 + TOP_BUFFER);
+        } else {
+            let home = document.getElementById("house");
+            ctx.drawImage(home, 0, 0 + TOP_BUFFER);
+        }
 
         let neighbor = document.getElementById("neighbor");
         ctx.drawImage(neighbor, 128, -24 + TOP_BUFFER);
@@ -603,7 +858,10 @@ function COVID_SMASHER() {
         draw_sprite(ctx, player.direction, player._type, player);
 
         // Draw npc
-        draw_sprite_npc(ctx, npc1.direction, npc1._type, npc1);
+        draw_sprite_npc(ctx, npc1.direction, "NPC1", npc1);
+        draw_sprite_npc2(ctx, npc2.direction, "NPC2", npc2);
+        draw_sprite_npc3(ctx, npc3.direction, "NPC3", npc3);
+        draw_sprite_npc4(ctx, npc4.direction, "NPC4", npc4);
         
 
         let college = document.getElementById("college-without-doormat");
@@ -621,6 +879,9 @@ function COVID_SMASHER() {
 
         // Moves NPC same as code below
         move_npc(npc1);
+        move_npc2(npc2);
+        move_npc3(npc3);
+        move_npc4(npc4);
 
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 3)) {
             switch (movequeue[0]) {
@@ -682,6 +943,7 @@ function COVID_SMASHER() {
                                         swal("ZZZZZ", "You took a nice long nap!", "success");
                                         if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            play_sleeping_audio();
                                         };
                                         time = 6;
                                         break;
@@ -1279,7 +1541,77 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
-                            swal("Arrived at Game Corner!");
+                            swal("You arrived at the Game Corner! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  slots: {
+                                    text: "Play slots for $1?",
+                                    value: "1",
+                                  },
+                                  blackjack: {
+                                    text: "Play blackjack for $2? House pays 3 to 2.",
+                                    value: "2",
+                                  },
+                                  roulette: {
+                                    text: "Play roulette?",
+                                    value: "3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result === 1) {
+                                                swal("Success!", "You won $2!", "success");
+                                                pass_time(0.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You lost your money!", "error");
+                                                pass_time(0.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result === 1) {
+                                                swal("Success!", "House pays 3 to 2.", "success");
+                                                pass_time(1.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You went bust!", "error");
+                                                pass_time(1.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result === 1) {
+                                                swal("Success!", "You pulled a blank. (What, did you expect money?)", "success");
+                                                pass_time(2.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You lost Russian Roulette! (Didn't see that one coming.)", "error");
+                                                pass_time(2.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the Game Corner.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the Game Corner.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
                             swal("You arrived at the highschool! What do you want to do?", {
                                 buttons: {
@@ -1399,10 +1731,10 @@ function COVID_SMASHER() {
                                         };
                                         break;
                                     case "leave":
-                                        swal("You decided not to enter the hospital.");
+                                        swal("You decided not to enter the gym.");
                                         break;
                                     default:
-                                        swal("You decided not to enter the hospital.");
+                                        swal("You decided not to enter the gym.");
                                         break;
                                 };
                             });
@@ -1490,6 +1822,11 @@ function COVID_SMASHER() {
             movequeue.shift();
             setMoves(movequeue);
         };
+
+        isTooClose(player, npc1, 1.5, ticks);
+        isTooClose(player, npc2, 1.5, ticks);
+        isTooClose(player, npc3, 1.5, ticks);
+        isTooClose(player, npc4, 1.5, ticks);
     }
 
     function move_npc(character) {
@@ -1527,6 +1864,115 @@ function COVID_SMASHER() {
             move_directions.shift();
         }
     }
+
+        function move_npc2(character) {
+        if (move_directions2.length > 0 && (animation_stage_npc2 === 0 || animation_stage_npc2 === 3)) {
+            switch (move_directions2[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT) {
+                        character.move_left();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.LEFT);
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT) {
+                        character.move_right();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.RIGHT);
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP) {
+                        character.move_up();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.UP);
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN) {
+                        character.move_down();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.DOWN);
+                    };
+                    break;
+                }
+            move_directions2.shift();
+        }
+    }
+
+        function move_npc3(character) {
+        if (move_directions3.length > 0 && (animation_stage_npc3 === 0 || animation_stage_npc3 === 3)) {
+            switch (move_directions3[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT) {
+                        character.move_left();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.LEFT);
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT) {
+                        character.move_right();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.RIGHT);
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP) {
+                        character.move_up();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.UP);
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN) {
+                        character.move_down();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.DOWN);
+                    };
+                    break;
+                }
+            move_directions3.shift();
+        }
+    }
+
+        function move_npc4(character) {
+        if (move_directions4.length > 0 && (animation_stage_npc4 === 0 || animation_stage_npc4 === 3)) {
+            switch (move_directions4[0]) {
+                case 0:
+                    if (character.direction === locations_module.DIRECTION.LEFT) {
+                        character.move_left();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.LEFT);
+                    };
+                    break;
+                case 1:
+                    if (character.direction === locations_module.DIRECTION.RIGHT) {
+                        character.move_right();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.RIGHT);
+                    };
+                    break;
+                case 2:
+                    if (character.direction === locations_module.DIRECTION.UP) {
+                        character.move_up();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.UP);
+                    };
+                    break;
+                case 3:
+                    if (character.direction === locations_module.DIRECTION.DOWN) {
+                        character.move_down();
+                    } else {
+                        character.set_direction(locations_module.DIRECTION.DOWN);
+                    };
+                    break;
+                }
+            move_directions4.shift();
+        }
+    }
+
 
     // Adds text/avatar image to each of the slots
     function addSlotText(x, slotData, ctx) {
@@ -1861,75 +2307,116 @@ function COVID_SMASHER() {
         }
     }
     
-    // // For draw_sprite()
-    // function draw_animation(ctx, sprite_no, sprite_sheet, sprite) {
-    //     switch(sprite_no) {
-    //         // Up
-    //         case 1:
-    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 2:
-    //             ctx.drawImage(sprite_sheet, 128, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 4, 64, 64);
-    //             break;
-    //         case 3:
-    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 8, 64, 64);
-    //             break;
-    //         case 4:
-    //             ctx.drawImage(sprite_sheet, 64, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 8, 64, 64);
-    //             break;
-    //         case 5:
-    //             ctx.drawImage(sprite_sheet, 0, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 4, 64, 64);
-    //             break;
-    //         // Down
-    //         case 6:
-    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 7:
-    //             ctx.drawImage(sprite_sheet, 128, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 4, 64, 64);
-    //             break;
-    //         case 8:
-    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER + 8, 64, 64);
-    //             break;
-    //         case 9:
-    //             ctx.drawImage(sprite_sheet, 128, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 8, 64, 64);
-    //             break;
-    //         case 10:
-    //             ctx.drawImage(sprite_sheet, 128, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER - 4, 64, 64);
-    //             break;
-    //         // Left
-    //         case 11:
-    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 12:
-    //             ctx.drawImage(sprite_sheet, 0, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 13:
-    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 14:
-    //             ctx.drawImage(sprite_sheet, 0, 192, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 15:
-    //             ctx.drawImage(sprite_sheet, 0, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         // Right
-    //         case 16:
-    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 17:
-    //             ctx.drawImage(sprite_sheet, 64, 128, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 18:
-    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 + 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 19:
-    //             ctx.drawImage(sprite_sheet, 64, 64, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 8, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //         case 20:
-    //             ctx.drawImage(sprite_sheet, 64, 0, 64, 64, sprite.get_x_pos() * UNIT_SIZE - UNIT_SIZE / 2 - 4, sprite.get_y_pos() * UNIT_SIZE - UNIT_SIZE + TOP_BUFFER, 64, 64);
-    //             break;
-    //     }
-    // }
+    function draw_sprite_npc2(ctx, direction, sprite_sheet_type, player) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                draw_animation(ctx, 1 + animation_stage_npc2, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                draw_animation(ctx, 6 + animation_stage_npc2, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                draw_animation(ctx, 11 + animation_stage_npc2, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                draw_animation(ctx, 16 + animation_stage_npc2, sprite_sheet, player);
+                break;
+            default:
+                break;
+        }
+
+        if (move_directions2.length === 0) {
+            animation_stage_npc2 = 0
+            is_animated2 = false;
+        }
+
+        if (is_animated2) {
+            if (animation_stage_npc2 === 1) {
+                animation_stage_npc2 = 2;
+            } else if (animation_stage_npc2 === 2) {
+                animation_stage_npc2 = 3;
+            } else if (animation_stage_npc2 === 3) {
+                animation_stage_npc2 = 4;
+            } else {
+                animation_stage_npc2 = 1;
+            }
+        }
+    }
+
+    function draw_sprite_npc3(ctx, direction, sprite_sheet_type, player) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                draw_animation(ctx, 1 + animation_stage_npc3, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                draw_animation(ctx, 6 + animation_stage_npc3, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                draw_animation(ctx, 11 + animation_stage_npc3, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                draw_animation(ctx, 16 + animation_stage_npc3, sprite_sheet, player);
+                break;
+            default:
+                break;
+        }
+
+        if (move_directions3.length === 0) {
+            animation_stage_npc3 = 0
+            is_animated3 = false;
+        }
+
+        if (is_animated3) {
+            if (animation_stage_npc3 === 1) {
+                animation_stage_npc3 = 2;
+            } else if (animation_stage_npc3 === 2) {
+                animation_stage_npc3 = 3;
+            } else if (animation_stage_npc3 === 3) {
+                animation_stage_npc3 = 4;
+            } else {
+                animation_stage_npc3 = 1;
+            }
+        }
+    }
+
+    function draw_sprite_npc4(ctx, direction, sprite_sheet_type, player) {
+        let sprite_sheet = document.getElementById(sprite_sheet_type);
+        switch (direction) {
+            case locations_module.DIRECTION.UP:
+                draw_animation(ctx, 1 + animation_stage_npc4, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.DOWN:
+                draw_animation(ctx, 6 + animation_stage_npc4, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.LEFT:
+                draw_animation(ctx, 11 + animation_stage_npc4, sprite_sheet, player);
+                break;
+            case locations_module.DIRECTION.RIGHT:
+                draw_animation(ctx, 16 + animation_stage_npc4, sprite_sheet, player);
+                break;
+            default:
+                break;
+        }
+
+        if (move_directions4.length === 0) {
+            animation_stage_npc4 = 0
+            is_animated4 = false;
+        }
+
+        if (is_animated4) {
+            if (animation_stage_npc4 === 1) {
+                animation_stage_npc4 = 2;
+            } else if (animation_stage_npc4 === 2) {
+                animation_stage_npc4 = 3;
+            } else if (animation_stage_npc4 === 3) {
+                animation_stage_npc4 = 4;
+            } else {
+                animation_stage_npc4 = 1;
+            }
+        }
+    }
 
     // To increment in-game time
     function pass_time(time_passed) {
@@ -1993,6 +2480,7 @@ function COVID_SMASHER() {
                 }
                 break;
             case 67: // C
+                break;
                 if (setup) {
                     if (game_state === 2) {
                         setGameState(0);
@@ -2004,6 +2492,7 @@ function COVID_SMASHER() {
                 }
                 break;
             case 86: // V
+                break;
                 if (setup) {
                     if (game_state === 3) {
                         setGameState(0);
@@ -2651,6 +3140,14 @@ export function play_item_consumed_audio() {
     let background_audio = document.getElementById("background_audio");
     background_audio.pause();
     let item_audio = document.getElementById("item_consumed_audio");
+    item_audio.volume = 0.025;
+    item_audio.play();
+};
+
+function play_sleeping_audio() {
+    let background_audio = document.getElementById("background_audio");
+    background_audio.pause();
+    let item_audio = document.getElementById("sleeping_audio");
     item_audio.volume = 0.025;
     item_audio.play();
 };

@@ -183,6 +183,13 @@ function fixNPCMoveQueue(npc_queue) {
 } 
 
 
+function isTooClose(player, npc, distance) {
+    if (Math.hypot(player.get_x_pos-npc.get_x_pos, player.get_y_pos-npc.get_y_pos) <= distance) {
+        alert("You are not social distancing!")
+    }
+}
+
+
 // console.log(fixNPCMoveQueue([3,2,2,3,3,2,1,1,0]));
 
 
@@ -193,4 +200,5 @@ console.log(bfs(4, 0, bfs_grid));
 
 let bfs_gridd = deepCopy(WORLD_MAP);
 console.log(fixNPCMoveQueue(bfs(4, 0, bfs_gridd)));
+
 
