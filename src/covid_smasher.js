@@ -27,6 +27,7 @@ const location_objects = [
     new locations_module.Cin_N_Cout(28, 11),
     new locations_module.Cin_N_Cout(29, 11),
     new locations_module.Foobar(32, 11),
+    new locations_module.Casino(37, 11),
     new locations_module.HighSchool(7, 22),
     new locations_module.Work(14, 21),
     new locations_module.Gym(18, 21),
@@ -607,8 +608,16 @@ function COVID_SMASHER() {
 
 
         // Buildings
-        let home = document.getElementById("home");
-        ctx.drawImage(home, 0, -48 + TOP_BUFFER);
+        if (player._type === "Male Impoverished" || player._type === "Female Impoverished") {
+            let apartment = document.getElementById("apartment");
+            ctx.drawImage(apartment, 0, -48 + TOP_BUFFER);
+        } else if (player._type === "Male Spoiled Brat" || player._type === "Female Spoiled Brat") {
+            let home = document.getElementById("villa");
+            ctx.drawImage(home, 0, 0 + TOP_BUFFER);
+        } else {
+            let home = document.getElementById("house");
+            ctx.drawImage(home, 0, 0 + TOP_BUFFER);
+        }
 
         let neighbor = document.getElementById("neighbor");
         ctx.drawImage(neighbor, 128, -24 + TOP_BUFFER);
@@ -749,6 +758,7 @@ function COVID_SMASHER() {
                                         swal("ZZZZZ", "You took a nice long nap!", "success");
                                         if (obj_pos_map.has(hashedPos)) {
                                             location_objects[obj_pos_map.get(hashedPos)].do_something(player);
+                                            play_sleeping_audio();
                                         };
                                         time = 6;
                                         break;
@@ -1346,7 +1356,77 @@ function COVID_SMASHER() {
                                 };
                             });
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
-                            swal("Arrived at Game Corner!");
+                            swal("You arrived at the Game Corner! What do you want to do?", {
+                                buttons: {
+                                  leave: {
+                                    text: "Leave for now...",
+                                    value: "leave",
+                                  },
+                                  slots: {
+                                    text: "Play slots for $1?",
+                                    value: "1",
+                                  },
+                                  blackjack: {
+                                    text: "Play blackjack for $2? House pays 3 to 2.",
+                                    value: "2",
+                                  },
+                                  roulette: {
+                                    text: "Play roulette?",
+                                    value: "3",
+                                  },
+                                },
+                            }).then((value) => {
+                                switch (value) {
+                                    case "1":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
+                                            if (result === 1) {
+                                                swal("Success!", "You won $2!", "success");
+                                                pass_time(0.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You lost your money!", "error");
+                                                pass_time(0.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "2":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
+                                            if (result === 1) {
+                                                swal("Success!", "House pays 3 to 2.", "success");
+                                                pass_time(1.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You went bust!", "error");
+                                                pass_time(1.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "3":
+                                        if (obj_pos_map.has(hashedPos)) {
+                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
+                                            if (result === 1) {
+                                                swal("Success!", "You pulled a blank. (What, did you expect money?)", "success");
+                                                pass_time(2.5);
+                                            } else if (result === 0) {
+                                                swal("Uh-oh!", "You lost Russian Roulette! (Didn't see that one coming.)", "error");
+                                                pass_time(2.5);
+                                            } else {
+                                                swal("Hold up...", "You don't have enough money!", "error");
+                                            };
+                                        };
+                                        break;
+                                    case "leave":
+                                        swal("You decided not to enter the Game Corner.");
+                                        break;
+                                    default:
+                                        swal("You decided not to enter the Game Corner.");
+                                        break;
+                                };
+                            });
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
                             swal("You arrived at the highschool! What do you want to do?", {
                                 buttons: {
@@ -1466,10 +1546,10 @@ function COVID_SMASHER() {
                                         };
                                         break;
                                     case "leave":
-                                        swal("You decided not to enter the hospital.");
+                                        swal("You decided not to enter the gym.");
                                         break;
                                     default:
-                                        swal("You decided not to enter the hospital.");
+                                        swal("You decided not to enter the gym.");
                                         break;
                                 };
                             });
@@ -2062,6 +2142,7 @@ function COVID_SMASHER() {
                 }
                 break;
             case 67: // C
+                break;
                 if (setup) {
                     if (game_state === 2) {
                         setGameState(0);
@@ -2073,6 +2154,7 @@ function COVID_SMASHER() {
                 }
                 break;
             case 86: // V
+                break;
                 if (setup) {
                     if (game_state === 3) {
                         setGameState(0);
@@ -2219,6 +2301,7 @@ function COVID_SMASHER() {
                     <audio controls id="background_audio" src="/audio/twinleaf_town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="item_received_audio" src="/audio/item_received.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="item_consumed_audio" src="/audio/item_consumed.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="sleeping_audio" src="/audio/sleeping.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="wall_bump_audio" src="/audio/wall_bump.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <audio controls id="interact_audio" src="/audio/interact.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
@@ -2240,7 +2323,9 @@ function COVID_SMASHER() {
                     <img src="/images/environment/dirt_path.png" alt="Dirt Path" id="dirt-path" style={{display: 'none'}}></img>
                     <img src="/images/environment/grass.png" alt="Grass" id="grass" style={{display: 'none'}}></img>
                     <img src="/images/environment/tree_2.png" alt="Tree 2" id="tree-2" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/homes/apartment.png" alt="apartment" id="home" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/homes/apartment.png" alt="apartment" id="apartment" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/homes/house.png" alt="house" id="house" style={{display: 'none'}}></img>
+                    <img src="/images/buildings/homes/villa.png" alt="villa" id="villa" style={{display: 'none'}}></img>
                     <img src="/images/buildings/neighbor.png" alt="neighbor" id="neighbor" style={{display: 'none'}}></img>
                     <img src="/images/buildings/city_hall.png" alt="City Hall" id="city-hall" style={{display: 'none'}}></img>
                     <img src="/images/buildings/store1.png" alt="Unary Store" id="store-1" style={{display: 'none'}}></img>
@@ -2355,6 +2440,14 @@ export function play_item_consumed_audio() {
     let background_audio = document.getElementById("background_audio");
     background_audio.pause();
     let item_audio = document.getElementById("item_consumed_audio");
+    item_audio.volume = 0.025;
+    item_audio.play();
+};
+
+function play_sleeping_audio() {
+    let background_audio = document.getElementById("background_audio");
+    background_audio.pause();
+    let item_audio = document.getElementById("sleeping_audio");
     item_audio.volume = 0.025;
     item_audio.play();
 };
