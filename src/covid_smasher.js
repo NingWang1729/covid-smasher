@@ -2028,7 +2028,7 @@ function COVID_SMASHER() {
                         cookiePolicy={'single_host_origin'} 
                     />
                 
-                    <audio controls id="my_audio" src="/audio/Twinleaf_Town.wav"> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="my_audio" src="/audio/Twinleaf_Town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
