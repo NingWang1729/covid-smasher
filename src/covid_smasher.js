@@ -1863,6 +1863,7 @@ function COVID_SMASHER() {
                     movequeue.push(4); // interact();
                 }
                 break;
+            case 27: // ESC
             case 80: // P
                 if (game_state === 0) {
                     setGameState(1);
