@@ -2612,152 +2612,514 @@ function COVID_SMASHER() {
     }
 
     return (
-        <table id="game-table">
-            <tr>
-                <td id="left-column">
-                    <p>TIME: {formatTime(time)}</p>
-                    <p>HEALTH POINTS: {player._hp}</p>
-                    <p>SUSTENANCE: {Math.trunc(player._substenance)}</p>
-                    <p>CASH: ${player._cash}</p>
-                    <p>STRENGTH: {player._strength}</p>
-                    <p>INTELLIGENCE: {player._intelligence}</p>
-                    <p>MORALE:{player._morale}</p>
-                    <p>PLAYER: {player._type}</p>
-                    <p>EMAIL: {email}</p>
-                    <p>{player.x_pos}, {player.y_pos}</p>
+      <table id="game-table">
+        <tr>
+          <td
+            id="left-column"
+            style={{ textAlign: 'left', paddingLeft: '10px' }}
+          >
+            <p>
+              <b>Stats:</b>
+            </p>
+            <p>🕒 Time: {formatTime(time)}</p>
+            <p>❤️ Health points: {player._hp}</p>
+            <p>🥩 Sustenance: {Math.trunc(player._substenance)}</p>
+            <p>💵 Cash: ${player._cash}</p>
+            <p>💪 Strength: {player._strength}</p>
+            <p>🧠 Intelligence: {player._intelligence}</p>
+            <p>🧭 Morale: {player._morale}</p>
+            <p>🧍 Character: {player._type}</p>
+            <p>✉️ Email: {email === '' ? "Not signed in" : email}</p>
+            
+            {/* <p>{player.x_pos}, {player.y_pos}</p> */}
 
-                    { /* Display OAuth 2.0 login */ }
-                    <GoogleLogin 
-                        clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com" 
-                        buttonText="Login" 
-                        onSuccess={onSignIn} 
-                        onFailure={onSignIn} 
-                        cookiePolicy={'single_host_origin'} 
-                    />
+            {/* Display OAuth 2.0 login */}
+            <p style={{ paddingTop: "20px", }}><b>Sign in:</b></p>
+            <GoogleLogin
+              clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com"
+              buttonText="Sign in"
+              onSuccess={onSignIn}
+              onFailure={onSignIn}
+              cookiePolicy={'single_host_origin'}
+            />
 
-                    {/* Hidden elements for special effects */}
-                    <audio controls id="background_audio" src="/audio/twinleaf_town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
-                    <audio controls id="item_received_audio" src="/audio/item_received.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
-                    <audio controls id="item_consumed_audio" src="/audio/item_consumed.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
-                    <audio controls id="sleeping_audio" src="/audio/sleeping.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
-                    <audio controls id="wall_bump_audio" src="/audio/wall_bump.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
-                    <audio controls id="interact_audio" src="/audio/interact.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
-                    <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Flint.png" alt="Flint" id="Male Spoiled Brat" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Byron.png" alt="Byron" id="Male Elderly Person" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Maylene.png" alt="Maylene" id="Female Highschool Teen" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Cynthia.png" alt="Cynthia" id="Female College Student" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Gardenia.png" alt="Gardenia" id="Female Impoverished" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Candice.png" alt="Candice" id="Female Spoiled Brat" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Bertha.png" alt="Bertha" id="Female Elderly Person" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Dawn.png" alt="Smol" id="Smol" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Fantina.png" alt="Fantina" id="NPC1" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Palmer.png" alt="Palmer" id="NPC2" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Volkner.png" alt="Volkner" id="NPC3" style={{display: 'none'}}></img>
-                    <img src="images/sprite_sheets/Wake.png" alt="Wake" id="NPC4" style={{display: 'none'}}></img>
-                    {/* Top row buildings */}
-                    <img src="/images/environment/dirt_path.png" alt="Dirt Path" id="dirt-path" style={{display: 'none'}}></img>
-                    <img src="/images/environment/grass.png" alt="Grass" id="grass" style={{display: 'none'}}></img>
-                    <img src="/images/environment/tree_2.png" alt="Tree 2" id="tree-2" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/homes/apartment.png" alt="apartment" id="apartment" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/homes/house.png" alt="house" id="house" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/homes/villa.png" alt="villa" id="villa" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/neighbor.png" alt="neighbor" id="neighbor" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/city_hall.png" alt="City Hall" id="city-hall" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store1.png" alt="Unary Store" id="store-1" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store2.png" alt="Binary Store" id="store-2" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store3.png" alt="Ternary Store" id="store-3" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/store4.png" alt="Mystery Store" id="store-4" style={{display: 'none'}}></img>
-                    <img src="/images/environment/tree.png" alt="Tree" id="tree-1" style={{display: 'none'}}></img>
-                    {/* Row two buildings */}
-                    <img src="/images/environment/park.png" alt="Park" id="park" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/object_garden.png" alt="Object Garden" id="object-garden" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/cin_n_cout.png" alt="Cin-N-Cout" id="cin-n-cout" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/foobar.png" alt="Foobar" id="foobar" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/casino.png" alt="Casino" id="casino" style={{display: 'none'}}></img>
-                    {/* Row Three buildings (Just the library) */}
-                    <img src="/images/buildings/library.png" alt="Library" id="library" style={{display: 'none'}}></img>
-                    {/* Row Four buildings (Just the park one) */}
-                    {/* We have no park building yet... */}
-                    {/* Row Five buildings (NOT COLLEGE) */}
-                    <img src="/images/buildings/highschool.png" alt="Highschool" id="highschool" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/work.png" alt="Work" id="work" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/gym.png" alt="Gym" id="gym" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/hospital.png" alt="Hospital" id="hospital" style={{display: 'none'}}></img>
-                    {/* Row Six building (College has different left side than others) */}
-                    <img src="/images/buildings/college.png" alt="College" id="college" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/college2.png" alt="College without doormat" id="college-without-doormat" style={{display: 'none'}}></img>
-                    <img src="/images/buildings/college_doormat.png" alt="College Doormat" id="college-doormat" style={{display: 'none'}}></img>
-                </td>
-                <td id="center-column">
-                    <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
-                </td>
-                <td id="right-column">
-                    <h1> Inventory:</h1>
-                    <table id="inventory" style={{width: "90%"}}>
-                        <tr id="inventory">
-                            {/* player._inventory.use_item.bind(this, item_index, player) */}
-                            {player._inventory._item_array.slice(0, 3).map((item, item_index) => {
-                                return (<td onClick={player._inventory.use_item.bind(this, item_index, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr id="inventory">
-                            {player._inventory._item_array.slice(3, 6).map((item, item_index) => {
-                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 3, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(3, 6).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr id="inventory">
-                            {player._inventory._item_array.slice(6, 9).map((item, item_index) => {
-                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 6, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(6, 9).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr>
-                            {player._inventory._item_array.slice(9, 12).map((item, item_index) => {
-                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 9, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(9, 12).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                        <tr>
-                            {player._inventory._item_array.slice(12, 15).map((item, item_index) => {
-                                return (<td onClick={player._inventory.use_item.bind(this, item_index + 12, player)}><img src={`/images/items/${item._item_type}.jpg`}></img></td>);
-                            })}
-                            {(() => {
-                                let empty = (new Array(Math.max(0, 3 - player._inventory._item_array.slice(12, 15).length))).fill("Empty");
-                                return (<React.Fragment>
-                                            {empty.map((item) => <td><img src={`/images/items/${item}.jpg`}></img></td>)}
-                                        </React.Fragment>);
-                            })()}
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    );
+            {/* Hidden elements for special effects */}
+            <audio
+              controls
+              id="background_audio"
+              src="/audio/twinleaf_town.wav"
+              style={{ display: 'none' }}
+            >
+              {' '}
+              Your browser does not support the <code>audio</code> element.{' '}
+            </audio>
+            <audio
+              controls
+              id="item_received_audio"
+              src="/audio/item_received.mp3"
+              style={{ display: 'none' }}
+              onEnded={resume_background}
+            >
+              {' '}
+              Your browser does not support the <code>audio</code> element.{' '}
+            </audio>
+            <audio
+              controls
+              id="item_consumed_audio"
+              src="/audio/item_consumed.mp3"
+              style={{ display: 'none' }}
+              onEnded={resume_background}
+            >
+              {' '}
+              Your browser does not support the <code>audio</code> element.{' '}
+            </audio>
+            <audio
+              controls
+              id="wall_bump_audio"
+              src="/audio/wall_bump.mp3"
+              style={{ display: 'none' }}
+            >
+              {' '}
+              Your browser does not support the <code>audio</code> element.{' '}
+            </audio>
+            <audio
+              controls
+              id="interact_audio"
+              src="/audio/interact.mp3"
+              style={{ display: 'none' }}
+            >
+              {' '}
+              Your browser does not support the <code>audio</code> element.{' '}
+            </audio>
+            <img
+              src="images/sprite_sheets/Aaron.png"
+              alt="Aaron"
+              id="Male Highschool Teen"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Lucian.png"
+              alt="Lucian"
+              id="Male College Student"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Roark.png"
+              alt="Roark"
+              id="Male Impoverished"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Flint.png"
+              alt="Flint"
+              id="Male Spoiled Brat"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Byron.png"
+              alt="Byron"
+              id="Male Elderly Person"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Maylene.png"
+              alt="Maylene"
+              id="Female Highschool Teen"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Cynthia.png"
+              alt="Cynthia"
+              id="Female College Student"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Gardenia.png"
+              alt="Gardenia"
+              id="Female Impoverished"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Candice.png"
+              alt="Candice"
+              id="Female Spoiled Brat"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Bertha.png"
+              alt="Bertha"
+              id="Female Elderly Person"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Dawn.png"
+              alt="Smol"
+              id="Smol"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Fantina.png"
+              alt="Fantina"
+              id="NPC"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Palmer.png"
+              alt="Palmer"
+              id="NPC"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Volkner.png"
+              alt="Volkner"
+              id="NPC"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="images/sprite_sheets/Wake.png"
+              alt="Wake"
+              id="NPC"
+              style={{ display: 'none' }}
+            ></img>
+            {/* Top row buildings */}
+            <img
+              src="/images/environment/dirt_path.png"
+              alt="Dirt Path"
+              id="dirt-path"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/environment/grass.png"
+              alt="Grass"
+              id="grass"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/environment/tree_2.png"
+              alt="Tree 2"
+              id="tree-2"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/homes/apartment.png"
+              alt="apartment"
+              id="home"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/neighbor.png"
+              alt="neighbor"
+              id="neighbor"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/city_hall.png"
+              alt="City Hall"
+              id="city-hall"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/store1.png"
+              alt="Unary Store"
+              id="store-1"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/store2.png"
+              alt="Binary Store"
+              id="store-2"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/store3.png"
+              alt="Ternary Store"
+              id="store-3"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/store4.png"
+              alt="Mystery Store"
+              id="store-4"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/environment/tree.png"
+              alt="Tree"
+              id="tree-1"
+              style={{ display: 'none' }}
+            ></img>
+            {/* Row two buildings */}
+            <img
+              src="/images/environment/park.png"
+              alt="Park"
+              id="park"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/object_garden.png"
+              alt="Object Garden"
+              id="object-garden"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/cin_n_cout.png"
+              alt="Cin-N-Cout"
+              id="cin-n-cout"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/foobar.png"
+              alt="Foobar"
+              id="foobar"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/casino.png"
+              alt="Casino"
+              id="casino"
+              style={{ display: 'none' }}
+            ></img>
+            {/* Row Three buildings (Just the library) */}
+            <img
+              src="/images/buildings/library.png"
+              alt="Library"
+              id="library"
+              style={{ display: 'none' }}
+            ></img>
+            {/* Row Four buildings (Just the park one) */}
+            {/* We have no park building yet... */}
+            {/* Row Five buildings (NOT COLLEGE) */}
+            <img
+              src="/images/buildings/highschool.png"
+              alt="Highschool"
+              id="highschool"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/work.png"
+              alt="Work"
+              id="work"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/gym.png"
+              alt="Gym"
+              id="gym"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/hospital.png"
+              alt="Hospital"
+              id="hospital"
+              style={{ display: 'none' }}
+            ></img>
+            {/* Row Six building (College has different left side than others) */}
+            <img
+              src="/images/buildings/college.png"
+              alt="College"
+              id="college"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/college2.png"
+              alt="College without doormat"
+              id="college-without-doormat"
+              style={{ display: 'none' }}
+            ></img>
+            <img
+              src="/images/buildings/college_doormat.png"
+              alt="College Doormat"
+              id="college-doormat"
+              style={{ display: 'none' }}
+            ></img>
+          </td>
+          <td id="center-column">
+            <canvas
+              ref={canvasRef}
+              width={MAX_WIDTH}
+              height={MAX_HEIGHT + TOP_BUFFER}
+              id="game-canvas"
+              onClick={e => {
+                on_click(e)
+              }}
+            />
+          </td>
+          <td id="right-column">
+            <h1> Inventory:</h1>
+            <table id="inventory" style={{ width: '90%' }}>
+              <tr id="inventory">
+                {/* player._inventory.use_item.bind(this, item_index, player) */}
+                {player._inventory._item_array
+                  .slice(0, 3)
+                  .map((item, item_index) => {
+                    return (
+                      <td
+                        onClick={player._inventory.use_item.bind(
+                          this,
+                          item_index,
+                          player
+                        )}
+                      >
+                        <img src={`/images/items/${item._item_type}.jpg`}></img>
+                      </td>
+                    )
+                  })}
+                {(() => {
+                  let empty = new Array(
+                    Math.max(0, 3 - player._inventory._item_array.length)
+                  ).fill('Empty')
+                  return (
+                    <React.Fragment>
+                      {empty.map(item => (
+                        <td>
+                          <img src={`/images/items/${item}.jpg`}></img>
+                        </td>
+                      ))}
+                    </React.Fragment>
+                  )
+                })()}
+              </tr>
+              <tr id="inventory">
+                {player._inventory._item_array
+                  .slice(3, 6)
+                  .map((item, item_index) => {
+                    return (
+                      <td
+                        onClick={player._inventory.use_item.bind(
+                          this,
+                          item_index + 3,
+                          player
+                        )}
+                      >
+                        <img src={`/images/items/${item._item_type}.jpg`}></img>
+                      </td>
+                    )
+                  })}
+                {(() => {
+                  let empty = new Array(
+                    Math.max(
+                      0,
+                      3 - player._inventory._item_array.slice(3, 6).length
+                    )
+                  ).fill('Empty')
+                  return (
+                    <React.Fragment>
+                      {empty.map(item => (
+                        <td>
+                          <img src={`/images/items/${item}.jpg`}></img>
+                        </td>
+                      ))}
+                    </React.Fragment>
+                  )
+                })()}
+              </tr>
+              <tr id="inventory">
+                {player._inventory._item_array
+                  .slice(6, 9)
+                  .map((item, item_index) => {
+                    return (
+                      <td
+                        onClick={player._inventory.use_item.bind(
+                          this,
+                          item_index + 6,
+                          player
+                        )}
+                      >
+                        <img src={`/images/items/${item._item_type}.jpg`}></img>
+                      </td>
+                    )
+                  })}
+                {(() => {
+                  let empty = new Array(
+                    Math.max(
+                      0,
+                      3 - player._inventory._item_array.slice(6, 9).length
+                    )
+                  ).fill('Empty')
+                  return (
+                    <React.Fragment>
+                      {empty.map(item => (
+                        <td>
+                          <img src={`/images/items/${item}.jpg`}></img>
+                        </td>
+                      ))}
+                    </React.Fragment>
+                  )
+                })()}
+              </tr>
+              <tr>
+                {player._inventory._item_array
+                  .slice(9, 12)
+                  .map((item, item_index) => {
+                    return (
+                      <td
+                        onClick={player._inventory.use_item.bind(
+                          this,
+                          item_index + 9,
+                          player
+                        )}
+                      >
+                        <img src={`/images/items/${item._item_type}.jpg`}></img>
+                      </td>
+                    )
+                  })}
+                {(() => {
+                  let empty = new Array(
+                    Math.max(
+                      0,
+                      3 - player._inventory._item_array.slice(9, 12).length
+                    )
+                  ).fill('Empty')
+                  return (
+                    <React.Fragment>
+                      {empty.map(item => (
+                        <td>
+                          <img src={`/images/items/${item}.jpg`}></img>
+                        </td>
+                      ))}
+                    </React.Fragment>
+                  )
+                })()}
+              </tr>
+              <tr>
+                {player._inventory._item_array
+                  .slice(12, 15)
+                  .map((item, item_index) => {
+                    return (
+                      <td
+                        onClick={player._inventory.use_item.bind(
+                          this,
+                          item_index + 12,
+                          player
+                        )}
+                      >
+                        <img src={`/images/items/${item._item_type}.jpg`}></img>
+                      </td>
+                    )
+                  })}
+                {(() => {
+                  let empty = new Array(
+                    Math.max(
+                      0,
+                      3 - player._inventory._item_array.slice(12, 15).length
+                    )
+                  ).fill('Empty')
+                  return (
+                    <React.Fragment>
+                      {empty.map(item => (
+                        <td>
+                          <img src={`/images/items/${item}.jpg`}></img>
+                        </td>
+                      ))}
+                    </React.Fragment>
+                  )
+                })()}
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    )
 };
 
 function resume_background() {
