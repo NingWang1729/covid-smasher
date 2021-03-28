@@ -320,6 +320,9 @@ function COVID_SMASHER() {
     useEffect(()=>{
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
+        var audio = document.getElementById("my_audio");
+        audio.volume = 0.025;
+        audio.play();
     }, []);
 
     // Game Clock
@@ -329,6 +332,10 @@ function COVID_SMASHER() {
 
     // Game Clock
     function counter () {
+        var audio = document.getElementById("my_audio");
+        if (audio.currentTime >= 75.4) {
+            audio.currentTime = 0.5;
+        };
         switch (game_state) {
             case 0: // WORLD MAP
                 pass_time(0.001);
@@ -1863,6 +1870,7 @@ function COVID_SMASHER() {
                     movequeue.push(4); // interact();
                 }
                 break;
+            case 27: // ESC
             case 80: // P
                 if (game_state === 0) {
                     setGameState(1);
@@ -2004,7 +2012,7 @@ function COVID_SMASHER() {
                 <td id="left-column">
                     <p>TIME: {Math.trunc(time).toString().padStart(2, "0")}:{Math.trunc((time - Math.trunc(time)) * 60).toString().padStart(2, "0")}</p>
                     <p>HEALTH POINTS: {player._hp}</p>
-                    <p>SUBSTENANCE: {Math.trunc(player._substenance)}</p>
+                    <p>SUSTENANCE: {Math.trunc(player._substenance)}</p>
                     <p>CASH: ${player._cash}</p>
                     <p>STRENGTH: {player._strength}</p>
                     <p>INTELLIGENCE: {player._intelligence}</p>
@@ -2020,7 +2028,7 @@ function COVID_SMASHER() {
                         cookiePolicy={'single_host_origin'} 
                     />
                 
-                    {/* This Cynthia is in public */}
+                    <audio controls id="my_audio" src="/audio/Twinleaf_Town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
