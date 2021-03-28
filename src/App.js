@@ -9,7 +9,7 @@ function App() {
          <script src="https://apis.google.com/js/platform.js" async defer></script>
         <meta name="google-signin-client_id" content="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com" />
         <h1>
-          Covid-Smasher!
+          Covid-Crusher!
         </h1>
         <br />
         <BrowserRouter basename={window.location.path || ''}>
