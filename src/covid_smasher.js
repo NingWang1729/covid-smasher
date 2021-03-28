@@ -2612,9 +2612,9 @@ function COVID_SMASHER() {
     }
 
     return (
-        <table id="game-table">
+        <table id="game-table" style={{border: "none"}}>
         <tr>
-          <td id="left-column" style={{ textAlign: 'left', paddingLeft: '10px', backgroundColor: "Beige" }}>
+          <td id="left-column" style={{ textAlign: 'left', paddingLeft: '10px', backgroundColor: "Beige", border: "none" }}>
             <p>
               <b>Stats:</b>
             </p>
@@ -2699,9 +2699,9 @@ function COVID_SMASHER() {
                 <td id="center-column">
                     <canvas ref={canvasRef} width={MAX_WIDTH} height={MAX_HEIGHT + TOP_BUFFER} id="game-canvas" onClick={(e) => {on_click(e)}}/>
                 </td>
-                <td id="right-column" style={{ backgroundColor: "beige" }}>
+                <td id="right-column" style={{ backgroundColor: "beige", border: "none", paddingLeft: "10px" }}>
                     <h1 style={{ textAlign: "center" }}> Inventory:</h1>
-                    <table id="inventory" style={{width: "90%"}}>
+                    <table id="inventory" style={{width: "90%", paddingLeft: "10px" }}>
                         <tr id="inventory">
                             {/* player._inventory.use_item.bind(this, item_index, player) */}
                             {player._inventory._item_array.slice(0, 3).map((item, item_index) => {
