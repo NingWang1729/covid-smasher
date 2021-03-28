@@ -1645,7 +1645,7 @@ function COVID_SMASHER() {
         ctx.font = '48px serif';
         ctx.fillStyle = "black";
         ctx.textAlign = "center"; 
-        ctx.fillText(" COVID SMASHER! ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * UNIT_SIZE, 8 * UNIT_SIZE, 2 * UNIT_SIZE);
+        ctx.fillText(" COVID Crusher! ", MAX_WIDTH / 2, MAX_HEIGHT / 4 - 2 * UNIT_SIZE, 8 * UNIT_SIZE, 2 * UNIT_SIZE);
 
         // Load menu text border
         ctx.rect(MAX_WIDTH / 2 - 4 * UNIT_SIZE, MAX_HEIGHT / 4 - 3.5 * UNIT_SIZE, 8 * UNIT_SIZE, 2 * UNIT_SIZE);
