@@ -80,10 +80,38 @@ class Player {
         else return false
     }
 
-    move_right() { if (this.canMoveHere(this.x_pos + 1, this.y_pos)) this.x_pos += 1; };
-    move_left() { if (this.canMoveHere(this.x_pos - 1, this.y_pos)) this.x_pos -= 1 };
-    move_up() { if (this.canMoveHere(this.x_pos, this.y_pos - 1)) this.y_pos -= 1};
-    move_down() { if (this.canMoveHere(this.x_pos, this.y_pos + 1)) this.y_pos += 1 };
+    move_right() { 
+        if (this.canMoveHere(this.x_pos + 1, this.y_pos)) {
+            this.x_pos += 1;
+            return true;
+        } else {
+            return false;
+        }
+    };
+    move_left() {
+        if (this.canMoveHere(this.x_pos - 1, this.y_pos)) {
+            this.x_pos -= 1;
+            return true;
+        } else {
+            return false;
+        }
+    };
+    move_up() {
+        if (this.canMoveHere(this.x_pos, this.y_pos - 1)) {
+            this.y_pos -= 1;
+            return true;
+        } else {
+            return false;
+        }
+    };
+    move_down() {
+        if (this.canMoveHere(this.x_pos, this.y_pos + 1)) {
+            this.y_pos += 1;
+            return true;
+        } else {
+            return false;
+        }
+    };
 };
 
 class Role extends Player {

@@ -320,7 +320,7 @@ function COVID_SMASHER() {
     useEffect(()=>{
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-        var audio = document.getElementById("my_audio");
+        var audio = document.getElementById("background_audio");
         audio.volume = 0.025;
         audio.play();
     }, []);
@@ -332,7 +332,7 @@ function COVID_SMASHER() {
 
     // Game Clock
     function counter () {
-        var audio = document.getElementById("my_audio");
+        var audio = document.getElementById("background_audio");
         if (audio.currentTime >= 75.4) {
             audio.currentTime = 0.5;
         };
@@ -578,28 +578,36 @@ function COVID_SMASHER() {
             switch (movequeue[0]) {
                 case 0:
                     if (player.direction === locations_module.DIRECTION.LEFT) {
-                        player.move_left();
+                        if (!player.move_left()) {
+                            play_wall_bump_audio();
+                        }
                     } else {
                         player.set_direction(locations_module.DIRECTION.LEFT);
                     };
                     break;
                 case 1:
                     if (player.direction === locations_module.DIRECTION.RIGHT) {
-                        player.move_right();
+                        if (!player.move_right()) {
+                            play_wall_bump_audio();
+                        }
                     } else {
                         player.set_direction(locations_module.DIRECTION.RIGHT);
                     };
                     break;
                 case 2:
                     if (player.direction === locations_module.DIRECTION.UP) {
-                        player.move_up();
+                        if (!player.move_up()) {
+                            play_wall_bump_audio();
+                        }
                     } else {
                         player.set_direction(locations_module.DIRECTION.UP);
                     };
                     break;
                 case 3:
                     if (player.direction === locations_module.DIRECTION.DOWN) {
-                        player.move_down();
+                        if (!player.move_down()) {
+                            play_wall_bump_audio();
+                        }
                     } else {
                         player.set_direction(locations_module.DIRECTION.DOWN);
                     };
@@ -1867,7 +1875,11 @@ function COVID_SMASHER() {
             case 70: // F
             case 88: // X
                 if(play) {
-                    movequeue.push(4); // interact();
+                    // interact();
+                    if (WORLD_MAP[player.y_pos][player.x_pos] === 2) {
+                        movequeue.push(4);
+                        play_interact_audio();
+                    }
                 }
                 break;
             case 27: // ESC
@@ -1892,6 +1904,7 @@ function COVID_SMASHER() {
                         setPlay(false);
                     }
                 }
+                play_item_audio();
                 break;
             case 86: // V
                 if (setup) {
@@ -2006,6 +2019,32 @@ function COVID_SMASHER() {
         email = googleUser.getBasicProfile().getEmail()
     }
 
+    function resume_background() {
+        let background_audio = document.getElementById("background_audio");
+        background_audio.volume = 0.025;
+        background_audio.play();
+    }
+
+    function play_item_audio() {
+        let background_audio = document.getElementById("background_audio");
+        background_audio.pause();
+        let item_audio = document.getElementById("item_audio");
+        item_audio.volume = 0.025;
+        item_audio.play();
+    };
+
+    function play_wall_bump_audio() {
+        let item_audio = document.getElementById("wall_bump_audio");
+        item_audio.volume = 0.1;
+        item_audio.play();
+    };
+
+    function play_interact_audio() {
+        let item_audio = document.getElementById("interact_audio");
+        item_audio.volume = 0.1;
+        item_audio.play();
+    };
+
     return (
         <table id="game-table">
             <tr>
@@ -2019,6 +2058,8 @@ function COVID_SMASHER() {
                     <p>MORALE:{player._morale}</p>
                     <p>PLAYER: {player._type}</p>
                     <p>EMAIL: {email}</p>
+                    <p>{player.x_pos}, {player.y_pos}</p>
+
                     { /* Display OAuth 2.0 login */ }
                     <GoogleLogin 
                         clientID="130407574445-7d1gjhpe6u5pj04fe4794hmbq7mtl9c1.apps.googleusercontent.com" 
@@ -2027,8 +2068,12 @@ function COVID_SMASHER() {
                         onFailure={onSignIn} 
                         cookiePolicy={'single_host_origin'} 
                     />
-                
-                    <audio controls id="my_audio" src="/audio/Twinleaf_Town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
+
+                    {/* Hidden elements for special effects */}
+                    <audio controls id="background_audio" src="/audio/Twinleaf_Town.wav" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="item_audio" src="/audio/item.mp3" style={{display: 'none'}} onEnded={resume_background}> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="wall_bump_audio" src="/audio/wall_bump.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
+                    <audio controls id="interact_audio" src="/audio/interact.mp3" style={{display: 'none'}}> Your browser does not support the <code>audio</code> element. </audio>
                     <img src="images/sprite_sheets/Aaron.png" alt="Aaron" id="Male Highschool Teen" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Lucian.png" alt="Lucian" id="Male College Student" style={{display: 'none'}}></img>
                     <img src="images/sprite_sheets/Roark.png" alt="Roark" id="Male Impoverished" style={{display: 'none'}}></img>
