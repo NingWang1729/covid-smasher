@@ -337,7 +337,7 @@ export class Casino extends Location {
                         player.delta_cash = -5;
                         return 1;
                     } else {
-                        player._hp = 1;
+                        player.delta_health = -99;
                         return 0;
                     }
                 } else {

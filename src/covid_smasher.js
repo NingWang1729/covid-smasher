@@ -1288,15 +1288,15 @@ function COVID_SMASHER() {
                                     value: "leave",
                                   },
                                   slots: {
-                                    text: "Play slots...",
+                                    text: "Play slots for $1?",
                                     value: "1",
                                   },
                                   blackjack: {
-                                    text: "Play blackjack...",
+                                    text: "Play blackjack for $2? House pays 3 to 2.",
                                     value: "2",
                                   },
                                   roulette: {
-                                    text: "Play roulette...",
+                                    text: "Play roulette?",
                                     value: "3",
                                   },
                                 },
@@ -2064,6 +2064,7 @@ function COVID_SMASHER() {
                 }
                 break;
             case 67: // C
+                break;
                 if (setup) {
                     if (game_state === 2) {
                         setGameState(0);
@@ -2075,6 +2076,7 @@ function COVID_SMASHER() {
                 }
                 break;
             case 86: // V
+                break;
                 if (setup) {
                     if (game_state === 3) {
                         setGameState(0);
