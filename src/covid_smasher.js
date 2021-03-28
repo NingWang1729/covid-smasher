@@ -1824,6 +1824,9 @@ function COVID_SMASHER() {
         };
 
         isTooClose(player, npc1, 1.5, ticks);
+        isTooClose(player, npc2, 1.5, ticks);
+        isTooClose(player, npc3, 1.5, ticks);
+        isTooClose(player, npc4, 1.5, ticks);
     }
 
     function move_npc(character) {
