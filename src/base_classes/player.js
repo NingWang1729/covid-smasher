@@ -66,10 +66,10 @@ class Player {
 
     canMoveHere(x, y) {
         // Out of bounds on the x-axis
-        if (x <= 0 || x >= WORLD_WIDTH - 1) return false
+        if (x < 0 || x > WORLD_WIDTH - 1) return false
 
         // Out of bounds on the y-axis
-        if (y <= 0 || y >= WORLD_HEIGHT - 1) return false
+        if (y < 0 || y > WORLD_HEIGHT - 1) return false
 
         // Check if player can move here on the map
         // TO-DO: Why is locations_module [y][x] and not [x][y] wtf
