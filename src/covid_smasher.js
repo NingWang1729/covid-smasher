@@ -2004,7 +2004,7 @@ function COVID_SMASHER() {
                 <td id="left-column">
                     <p>TIME: {Math.trunc(time).toString().padStart(2, "0")}:{Math.trunc((time - Math.trunc(time)) * 60).toString().padStart(2, "0")}</p>
                     <p>HEALTH POINTS: {player._hp}</p>
-                    <p>SUBSTENANCE: {Math.trunc(player._substenance)}</p>
+                    <p>SUSTENANCE: {Math.trunc(player._substenance)}</p>
                     <p>CASH: ${player._cash}</p>
                     <p>STRENGTH: {player._strength}</p>
                     <p>INTELLIGENCE: {player._intelligence}</p>
