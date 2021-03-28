@@ -5,7 +5,6 @@ import { GoogleLogin } from 'react-google-login'
 import './covid_smasher.css';
 
 import * as locations_module from './base_classes/locations.js'
-import * as timezones_module from './base_classes/timezones.js'
 import * as player_module from './base_classes/player.js'
 import * as items_module from './base_classes/items.js'
 
@@ -1529,6 +1528,7 @@ function COVID_SMASHER() {
         }
     }
 
+    // Adds text/avatar image to each of the slots
     function addSlotText(x, slotData, ctx) {
         const y = MAX_HEIGHT / 3 - 2 * UNIT_SIZE
         const width = MAX_WIDTH / 4 + 1 * UNIT_SIZE
@@ -1542,7 +1542,7 @@ function COVID_SMASHER() {
         ctx.fillText(`  Health: ${slotData.stats.health} | Strength: ${slotData.stats.strength}`, x, y + UNIT_SIZE * 6, width, height)
         ctx.fillText(`  Sustenance: ${Math.floor(slotData.stats.sustenance)} | Morale: ${slotData.stats.morale}`, x, y + UNIT_SIZE * 7, width, height)
         ctx.fillText(`  Intelligence: ${slotData.stats.intelligence}`, x + UNIT_SIZE * 2, y + UNIT_SIZE * 8, width, height)
-        ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x + UNIT_SIZE * 1.625, y + UNIT_SIZE * 7 + TOP_BUFFER, 256, 256);
+        ctx.drawImage(document.getElementById(slotData.playerType), 128, 64, 64, 64, x + UNIT_SIZE * 1.625, y + UNIT_SIZE * 6 + TOP_BUFFER, 256, 256);
     }
 
     // PAUSE MENU
