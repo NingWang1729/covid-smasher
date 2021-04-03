@@ -1,4 +1,4 @@
-## Available Scripts
+## Live Website
 You can play this game at https://covid-smasher.ningwang1729.repl.co/
 
 ## Available Scripts
