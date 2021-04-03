@@ -1,4 +1,7 @@
 ## Available Scripts
+You can play this game at https://covid-smasher.ningwang1729.repl.co/
+
+## Available Scripts
 
 In the project directory, you can run:
 
