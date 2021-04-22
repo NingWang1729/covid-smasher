@@ -1,43 +1,25 @@
-import dotenv from 'dotenv'
 import mongoose from 'mongoose'
-
-dotenv.config()
-
 const { Schema } = mongoose
-const { DB_USERNAME, DB_PASSWORD, DB_URL, DB_NAME } = process.env
-const URI = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}?retryWrites=true&w=majority`
-
-// Connect to our MongoDB database
-mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-db.on('error', console.error)
-db.once('open', () => console.log('Connected to Mongoose!'))
 
 // Structure that all save objects need to follow
 const saveSchema = new Schema({
-  savedAt: { type: Date, default: Date.now },
-  email: { type: String, required: true },
-  slot: { type: Number, required: true, min: 1, max: 3 },
   position: {
     x: { type: Number, required: true, min: 0, max: 39 },
     y: { type: Number, required: true, min: 0, max: 23 },
   },
-  playerType: { type: String, required: true },
-  direction: { type: String, required: true },
+  direction: { type: Number, required: true },
   stats: {
     intelligence: { type: Number, required: true, min: 0, max: 100 },
     strength: { type: Number, required: true, min: 0, max: 100 },
     morale: { type: Number, required: true, min: 0, max: 100 },
-    sustenance: { type: Number, required: true, min: 0, max: 100 },
-    health: { type: Number, required: true, min: 0, max: 100 },
+    sustenance: { type: Number, required: true, min: 0, max: 100 }, // TO-DO: Change this later
+    health: { type: Number, required: true, min: 0, max: 100 }, // Why 0-110 with 100 as max?
   },
   time: { type: Number, required: true, min: 0, max: 24 },
   money: { type: Number, required: true, min: 0, max: 99999 },
-  inventory: { 
-    items: { type: Array, required: true },
-    capacity: { type: Number, required: true, min: 1 }
-  }
+  inventory: { type: Array, required: false }, // Not required for now
 })
+
 export const Save = mongoose.model('Save', saveSchema)
 
 /*
@@ -58,7 +40,7 @@ const defaultSave = {
   },
   time: 0,
   money: 0,
-  // inventory: []
+  inventory: []
 }
 
 2. Use the Save() constructor and call it on that JS object

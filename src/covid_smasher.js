@@ -96,43 +96,61 @@ let gameSaves = {}
 //     [1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
 //     [1,1,1,1,1,1,1,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
 // ]
+
 // Creates deep copy of map grid
+const deepCopy = (arr) => {
+  return arr.map(elem => {
+    if (Array.isArray(elem)) return deepCopy(elem)
+    else if (typeof elem === 'object') return deepCopyObject(elem)
+    else return elem
+  })
+}
+
+
+// Original code for reference
+/*
 const deepCopy = (arr) => {
   let copy = [];
   arr.forEach(elem => {
-    if(Array.isArray(elem)){
-      copy.push(deepCopy(elem))
-    }else{
-      if (typeof elem === 'object') {
-        copy.push(deepCopyObject(elem))
-    } else {
-        copy.push(elem)
-      }
-    }
+    if (Array.isArray(elem)) copy.push(deepCopy(elem))
+    else if (typeof elem === 'object') copy.push(deepCopyObject(elem))
+    else copy.push(elem)
   })
   return copy;
 }
+*/
 
 // Helper function to deal with Objects
-const deepCopyObject = (obj) => {
-  let tempObj = {};
-  for (let [key, value] of Object.entries(obj)) {
-    if (Array.isArray(value)) {
-      tempObj[key] = deepCopy(value);
-    } else {
-      if (typeof value === 'object') {
-        tempObj[key] = deepCopyObject(value);
-      } else {
-        tempObj[key] = value
-      }
-    }
+const deepCopyObject = (orig) => {
+  const clone = {}
+  for (let [key, val] of Object.entries(orig)) {
+      if (Array.isArray(val)) orig[key] = deepCopy(val)
+      else if (typeof val === 'object') orig[key] = deepCopyObject(val)
+      else orig[key] = val
   }
-  return tempObj;
+  return clone
+
+// Original code for reference, TO-DO: Remove it if it works
+//   let tempObj = {};
+//   for (let [key, value] of Object.entries(obj)) {
+//     if (Array.isArray(value)) {
+//       tempObj[key] = deepCopy(value);
+//     } else {
+//       if (typeof value === 'object') {
+//         tempObj[key] = deepCopyObject(value);
+//       } else {
+//         tempObj[key] = value
+//       }
+//     }
+//   }
+//   return tempObj;
 }
 
 var dfs_map = deepCopy(locations_module.WORLD_MAP);
-var bfs_map1 = deepCopy(locations_module.WORLD_MAP);
-var bfs_map2 = deepCopy(locations_module.WORLD_MAP);
+
+// TO-DO: Unused variables, we can remove these
+// var bfs_map1 = deepCopy(locations_module.WORLD_MAP);
+// var bfs_map2 = deepCopy(locations_module.WORLD_MAP);
 
 // NPC
 // Numbers are inclusive
