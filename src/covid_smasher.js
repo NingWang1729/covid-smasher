@@ -8,6 +8,9 @@ import * as locations_module from './base_classes/locations.js'
 import * as player_module from './base_classes/player.js'
 import * as items_module from './base_classes/items.js'
 
+// Get helper functions
+import { deepCopy, getRandomSpawnPoint } from './lib.js'
+
 import axios from 'axios'
 
 const { UNIT_SIZE, TOP_BUFFER, WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP } = locations_module
@@ -97,106 +100,7 @@ let gameSaves = {}
 //     [1,1,1,1,1,1,1,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
 // ]
 
-// Creates deep copy of map grid
-const deepCopy = (arr) => {
-  return arr.map(elem => {
-    if (Array.isArray(elem)) return deepCopy(elem)
-    else if (typeof elem === 'object') return deepCopyObject(elem)
-    else return elem
-  })
-}
-
-
-// Original code for reference
-/*
-const deepCopy = (arr) => {
-  let copy = [];
-  arr.forEach(elem => {
-    if (Array.isArray(elem)) copy.push(deepCopy(elem))
-    else if (typeof elem === 'object') copy.push(deepCopyObject(elem))
-    else copy.push(elem)
-  })
-  return copy;
-}
-*/
-
-// Helper function to deal with Objects
-const deepCopyObject = (orig) => {
-  const clone = {}
-  for (let [key, val] of Object.entries(orig)) {
-      if (Array.isArray(val)) orig[key] = deepCopy(val)
-      else if (typeof val === 'object') orig[key] = deepCopyObject(val)
-      else orig[key] = val
-  }
-  return clone
-
-// Original code for reference, TO-DO: Remove it if it works
-//   let tempObj = {};
-//   for (let [key, value] of Object.entries(obj)) {
-//     if (Array.isArray(value)) {
-//       tempObj[key] = deepCopy(value);
-//     } else {
-//       if (typeof value === 'object') {
-//         tempObj[key] = deepCopyObject(value);
-//       } else {
-//         tempObj[key] = value
-//       }
-//     }
-//   }
-//   return tempObj;
-}
-
-var dfs_map = deepCopy(locations_module.WORLD_MAP);
-
-// TO-DO: Unused variables, we can remove these
-// var bfs_map1 = deepCopy(locations_module.WORLD_MAP);
-// var bfs_map2 = deepCopy(locations_module.WORLD_MAP);
-
-// NPC
-// Numbers are inclusive
-const getRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-
-
-function moveableSpaces(grid) {
-    let row_col_arr = [];
-    for (let i = 0; i < grid.length; i++) {
-        for (let j = 0; j < grid[i].length; j++) {
-            if (grid[i][j] == 2) {
-                row_col_arr.push([i, j]);
-            }
-        }
-    }
-    return row_col_arr
-}
-
-
-// Sometimes this does not work
-let getRandomValidPosition = () => {
-    for (;;) {
-        let random_row = getRandomNumber(0, WORLD_HEIGHT - 1)
-        // 4 is for the buffer
-        let random_col = getRandomNumber(0, WORLD_WIDTH - 1)
-        
-        // If the start position is valid
-        if (WORLD_MAP[random_row][random_col] == 0) {
-            console.log("Map Locale", WORLD_MAP[random_row][random_col]);
-            console.log(random_row, random_col);
-
-            return [random_row, random_col];
-        }
-    }
-}
-
-let getRandomSpawnPoint = () => {
-    let random_num = getRandomNumber(0, moveableSpaces(locations_module.WORLD_MAP).length - 1)
-    const rows = moveableSpaces(locations_module.WORLD_MAP)[random_num][0];
-    const cols = moveableSpaces(locations_module.WORLD_MAP)[random_num][1];
-
-    return [rows, cols];
-}
+var dfs_map = deepCopy(WORLD_MAP);
 
 // We get a random valid position for our npc to start
 // const [rows, cols] = getRandomValidPosition();
@@ -246,115 +150,14 @@ function fixNPCMoveQueue(npc_queue) {
     return npc_queue;
 } 
 
-function randomMovement(character) {
-    let move_arr = [];
-    // let curr_row = character.get_y_pos;
-    // let curr_col = character.get_x_pos;
-
-    for (let i = 0; i < 101; i++) {
-        let direction_int = getRandomNumber(0,3);
-        let append_count = getRandomNumber(1,10);
-        for (let j = 0; j < append_count; j++) {
-            // if (direction_int === 0) {
-            //     if (WORLD_MAP[curr_row][curr_col - 1] != 0) {
-            //         continue;
-            //     }
-            //     curr_col -= 1;
-            // } else if (direction_int === 1) {
-            //     if (WORLD_MAP[curr_row][curr_col + 1] != 0) {
-            //         continue;
-            //     }
-            //     curr_col += 1;
-            // } else if (direction_int === 2) {
-            //     if (WORLD_MAP[curr_row - 1][curr_col] != 0) {
-            //         continue;
-            //     }
-            //     curr_row -= 1;
-            // } else if (direction_int === 3) {
-            //     if (WORLD_MAP[curr_row + 1][curr_col] != 0) {
-            //         continue;
-            //     }
-            //     curr_row += 1;
-            // }
-            
-            move_arr.push(direction_int)
-        }    
-    }
-
-    return move_arr;
-}
-
-
 function canMove(row, col) {
     return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] != 1); 
 }
 
-// BFS Implementation
-function exploreNeighbors(r, c, rq, cq, visited, move_input, grid) {
-    // NSEW Change Coordinates
-    const dr = [-1, 1, 0, 0];
-    const dc = [0, 0, 1, -1];
-    for (let i = 0; i < 4; i++) {
-        let rr = r + dr[i];
-        let cc = c + dc[i];
-
-        if (!canMove(rr, cc, grid)) {
-            continue;
-        }
-
-        // Adding unvisited Nodes to visited
-        rq.unshift(rr);
-        cq.unshift(cc);
-        visited.push([rr,cc]);
-        grid[rr][cc] = 1;
-
-        // Pushing movement input
-        if (i == 0) {
-            move_input.push(2);
-        } else if (i == 1) {
-            move_input.push(3);
-        } else if (i == 2) {
-            move_input.push(0);
-        } else if (i == 3) {
-            move_input.push(1);
-        } 
-
-        
-    }
-}
-
-function bfs(row, col, grid) {
-    var rq = [row];
-    var cq = [col];
-    var visited = [[row, col]]
-    var move_input = []
-    grid[row][col] = 1;
-    
-    while (rq.length > 0) {
-        let r = rq.shift();
-        let c = cq.shift();
-
-        if (grid[r][c] === 4) {
-            return;
-        }
-
-        exploreNeighbors(r, c, rq, cq, visited, move_input, grid);
-        // console.log(rq, cq);
-        // console.log(visited);
-        // console.dir(visited, {'maxArrayLength': null});
-    }
-
-    return move_input
-}
-
 var dfs_move_que = [];
 function dfs(row, col) {
-    // console.log(row, col);
     dfs_map[row][col] = 1;
-
-    if (dfs_map[row][col] == 4) {
-        return 
-    }
+    if (dfs_map[row][col] === 4) return
 
     if (canMove(row - 1, col)) {
         dfs_move_que.push(2);
@@ -397,77 +200,28 @@ dfs(rows, cols);
 dfs_move_que = fixNPCMoveQueue(dfs_move_que);
 move_directions = deepCopy(dfs_move_que);
 dfs_move_que = [];
-dfs_map = deepCopy(locations_module.WORLD_MAP);
+dfs_map = deepCopy(WORLD_MAP);
 
 dfs(rows2, cols2);
 dfs_move_que = fixNPCMoveQueue(dfs_move_que);
 var move_directions2 = deepCopy(dfs_move_que);
 dfs_move_que = [];
-dfs_map = deepCopy(locations_module.WORLD_MAP);
+dfs_map = deepCopy(WORLD_MAP);
 
 dfs(rows3, cols3);
 dfs_move_que = fixNPCMoveQueue(dfs_move_que);
 var move_directions3 = deepCopy(dfs_move_que);
 dfs_move_que = [];
-dfs_map = deepCopy(locations_module.WORLD_MAP);
+dfs_map = deepCopy(WORLD_MAP);
 
 dfs(rows4, cols4);
 dfs_move_que = fixNPCMoveQueue(dfs_move_que);
 var move_directions4 = deepCopy(dfs_move_que);
 dfs_move_que = [];
-dfs_map = deepCopy(locations_module.WORLD_MAP);
+dfs_map = deepCopy(WORLD_MAP);
 
-// var move_directions = deepCopy(move_directions);
-// var move_directions2 = deepCopy(move_directions);
-// var move_directions3 = deepCopy(move_directions);
-// var move_directions4 = deepCopy(move_directions);
-
-
-// BFS Algo
-// let bfs_move_que = fixNPCMoveQueue(bfs(rows,cols, bfs_map1));
-// move_directions = bfs_move_que;
-
-
-
-
-
-
-function character_selection(player_class) {
-    player = player_selection[player_class];
-    switch (player_class) {
-        case 0:
-            // player = m_highschool_teen;
-            break;
-        case 1:
-            // player = m_college_student;
-            break;
-        case 2:
-            // player = m_rich_kid;
-            break;
-        case 3:
-            // player = m_poor_person;
-            break;
-        case 4:
-            // player = m_old_person;
-            break;
-        case 5:
-            // player = f_highschool_teen;
-            break;
-        case 6:
-            // player = f_college_student;
-            break;
-        case 7:
-            // player = f_rich_kid;
-            break;
-        case 8:
-            // player = f_poor_person;
-            break;
-        case 9:
-            // player = f_old_person;
-            break;
-        default:
-            break;
-    }
+function character_selection(playerClass) {
+    player = player_selection[playerClass]
 }
 
 function COVID_SMASHER() {
@@ -2939,53 +2693,12 @@ function setPlayerState(slotData) {
     player._hp = slotData.stats.health;
     player._cash = slotData.money;
     player._inventory._item_array = slotData.inventory.items;
-    for (let i = 0; i < player._inventory._item_array.length; i++) {
-        if (player._inventory._item_array[i]._item_type === "Plastic_Meat") {
-            player._inventory._item_array[i] = new items_module.Plastic_Meat;
-        } else if (player._inventory._item_array[i]._item_type === "Plastic_Water") {
-            player._inventory._item_array[i] = new items_module.Plastic_Water;
-        } else if (player._inventory._item_array[i]._item_type === "Fidget_Spinner") {
-            player._inventory._item_array[i] = new items_module.Fidget_Spinner;
-        } else if (player._inventory._item_array[i]._item_type === "Cooked_Chicken") {
-            player._inventory._item_array[i] = new items_module.Cooked_Chicken;
-        } else if (player._inventory._item_array[i]._item_type === "Cooked_Bistec") {
-            player._inventory._item_array[i] = new items_module.Cooked_Bistec;
-        } else if (player._inventory._item_array[i]._item_type === "Lawn_Mower") {
-            player._inventory._item_array[i] = new items_module.Lawn_Mower;
-        } else if (player._inventory._item_array[i]._item_type === "Pizza") {
-            player._inventory._item_array[i] = new items_module.Pizza;
-        } else if (player._inventory._item_array[i]._item_type === "Lemon") {
-            player._inventory._item_array[i] = new items_module.Lemon;
-        } else if (player._inventory._item_array[i]._item_type === "Shell_Script") {
-            player._inventory._item_array[i] = new items_module.Shell_Script;
-        } else if (player._inventory._item_array[i]._item_type === "Hard_To_Swallow_Pills") {
-            player._inventory._item_array[i] = new items_module.Hard_To_Swallow_Pills;
-        } else if (player._inventory._item_array[i]._item_type === "Vim") {
-            player._inventory._item_array[i] = new items_module.Vim;
-        } else if (player._inventory._item_array[i]._item_type === "Emacs") {
-            player._inventory._item_array[i] = new items_module.Emacs;
-        } else if (player._inventory._item_array[i]._item_type === "Wurd") {
-            player._inventory._item_array[i] = new items_module.Wurd;
-        } else if (player._inventory._item_array[i]._item_type === "Borger") {
-            player._inventory._item_array[i] = new items_module.Borger;
-        } else if (player._inventory._item_array[i]._item_type === "Header_Fries") {
-            player._inventory._item_array[i] = new items_module.Header_Fries;
-        } else if (player._inventory._item_array[i]._item_type === "Soda") {
-            player._inventory._item_array[i] = new items_module.Soda;
-        } else if (player._inventory._item_array[i]._item_type === "Butterbeer") {
-            player._inventory._item_array[i] = new items_module.Butterbeer;
-        } else if (player._inventory._item_array[i]._item_type === "Dry_Martini") {
-            player._inventory._item_array[i] = new items_module.Dry_Martini;
-        } else if (player._inventory._item_array[i]._item_type === "Spam_and_eggs") {
-            player._inventory._item_array[i] = new items_module.Spam_and_eggs;
-        } else if (player._inventory._item_array[i]._item_type === "Bread_Stacks") {
-            player._inventory._item_array[i] = new items_module.Bread_Stacks;
-        } else if (player._inventory._item_array[i]._item_type === "Copypasta") {
-            player._inventory._item_array[i] = new items_module.Copypasta;
-        } else if (player._inventory._item_array[i]._item_type === "Tiramisu") {
-            player._inventory._item_array[i] = new items_module.Tiramisu;
-        };
-    };
+
+    const len = player._inventory._item_array.length
+    for (let x = 0; x < len; x++) {
+        const itemType = player._inventory._item_array.length[x]._item_type
+        player._inventory.item_array[x] = items_module[itemType]
+    }
     player._inventory._capacity = slotData.inventory.capacity;
     console.log(player.playerState());
 };
