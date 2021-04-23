@@ -1,10 +1,12 @@
 import { WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP, DIRECTION } from './locations.js';
+import * as locationsModule from './locations.js'
 import * as items_module from './items.js';
 import * as COVID_SMASHER from '../covid_smasher.js'
 
 const INVENTORY_ROWS = 3;
 const INVENTORY_COLS = 5;
 const INVENTORY_LENGTH = INVENTORY_ROWS * INVENTORY_COLS;
+const { LEFT, RIGHT, UP, DOWN } = locationsModule.DIRECTION
 
 class Inventory {
     constructor(capacity) {
@@ -59,11 +61,19 @@ class Player {
     add_item(item) { return this._inventory.add_item(item); };
     use_item(index) { this._inventory.use_item(index, this); }
 
+    // TO-DO: Change to use get keyword
     // Getters for getting position, direction
     get_x_pos() { return this.x_pos; };
     get_y_pos() { return this.y_pos; };
     get_directon() { return this.direction; };
     set_direction(newDirection) { this.direction = newDirection; };
+
+    // See if player is at a location
+    isAt(x, y) { return x === this.x_pos && y === this.y_pos }
+
+    isWithin(xMin, xMax, yMin, yMax) {
+        return xMin < this.x_pos && this.x_pos 
+    }
 
     canMoveHere(x, y) {
         // Out of bounds on the x-axis
@@ -81,38 +91,49 @@ class Player {
         else return false
     }
 
-    move_right() { 
-        if (this.canMoveHere(this.x_pos + 1, this.y_pos)) {
-            this.x_pos += 1;
-            return true;
-        } else {
-            return false;
+    // move_right() { 
+    //     if (this.canMoveHere(this.x_pos + 1, this.y_pos)) {
+    //         this.x_pos += 1;
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // };
+    // move_left() {
+    //     if (this.canMoveHere(this.x_pos - 1, this.y_pos)) {
+    //         this.x_pos -= 1;
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // };
+    // move_up() {
+    //     if (this.canMoveHere(this.x_pos, this.y_pos - 1)) {
+    //         this.y_pos -= 1;
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // };
+    // move_down() {
+    //     if (this.canMoveHere(this.x_pos, this.y_pos + 1)) {
+    //         this.y_pos += 1;
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // };
+    move(dir) {
+        let moved = false
+        switch (dir) {
+            case LEFT: if (this.canMoveHere(this.x_pos - 1, this.y_pos)) { this.x_pos += -1; moved = true } break
+            case RIGHT: if (this.canMoveHere(this.x_pos + 1, this.y_pos)) { this.x_pos += 1; moved = true } break
+            case UP: if (this.canMoveHere(this.x_pos, this.y_pos - 1)) { this.y_pos += -1; moved = true } break
+            case DOWN: if (this.canMoveHere(this.x_pos, this.y_pos + 1)) { this.y_pos += 1; moved = true } break
+            default: break
         }
-    };
-    move_left() {
-        if (this.canMoveHere(this.x_pos - 1, this.y_pos)) {
-            this.x_pos -= 1;
-            return true;
-        } else {
-            return false;
-        }
-    };
-    move_up() {
-        if (this.canMoveHere(this.x_pos, this.y_pos - 1)) {
-            this.y_pos -= 1;
-            return true;
-        } else {
-            return false;
-        }
-    };
-    move_down() {
-        if (this.canMoveHere(this.x_pos, this.y_pos + 1)) {
-            this.y_pos += 1;
-            return true;
-        } else {
-            return false;
-        }
-    };
+        return moved
+    }
 };
 
 class Role extends Player {

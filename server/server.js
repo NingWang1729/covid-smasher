@@ -3,7 +3,7 @@ import express from 'express'
 import path, { dirname } from 'path'
 import cors from 'cors'
 
-import { Save } from './db/Save.js'
+import { Save } from './schema/Save.js'
 
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))

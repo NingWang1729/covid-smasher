@@ -4,39 +4,40 @@ import swal from '@sweetalert/with-react';
 import { GoogleLogin } from 'react-google-login'
 import './covid_smasher.css';
 
-import * as locations_module from './base_classes/locations.js'
-import * as player_module from './base_classes/player.js'
-import * as items_module from './base_classes/items.js'
+import * as locationsModule from './base_classes/locations.js'
+import * as playerModule from './base_classes/player.js'
+import * as itemsModule from './base_classes/items.js'
 
 // Get helper functions
 import { deepCopy, getRandomSpawnPoint } from './lib.js'
 
 import axios from 'axios'
 
-const { UNIT_SIZE, TOP_BUFFER, WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP } = locations_module
+const { UNIT_SIZE, TOP_BUFFER, WORLD_WIDTH, WORLD_HEIGHT, WORLD_MAP, DIRECTION } = locationsModule
+const { LEFT, RIGHT, UP, DOWN } = DIRECTION
 
 const location_objects = [
-    new locations_module.Home(1, 4),
-    new locations_module.Home(2, 4),
-    new locations_module.Neighbor(5, 4),
-    new locations_module.Cityhall(12, 4),
-    new locations_module.Unary_Store(17, 4),
-    new locations_module.Binary_Store(23, 4),
-    new locations_module.Ternary_Store(28, 4),
-    new locations_module.Mystery_Store(33, 4),
-    new locations_module.Library(2, 13),
-    new locations_module.Object_Garden(23, 11),
-    new locations_module.Cin_N_Cout(27, 11),
-    new locations_module.Cin_N_Cout(28, 11),
-    new locations_module.Cin_N_Cout(29, 11),
-    new locations_module.Foobar(32, 11),
-    new locations_module.Casino(37, 11),
-    new locations_module.HighSchool(7, 22),
-    new locations_module.Work(14, 21),
-    new locations_module.Gym(18, 21),
-    new locations_module.Hospital(22, 21),
-    new locations_module.College(24, 21),
-    new locations_module.College(24, 22)
+    new locationsModule.Home(1, 4),
+    new locationsModule.Home(2, 4),
+    new locationsModule.Neighbor(5, 4),
+    new locationsModule.Cityhall(12, 4),
+    new locationsModule.Unary_Store(17, 4),
+    new locationsModule.Binary_Store(23, 4),
+    new locationsModule.Ternary_Store(28, 4),
+    new locationsModule.Mystery_Store(33, 4),
+    new locationsModule.Library(2, 13),
+    new locationsModule.Object_Garden(23, 11),
+    new locationsModule.Cin_N_Cout(27, 11),
+    new locationsModule.Cin_N_Cout(28, 11),
+    new locationsModule.Cin_N_Cout(29, 11),
+    new locationsModule.Foobar(32, 11),
+    new locationsModule.Casino(37, 11),
+    new locationsModule.HighSchool(7, 22),
+    new locationsModule.Work(14, 21),
+    new locationsModule.Gym(18, 21),
+    new locationsModule.Hospital(22, 21),
+    new locationsModule.College(24, 21),
+    new locationsModule.College(24, 22)
 ];
 
 // sort in ascending order for easy binary search
@@ -52,26 +53,27 @@ for (let i = 0; i < location_objects.length; ++i) {
 }
 
 const player_selection = [
-    new player_module.Role(2, 5, 100, 100, 40, 45, 50, 'Male Highschool Teen'),
-    new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Male College Student'),
-    new player_module.Role(2, 5, 100, 50, 30, 50, 30, 'Male Impoverished'),
-    new player_module.Role(2, 5, 100, 1000, 20, 60, 60, 'Male Spoiled Brat'),
-    new player_module.Role(2, 5, 100, 100, 10, 50, 40, 'Male Elderly Person'),
-    new player_module.Role(2, 5, 100, 100, 40, 45, 50, 'Female Highschool Teen'),
-    new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student'),
-    new player_module.Role(2, 5, 100, 50, 30, 50, 30, 'Female Impoverished'),
-    new player_module.Role(2, 5, 100, 1000, 20, 60, 60, 'Female Spoiled Brat'),
-    new player_module.Role(2, 5, 100, 100, 10, 50, 40, 'Female Elderly Person'),
+    new playerModule.Role(2, 5, 100, 100, 40, 45, 50, 'Male Highschool Teen'),
+    new playerModule.Role(2, 5, 100, 200, 50, 69, 50, 'Male College Student'),
+    new playerModule.Role(2, 5, 100, 50, 30, 50, 30, 'Male Impoverished'),
+    new playerModule.Role(2, 5, 100, 1000, 20, 60, 60, 'Male Spoiled Brat'),
+    new playerModule.Role(2, 5, 100, 100, 10, 50, 40, 'Male Elderly Person'),
+    new playerModule.Role(2, 5, 100, 100, 40, 45, 50, 'Female Highschool Teen'),
+    new playerModule.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student'),
+    new playerModule.Role(2, 5, 100, 50, 30, 50, 30, 'Female Impoverished'),
+    new playerModule.Role(2, 5, 100, 1000, 20, 60, 60, 'Female Spoiled Brat'),
+    new playerModule.Role(2, 5, 100, 100, 10, 50, 40, 'Female Elderly Person'),
 ];
 
 // Global variables
-var player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
-var animated = false;
-var animation_stage = 0;
-var time = 6;
-var email = ''
-let gameSaves = {}
+let player = new playerModule.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
+let animated = false;
+let animation_stage = 0;
+let time = 6;
 
+// Used for MongoDB saving
+let email = ''
+let gameSaves = {}
 
 // var dfs_map = [
 //     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
@@ -112,29 +114,55 @@ const [rows2, cols2] = getRandomSpawnPoint();
 const [rows3, cols3] = getRandomSpawnPoint();
 const [rows4, cols4] = getRandomSpawnPoint();
 
-var npc1 = new player_module.Role(cols, rows, 100, 50, 30, 50, 30, 'Female Impoverished');
+var npc1 = new playerModule.Role(cols, rows, 100, 50, 30, 50, 30, 'Female Impoverished');
 var animation_stage_npc = 0;
 var is_animated = true;
 var move_directions = [1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,2,2,2,2,2];
 
-var npc2 = new player_module.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
+var npc2 = new playerModule.Role(cols2, rows2, 100, 50, 30, 50, 30, 'Male Impoverished');
 var animation_stage_npc2 = 0;
 var is_animated2 = true;
 
-var npc3 = new player_module.Role(cols3, rows3, 100, 50, 30, 50, 30, 'Male Impoverished');
+var npc3 = new playerModule.Role(cols3, rows3, 100, 50, 30, 50, 30, 'Male Impoverished');
 var animation_stage_npc3 = 0;
 var is_animated3 = true;
 
-var npc4 = new player_module.Role(cols4, rows4, 100, 50, 30, 50, 30, 'Male Impoverished');
+var npc4 = new playerModule.Role(cols4, rows4, 100, 50, 30, 50, 30, 'Male Impoverished');
 var animation_stage_npc4 = 0;
 var is_animated4 = true;
+
+// DFS Algo
+let dfs_move_que = []
+dfs(rows, cols);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+move_directions = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(WORLD_MAP);
+
+dfs(rows2, cols2);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+var move_directions2 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(WORLD_MAP);
+
+dfs(rows3, cols3);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+var move_directions3 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(WORLD_MAP);
+
+dfs(rows4, cols4);
+dfs_move_que = fixNPCMoveQueue(dfs_move_que);
+var move_directions4 = deepCopy(dfs_move_que);
+dfs_move_que = [];
+dfs_map = deepCopy(WORLD_MAP);
 
 
 //   0     1     2    3  4  5   6
 // right right right up up up down
 function fixNPCMoveQueue(npc_queue) {
     let join_arr = [];
-    if (npc_queue[0] != 3) {
+    if (npc_queue[0] !== 3) {
         npc_queue.unshift(npc_queue[0])
     }
     for (let i = 1; i < npc_queue.length - 1; i++) {
@@ -148,13 +176,13 @@ function fixNPCMoveQueue(npc_queue) {
         
     }
     return npc_queue;
-} 
+}
 
 function canMove(row, col) {
     return (row >= 0 && col >= 0 && row < 24 && col < 40 && dfs_map[row][col] != 1); 
 }
 
-var dfs_move_que = [];
+dfs_move_que = []
 function dfs(row, col) {
     dfs_map[row][col] = 1;
     if (dfs_map[row][col] === 4) return
@@ -194,31 +222,6 @@ function isTooClose(player, npc, distance, ticks) {
 
 // Random Algo
 // move_directions = randomMovement(npc1);
-
-// DFS Algo
-dfs(rows, cols);
-dfs_move_que = fixNPCMoveQueue(dfs_move_que);
-move_directions = deepCopy(dfs_move_que);
-dfs_move_que = [];
-dfs_map = deepCopy(WORLD_MAP);
-
-dfs(rows2, cols2);
-dfs_move_que = fixNPCMoveQueue(dfs_move_que);
-var move_directions2 = deepCopy(dfs_move_que);
-dfs_move_que = [];
-dfs_map = deepCopy(WORLD_MAP);
-
-dfs(rows3, cols3);
-dfs_move_que = fixNPCMoveQueue(dfs_move_que);
-var move_directions3 = deepCopy(dfs_move_que);
-dfs_move_que = [];
-dfs_map = deepCopy(WORLD_MAP);
-
-dfs(rows4, cols4);
-dfs_move_que = fixNPCMoveQueue(dfs_move_que);
-var move_directions4 = deepCopy(dfs_move_que);
-dfs_move_que = [];
-dfs_map = deepCopy(WORLD_MAP);
 
 function character_selection(playerClass) {
     player = player_selection[playerClass]
@@ -293,7 +296,7 @@ function COVID_SMASHER() {
         if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
             switch (queue[0]) {
                 case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                    if (character.direction === LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing left");
@@ -302,7 +305,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                    if (character.direction === RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing right");
@@ -311,7 +314,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                    if (character.direction === UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing up");
@@ -320,7 +323,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                    if (character.direction === DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
                         is_animated = true;
                     } else {
                         // alert("Facing down");
@@ -338,7 +341,7 @@ function COVID_SMASHER() {
         if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
             switch (queue[0]) {
                 case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                    if (character.direction === LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
                         is_animated2 = true;
                     } else {
                         // alert("Facing left");
@@ -347,7 +350,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                    if (character.direction === RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
                         is_animated2 = true;
                     } else {
                         // alert("Facing right");
@@ -356,7 +359,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                    if (character.direction === UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
                         is_animated2 = true;
                     } else {
                         // alert("Facing up");
@@ -365,7 +368,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                    if (character.direction === DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
                         is_animated2 = true;
                     } else {
                         // alert("Facing down");
@@ -383,7 +386,7 @@ function COVID_SMASHER() {
         if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
             switch (queue[0]) {
                 case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                    if (character.direction === LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
                         is_animated3 = true;
                     } else {
                         // alert("Facing left");
@@ -392,7 +395,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                    if (character.direction === RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
                         is_animated3 = true;
                     } else {
                         // alert("Facing right");
@@ -401,7 +404,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                    if (character.direction === UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
                         is_animated3 = true;
                     } else {
                         // alert("Facing up");
@@ -410,7 +413,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                    if (character.direction === DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
                         is_animated3 = true;
                     } else {
                         // alert("Facing down");
@@ -428,7 +431,7 @@ function COVID_SMASHER() {
         if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
             switch (queue[0]) {
                 case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
+                    if (character.direction === LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
                         is_animated4 = true;
                     } else {
                         // alert("Facing left");
@@ -437,7 +440,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
+                    if (character.direction === RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
                         is_animated4 = true;
                     } else {
                         // alert("Facing right");
@@ -446,7 +449,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (character.direction === locations_module.DIRECTION.UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
+                    if (character.direction === UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
                         is_animated4 = true;
                     } else {
                         // alert("Facing up");
@@ -455,7 +458,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
+                    if (character.direction === DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
                         is_animated4 = true;
                     } else {
                         // alert("Facing down");
@@ -492,7 +495,7 @@ function COVID_SMASHER() {
             pass_time(0.01);
             switch (movequeue[0]) {
                 case 0:
-                    if (player.direction === locations_module.DIRECTION.LEFT && player.x_pos > 0 && (WORLD_MAP[player.y_pos][player.x_pos - 1] === 0 || WORLD_MAP[player.y_pos][player.x_pos - 1] === 2)) {
+                    if (player.direction === LEFT && player.x_pos > 0 && (WORLD_MAP[player.y_pos][player.x_pos - 1] === 0 || WORLD_MAP[player.y_pos][player.x_pos - 1] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -500,7 +503,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 1:
-                    if (player.direction === locations_module.DIRECTION.RIGHT && player.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[player.y_pos][player.x_pos + 1] === 2)) {
+                    if (player.direction === RIGHT && player.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[player.y_pos][player.x_pos + 1] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -508,7 +511,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 2:
-                    if (player.direction === locations_module.DIRECTION.UP && player.y_pos > 0 && (WORLD_MAP[player.y_pos - 1][player.x_pos] === 0 || WORLD_MAP[player.y_pos - 1][player.x_pos] === 2)) {
+                    if (player.direction === UP && player.y_pos > 0 && (WORLD_MAP[player.y_pos - 1][player.x_pos] === 0 || WORLD_MAP[player.y_pos - 1][player.x_pos] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -516,7 +519,7 @@ function COVID_SMASHER() {
                     };
                     break;
                 case 3:
-                    if (player.direction === locations_module.DIRECTION.DOWN && player.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][player.x_pos] === 0 || WORLD_MAP[player.y_pos + 1][player.x_pos] === 2)) {
+                    if (player.direction === DOWN && player.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][player.x_pos] === 0 || WORLD_MAP[player.y_pos + 1][player.x_pos] === 2)) {
                         animated = true;
                     } else {
                         animation_stage = 0;
@@ -570,60 +573,60 @@ function COVID_SMASHER() {
             ctx.drawImage(home, 0, 0 + TOP_BUFFER);
         }
 
-        let neighbor = document.getElementById("neighbor");
+        const neighbor = document.getElementById("neighbor");
         ctx.drawImage(neighbor, 128, -24 + TOP_BUFFER);
 
-        let city_hall = document.getElementById("city-hall");
+        const city_hall = document.getElementById("city-hall");
         ctx.drawImage(city_hall, 256, -56 + TOP_BUFFER);
 
-        let store_1 = document.getElementById("store-1");
+        const store_1 = document.getElementById("store-1");
         ctx.drawImage(store_1, 496, -12 + TOP_BUFFER);
 
-        let store_2 = document.getElementById("store-2");
+        const store_2 = document.getElementById("store-2");
         ctx.drawImage(store_2, 666, -8 + TOP_BUFFER);
 
-        let store_3 = document.getElementById("store-3");
+        const store_3 = document.getElementById("store-3");
         ctx.drawImage(store_3, 832, -4 + TOP_BUFFER);
 
-        let store_4 = document.getElementById("store-4");
+        const store_4 = document.getElementById("store-4");
         ctx.drawImage(store_4, 983, 8 + TOP_BUFFER);
 
-        let tree_1 = document.getElementById("tree-1");
+        const tree_1 = document.getElementById("tree-1");
         ctx.drawImage(tree_1, 1152, 32 + TOP_BUFFER);
 
         // Row 2
-        let library = document.getElementById("library");
+        const library = document.getElementById("library");
         ctx.drawImage(library, -4, 256 + TOP_BUFFER);
 
-        let park = document.getElementById("park");
+        const park = document.getElementById("park");
         ctx.drawImage(park, 288, 224 + TOP_BUFFER);
 
-        let object_garden = document.getElementById("object-garden");
+        const object_garden = document.getElementById('object-garden')
         ctx.drawImage(object_garden, 708, 232 + TOP_BUFFER);
 
-        let cin_n_cout = document.getElementById("cin-n-cout");
+        const cin_n_cout = document.getElementById("cin-n-cout");
         ctx.drawImage(cin_n_cout, 840, 224 + TOP_BUFFER);
 
-        let foobar = document.getElementById("foobar");
+        const foobar = document.getElementById("foobar");
         ctx.drawImage(foobar, 976, 225 + TOP_BUFFER);
 
-        let casino = document.getElementById("casino");
+        const casino = document.getElementById("casino");
         ctx.drawImage(casino, 1128, 220 + TOP_BUFFER);
 
         // Row 3
-        let highschool = document.getElementById("highschool");
+        const highschool = document.getElementById("highschool");
         ctx.drawImage(highschool, -3, 500 + TOP_BUFFER);
 
-        let work = document.getElementById("work");
+        const work = document.getElementById("work");
         ctx.drawImage(work, 384, 550 + TOP_BUFFER);
 
-        let gym = document.getElementById("gym");
+        const gym = document.getElementById("gym");
         ctx.drawImage(gym, 524, 524 + TOP_BUFFER);
 
-        let hospital = document.getElementById("hospital");
+        const hospital = document.getElementById("hospital");
         ctx.drawImage(hospital, 666, 543 + TOP_BUFFER, 128, 128);
 
-        let college_doormat = document.getElementById("college-doormat");
+        const college_doormat = document.getElementById("college-doormat");
         ctx.drawImage(college_doormat, 768, 456 + TOP_BUFFER);
 
         // Draw player
@@ -650,54 +653,55 @@ function COVID_SMASHER() {
         ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT + TOP_BUFFER);
 
         // Moves NPC same as code below
-        move_npc(npc1);
-        move_npc2(npc2);
-        move_npc3(npc3);
-        move_npc4(npc4);
+        moveNPC(npc1, move_directions, animation_stage_npc);
+        moveNPC(npc2, move_directions2, animation_stage_npc2);
+        moveNPC(npc3, move_directions3, animation_stage_npc3);
+        moveNPC(npc4, move_directions4, animation_stage_npc4);
 
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 3)) {
             switch (movequeue[0]) {
                 case 0:
-                    if (player.direction === locations_module.DIRECTION.LEFT) {
-                        if (!player.move_left()) {
+                    if (player.direction === LEFT) {
+                        if (!player.move(LEFT)) {
                             play_wall_bump_audio();
                         }
                     } else {
-                        player.set_direction(locations_module.DIRECTION.LEFT);
+                        player.set_direction(LEFT);
                     };
                     break;
                 case 1:
-                    if (player.direction === locations_module.DIRECTION.RIGHT) {
-                        if (!player.move_right()) {
+                    if (player.direction === RIGHT) {
+                        if (!player.move(RIGHT)) {
                             play_wall_bump_audio();
                         }
                     } else {
-                        player.set_direction(locations_module.DIRECTION.RIGHT);
+                        player.set_direction(RIGHT);
                     };
                     break;
                 case 2:
-                    if (player.direction === locations_module.DIRECTION.UP) {
-                        if (!player.move_up()) {
+                    if (player.direction === UP) {
+                        if (!player.move(UP)) {
                             play_wall_bump_audio();
                         }
                     } else {
-                        player.set_direction(locations_module.DIRECTION.UP);
+                        player.set_direction(UP);
                     };
                     break;
                 case 3:
-                    if (player.direction === locations_module.DIRECTION.DOWN) {
-                        if (!player.move_down()) {
+                    if (player.direction === DOWN) {
+                        if (!player.move(DOWN)) {
                             play_wall_bump_audio();
                         }
                     } else {
-                        player.set_direction(locations_module.DIRECTION.DOWN);
+                        player.set_direction(DOWN);
                     };
                     break;
                 case 4:
                     if (WORLD_MAP[player.y_pos][player.x_pos] === 2) {
                         let hashedPos = hashKey(player.get_x_pos(), player.get_y_pos());
                         console.log(obj_pos_map.get(hashedPos));
-                        if ((player.x_pos === 1 || player.x_pos === 2) && player.y_pos === 4) {
+                        
+                        if (player.isAt(1, 4) || player.isAt(2, 4)) {
                             swal("You arrived home! What do you want to do?", {
                                 buttons: {
                                   leave: {
@@ -727,7 +731,7 @@ function COVID_SMASHER() {
                                         break;
                                 };
                             });
-                        } else if (player.x_pos === 5 && player.y_pos === 4) {
+                        } else if (player.isAt(5, 4)) {
                             swal("You arrived at your neighbor's house! What do you want to do?", {
                                 buttons: {
                                   leave: {
@@ -758,7 +762,7 @@ function COVID_SMASHER() {
                                         break;
                                 };
                             });
-                        } else if (player.x_pos === 12 && player.y_pos === 4) {
+                        } else if (player.isAt(12, 4)) {
                             swal("You arrived at City Hall!! What do you want to do?", {
                                 buttons: {
                                   leave: {
@@ -799,792 +803,1217 @@ function COVID_SMASHER() {
                                         break;
                                 }
                             });
-                        } else if (player.x_pos === 17 && player.y_pos === 4) {
-                            swal("You arrived at the Unary-Store! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  item1: {
-                                    text: "Buy plastic meat for $1?",
-                                    value: "item1",
-                                  },
-                                  item2: {
-                                    text: "Buy plastic water for $1?",
-                                    value: "item2",
-                                  },
-                                  item3: {
-                                    text: "Buy spidget finner for $1?",
-                                    value: "item3",
-                                  },
+                            
+                        } else if (player.isAt(17, 4)) {
+                          swal(
+                            'You arrived at the Unary-Store! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "item1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a plastic meat(ball? clump?)! (Sounds... edible?)");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a plastic water! (Aside: What's a plastic water?)");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a spidget finner! *nice*");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit the Unary Store.");
-                                        break;
-                                    default:
-                                        swal("You decided not to visit the Unary Store.");
-                                        break;
+                                item1: {
+                                  text: 'Buy plastic meat for $1?',
+                                  value: 'item1',
+                                },
+                                item2: {
+                                  text: 'Buy plastic water for $1?',
+                                  value: 'item2',
+                                },
+                                item3: {
+                                  text: 'Buy spidget finner for $1?',
+                                  value: 'item3',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'item1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Hey, you got a plastic meat(ball? clump?)! (Sounds... edible?)'
+                                    )
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
                                 }
-                            });
-                        } else if (player.x_pos === 23 && player.y_pos === 4) {
-                            swal("You arrived at the Binary-Store! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  item1: {
-                                    text: "Buy cooked chicken for $2?",
-                                    value: "item1",
-                                  },
-                                  item2: {
-                                    text: "Buy cooked bistec for $4?",
-                                    value: "item2",
-                                  },
-                                  item3: {
-                                    text: "Buy lawn mower for $8?",
-                                    value: "item3",
-                                  },
-                                },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "item1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a cooked chicken!");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a cooked bistec!");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a lawn mower! (But why tho...)");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit the Binary Store.");
-                                        break;
-                                    default:
-                                        swal("You decided not to visit the Binary Store.");
-                                        break;
+                                break
+                              case 'item2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      "Hey, you got a plastic water! (Aside: What's a plastic water?)"
+                                    )
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
                                 }
-                            });
-                        } else if (player.x_pos === 28 && player.y_pos === 4) {
-                            swal("You arrived at the Ternary-Store! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  item1: {
-                                    text: "Buy pizza for $3?",
-                                    value: "item1",
-                                  },
-                                  item2: {
-                                    text: "Buy lemon for $9?",
-                                    value: "item2",
-                                  },
-                                  item3: {
-                                    text: "Buy shell script for $27?",
-                                    value: "item3",
-                                  },
+                                break
+                              case 'item3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Hey, you got a spidget finner! *nice*'
+                                    )
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'leave':
+                                swal(
+                                  'You decided not to visit the Unary Store.'
+                                )
+                                break
+                              default:
+                                swal(
+                                  'You decided not to visit the Unary Store.'
+                                )
+                                break
+                            }
+                          })
+                          
+                        } else if (player.isAt(23, 4)) {
+                          swal(
+                            'You arrived at the Binary-Store! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "item1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a pizza! (Wanna share?)");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, life gave you a lemon! (Make life take the lemon back!))");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Hey, you got a shell script! #!/bin/bash; cd ~/;");
-                                            } else {
-                                                swal("You were unable to purchase this item! (Can your inventory even be too full for a shell script? It's just a few bytes!)");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit the Ternary Store.");
-                                        break;
-                                    default:
-                                        swal("You decided not to visit the Ternary Store.");
-                                        break;
-                                };
-                            });
+                                item1: {
+                                  text: 'Buy cooked chicken for $2?',
+                                  value: 'item1',
+                                },
+                                item2: {
+                                  text: 'Buy cooked bistec for $4?',
+                                  value: 'item2',
+                                },
+                                item3: {
+                                  text: 'Buy lawn mower for $8?',
+                                  value: 'item3',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'item1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Hey, you got a cooked chicken!')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Hey, you got a cooked bistec!')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Hey, you got a lawn mower! (But why tho...)'
+                                    )
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'leave':
+                                swal(
+                                  'You decided not to visit the Binary Store.'
+                                )
+                                break
+                              default:
+                                swal(
+                                  'You decided not to visit the Binary Store.'
+                                )
+                                break
+                            }
+                          })
+                        } else if (player.isAt(28, 4)) {
+                          swal(
+                            'You arrived at the Ternary-Store! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
+                                },
+                                item1: {
+                                  text: 'Buy pizza for $3?',
+                                  value: 'item1',
+                                },
+                                item2: {
+                                  text: 'Buy lemon for $9?',
+                                  value: 'item2',
+                                },
+                                item3: {
+                                  text: 'Buy shell script for $27?',
+                                  value: 'item3',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'item1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Hey, you got a pizza! (Wanna share?)')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Hey, life gave you a lemon! (Make life take the lemon back!))'
+                                    )
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Hey, you got a shell script! #!/bin/bash; cd ~/;'
+                                    )
+                                  } else {
+                                    swal(
+                                      "You were unable to purchase this item! (Can your inventory even be too full for a shell script? It's just a few bytes!)"
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'leave':
+                                swal(
+                                  'You decided not to visit the Ternary Store.'
+                                )
+                                break
+                              default:
+                                swal(
+                                  'You decided not to visit the Ternary Store.'
+                                )
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 33 && player.y_pos === 4) {
-                            swal("You arrived at the Mystery-Store! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  item1: {
-                                    text: "Buy hard to swallow pills for $10?",
-                                    value: "item1",
-                                  },
-                                  item2: {
-                                    text: "Buy vim for $5?",
-                                    value: "item2",
-                                  },
-                                  item3: {
-                                    text: "Buy EMACS for $20?",
-                                    value: "item3",
-                                  },
-                                  item4: {
-                                    text: "Buy Wurd for $15?",
-                                    value: "item4",
-                                  },
+                          swal(
+                            'You arrived at the Mystery-Store! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "item1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("How will you swallow these?");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Vim?", "idk, let's look it up", "info").then(() => {
-                                                    swal(<a href="https://www.google.com/search?q=vi" target="_blank">https://www.google.com/search?q=vi</a>)
-                                                });
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Emacs?", "idk, let's look it up", "info").then(() => {
-                                                    swal(<a href="https://www.google.com/search?q=emacs" target="_blank">https://www.google.com/search?q=emacs</a>)
-                                                });
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item4":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 4);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Bird is the wurd!");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit the Mystery Store. (Are you sure it's not a gym?)");
-                                        break;
-                                    default:
-                                        swal("You decided not to visit the Mystery Store.");
-                                        break;
+                                item1: {
+                                  text: 'Buy hard to swallow pills for $10?',
+                                  value: 'item1',
+                                },
+                                item2: {
+                                  text: 'Buy vim for $5?',
+                                  value: 'item2',
+                                },
+                                item3: {
+                                  text: 'Buy EMACS for $20?',
+                                  value: 'item3',
+                                },
+                                item4: {
+                                  text: 'Buy Wurd for $15?',
+                                  value: 'item4',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'item1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('How will you swallow these?')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
                                 }
-                            });
+                                break
+                              case 'item2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Vim?',
+                                      "idk, let's look it up",
+                                      'info'
+                                    ).then(() => {
+                                      swal(
+                                        <a
+                                          href="https://www.google.com/search?q=vi"
+                                          target="_blank"
+                                        >
+                                          https://www.google.com/search?q=vi
+                                        </a>
+                                      )
+                                    })
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Emacs?',
+                                      "idk, let's look it up",
+                                      'info'
+                                    ).then(() => {
+                                      swal(
+                                        <a
+                                          href="https://www.google.com/search?q=emacs"
+                                          target="_blank"
+                                        >
+                                          https://www.google.com/search?q=emacs
+                                        </a>
+                                      )
+                                    })
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item4':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 4)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Bird is the wurd!')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'leave':
+                                swal(
+                                  "You decided not to visit the Mystery Store. (Are you sure it's not a gym?)"
+                                )
+                                break
+                              default:
+                                swal(
+                                  'You decided not to visit the Mystery Store.'
+                                )
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 2 && player.y_pos === 13) {
-                            swal("You arrived at the library! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  enter: {
-                                    text: "Read a book...",
-                                    value: "enter",
-                                  },
+                          swal(
+                            'You arrived at the library! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "enter":
-                                        swal("Success!", `You read a book about ${books[Math.trunc(10 * Math.random())]}...`, "success").then(()=>{
-                                            swal(<p>With libraries no longer open in person, you can checkout over 60,000 free ebooks at the <a href="http://www.gutenberg.org/" target="_blank">Gutenberg Project!</a></p>);
-                                        });
-                                        if (obj_pos_map.has(hashedPos))  {
-                                            location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                            pass_time(1.5);
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to enter the library.");
-                                        break;
-                                    default:
-                                        swal("You decided not to enter the library.");
-                                        break;
-                                };
-                            });
+                                enter: {
+                                  text: 'Read a book...',
+                                  value: 'enter',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'enter':
+                                swal(
+                                  'Success!',
+                                  `You read a book about ${
+                                    books[Math.trunc(10 * Math.random())]
+                                  }...`,
+                                  'success'
+                                ).then(() => {
+                                  swal(
+                                    <p>
+                                      With libraries no longer open in person,
+                                      you can checkout over 60,000 free ebooks
+                                      at the{' '}
+                                      <a
+                                        href="http://www.gutenberg.org/"
+                                        target="_blank"
+                                      >
+                                        Gutenberg Project!
+                                      </a>
+                                    </p>
+                                  )
+                                })
+                                if (obj_pos_map.has(hashedPos)) {
+                                  location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player)
+                                  pass_time(1.5)
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to enter the library.')
+                                break
+                              default:
+                                swal('You decided not to enter the library.')
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 23 && player.y_pos === 11) {
-                            swal("You arrived at Object Garden! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  item1: {
-                                    text: "Buy Breadstacks for $6?",
-                                    value: "item1",
-                                  },
-                                  item2: {
-                                    text: "Buy Copypasta for $20?",
-                                    value: "item2",
-                                  },
-                                  item3: {
-                                    text: "Buy Tiramisu for $8?",
-                                    value: "item3",
-                                  },
+                          swal(
+                            'You arrived at Object Garden! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "item1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Where's the lamb sauce?");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Somebody toucha my spaghet?");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(3 / 2 * Math.random());
-                                        };
-                                        break;
-                                    case "item3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Delicious. Finally, some tiramisu.");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit Object-Garden.");
-                                        break;
-                                    default:
-                                        swal("You decided not to visit Object-Garden.");
-                                        break;
-                                };
-                            });
-                        } else if ((player.x_pos === 27 || player.x_pos === 28 || player.x_pos === 29) && player.y_pos === 11) {
-                            swal("You arrived at Cin-N-Cout! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  item1: {
-                                    text: "Buy Borger for $3?",
-                                    value: "item1",
-                                  },
-                                  item2: {
-                                    text: "Buy Header Fries for $2?",
-                                    value: "item2",
-                                  },
-                                  item3: {
-                                    text: "Buy soda for $1?",
-                                    value: "item3",
-                                  },
+                                item1: {
+                                  text: 'Buy Breadstacks for $6?',
+                                  value: 'item1',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "item1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Mmm, Borger. Yum.");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Is this even French?");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "item3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Soda? Candy pop? What's the difference?");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random());
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit Cin-N-Out.");
-                                        break;
-                                    default:
-                                        swal("You decided not to visit Cin-N-Out.");
-                                        break;
-                                };
-                            });
+                                item2: {
+                                  text: 'Buy Copypasta for $20?',
+                                  value: 'item2',
+                                },
+                                item3: {
+                                  text: 'Buy Tiramisu for $8?',
+                                  value: 'item3',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'item1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal("Where's the lamb sauce?")
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Somebody toucha my spaghet?')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time((3 / 2) * Math.random())
+                                }
+                                break
+                              case 'item3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Delicious. Finally, some tiramisu.')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to visit Object-Garden.')
+                                break
+                              default:
+                                swal('You decided not to visit Object-Garden.')
+                                break
+                            }
+                          })
+                        } else if (
+                          (player.x_pos === 27 ||
+                            player.x_pos === 28 ||
+                            player.x_pos === 29) &&
+                          player.y_pos === 11
+                        ) {
+                          swal(
+                            'You arrived at Cin-N-Cout! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
+                                },
+                                item1: {
+                                  text: 'Buy Borger for $3?',
+                                  value: 'item1',
+                                },
+                                item2: {
+                                  text: 'Buy Header Fries for $2?',
+                                  value: 'item2',
+                                },
+                                item3: {
+                                  text: 'Buy soda for $1?',
+                                  value: 'item3',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'item1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Mmm, Borger. Yum.')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Is this even French?')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'item3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      "Soda? Candy pop? What's the difference?"
+                                    )
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random())
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to visit Cin-N-Out.')
+                                break
+                              default:
+                                swal('You decided not to visit Cin-N-Out.')
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 32 && player.y_pos === 11) {
-                            swal("You arrived at Foobar! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  item1: {
-                                    text: "Buy Butterbeer for $2?",
-                                    value: "item1",
-                                  },
-                                  item2: {
-                                    text: "Buy Dry Martini for $3?",
-                                    value: "item2",
-                                  },
-                                  item3: {
-                                    text: "Buy spam and eggs for $5?",
-                                    value: "item3",
-                                  },
+                          swal(
+                            'You arrived at Foobar! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "item1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Did you get your permission slip signed for Hogsmeade?");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random() / 2);
-                                        };
-                                        break;
-                                    case "item2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Stirred, not shaken, right?");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random() / 2);
-                                        };
-                                        break;
-                                    case "item3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result) {
-                                                play_item_received_audio();
-                                                swal("Wait, this is not pythonic...");
-                                            } else {
-                                                swal("You were unable to purchase this item!");
-                                            };
-                                            pass_time(Math.random() / 2);
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit Foobar.");
-                                        break;
-                                    default:
-                                        swal("You decided not to visit Foobar.");
-                                        break;
-                                };
-                            });
+                                item1: {
+                                  text: 'Buy Butterbeer for $2?',
+                                  value: 'item1',
+                                },
+                                item2: {
+                                  text: 'Buy Dry Martini for $3?',
+                                  value: 'item2',
+                                },
+                                item3: {
+                                  text: 'Buy spam and eggs for $5?',
+                                  value: 'item3',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'item1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal(
+                                      'Did you get your permission slip signed for Hogsmeade?'
+                                    )
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random() / 2)
+                                }
+                                break
+                              case 'item2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Stirred, not shaken, right?')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random() / 2)
+                                }
+                                break
+                              case 'item3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result) {
+                                    play_item_received_audio()
+                                    swal('Wait, this is not pythonic...')
+                                  } else {
+                                    swal(
+                                      'You were unable to purchase this item!'
+                                    )
+                                  }
+                                  pass_time(Math.random() / 2)
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to visit Foobar.')
+                                break
+                              default:
+                                swal('You decided not to visit Foobar.')
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 37 && player.y_pos === 11) {
-                            swal("You arrived at the Game Corner! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  slots: {
-                                    text: "Play slots for $1?",
-                                    value: "1",
-                                  },
-                                  blackjack: {
-                                    text: "Play blackjack for $2? House pays 3 to 2.",
-                                    value: "2",
-                                  },
-                                  roulette: {
-                                    text: "Play roulette?",
-                                    value: "3",
-                                  },
+                          swal(
+                            'You arrived at the Game Corner! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "1":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 1);
-                                            if (result === 1) {
-                                                swal("Success!", "You won $2!", "success");
-                                                pass_time(0.5);
-                                            } else if (result === 0) {
-                                                swal("Uh-oh!", "You lost your money!", "error");
-                                                pass_time(0.5);
-                                            } else {
-                                                swal("Hold up...", "You don't have enough money!", "error");
-                                            };
-                                        };
-                                        break;
-                                    case "2":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 2);
-                                            if (result === 1) {
-                                                swal("Success!", "House pays 3 to 2.", "success");
-                                                pass_time(1.5);
-                                            } else if (result === 0) {
-                                                swal("Uh-oh!", "You went bust!", "error");
-                                                pass_time(1.5);
-                                            } else {
-                                                swal("Hold up...", "You don't have enough money!", "error");
-                                            };
-                                        };
-                                        break;
-                                    case "3":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player, 3);
-                                            if (result === 1) {
-                                                swal("Success!", "You pulled a blank. (What, did you expect money?)", "success");
-                                                pass_time(2.5);
-                                            } else if (result === 0) {
-                                                swal("Uh-oh!", "You lost Russian Roulette! (Didn't see that one coming.)", "error");
-                                                pass_time(2.5);
-                                            } else {
-                                                swal("Hold up...", "You don't have enough money!", "error");
-                                            };
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to enter the Game Corner.");
-                                        break;
-                                    default:
-                                        swal("You decided not to enter the Game Corner.");
-                                        break;
-                                };
-                            });
+                                slots: {
+                                  text: 'Play slots for $1?',
+                                  value: '1',
+                                },
+                                blackjack: {
+                                  text:
+                                    'Play blackjack for $2? House pays 3 to 2.',
+                                  value: '2',
+                                },
+                                roulette: {
+                                  text: 'Play roulette?',
+                                  value: '3',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case '1':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 1)
+                                  if (result === 1) {
+                                    swal('Success!', 'You won $2!', 'success')
+                                    pass_time(0.5)
+                                  } else if (result === 0) {
+                                    swal(
+                                      'Uh-oh!',
+                                      'You lost your money!',
+                                      'error'
+                                    )
+                                    pass_time(0.5)
+                                  } else {
+                                    swal(
+                                      'Hold up...',
+                                      "You don't have enough money!",
+                                      'error'
+                                    )
+                                  }
+                                }
+                                break
+                              case '2':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 2)
+                                  if (result === 1) {
+                                    swal(
+                                      'Success!',
+                                      'House pays 3 to 2.',
+                                      'success'
+                                    )
+                                    pass_time(1.5)
+                                  } else if (result === 0) {
+                                    swal('Uh-oh!', 'You went bust!', 'error')
+                                    pass_time(1.5)
+                                  } else {
+                                    swal(
+                                      'Hold up...',
+                                      "You don't have enough money!",
+                                      'error'
+                                    )
+                                  }
+                                }
+                                break
+                              case '3':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player, 3)
+                                  if (result === 1) {
+                                    swal(
+                                      'Success!',
+                                      'You pulled a blank. (What, did you expect money?)',
+                                      'success'
+                                    )
+                                    pass_time(2.5)
+                                  } else if (result === 0) {
+                                    swal(
+                                      'Uh-oh!',
+                                      "You lost Russian Roulette! (Didn't see that one coming.)",
+                                      'error'
+                                    )
+                                    pass_time(2.5)
+                                  } else {
+                                    swal(
+                                      'Hold up...',
+                                      "You don't have enough money!",
+                                      'error'
+                                    )
+                                  }
+                                }
+                                break
+                              case 'leave':
+                                swal(
+                                  'You decided not to enter the Game Corner.'
+                                )
+                                break
+                              default:
+                                swal(
+                                  'You decided not to enter the Game Corner.'
+                                )
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 7 && player.y_pos === 22) {
-                            swal("You arrived at the highschool! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  enter: {
-                                    text: "Go to class...",
-                                    value: "enter",
-                                  },
+                          swal(
+                            'You arrived at the highschool! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "enter":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                            if (result === 1) {
-                                                swal("Success!", "You went to class as usual.", "success");
-                                                pass_time(1.5);
-                                            } else if (result === 0) {
-                                                swal("Uh-oh!", "You were unable to concentrate.", "error").then(() => {
-                                                    swal(<p>Remote learning has made education more difficult all around the country, with <a href="https://www.cbsnews.com/news/coronavirus-pandemic-students-grades-suffering-all-remote-learning/" target="_blank">higher rates of failing classes</a>. This has been significantly worse in more rural and poorer areas.</p>);
-                                                });
-                                                pass_time(1.5);
-                                            } else {
-                                                swal("Hold up...", "You are not a highschooler! What a silly mistake...", "error");
-                                            };
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to enter the highschool.");
-                                        break;
-                                    default:
-                                        swal("You decided not to enter the highschool.");
-                                        break;
-                                };
-                            });
+                                enter: {
+                                  text: 'Go to class...',
+                                  value: 'enter',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'enter':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player)
+                                  if (result === 1) {
+                                    swal(
+                                      'Success!',
+                                      'You went to class as usual.',
+                                      'success'
+                                    )
+                                    pass_time(1.5)
+                                  } else if (result === 0) {
+                                    swal(
+                                      'Uh-oh!',
+                                      'You were unable to concentrate.',
+                                      'error'
+                                    ).then(() => {
+                                      swal(
+                                        <p>
+                                          Remote learning has made education
+                                          more difficult all around the country,
+                                          with{' '}
+                                          <a
+                                            href="https://www.cbsnews.com/news/coronavirus-pandemic-students-grades-suffering-all-remote-learning/"
+                                            target="_blank"
+                                          >
+                                            higher rates of failing classes
+                                          </a>
+                                          . This has been significantly worse in
+                                          more rural and poorer areas.
+                                        </p>
+                                      )
+                                    })
+                                    pass_time(1.5)
+                                  } else {
+                                    swal(
+                                      'Hold up...',
+                                      'You are not a highschooler! What a silly mistake...',
+                                      'error'
+                                    )
+                                  }
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to enter the highschool.')
+                                break
+                              default:
+                                swal('You decided not to enter the highschool.')
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 14 && player.y_pos === 21) {
-                            swal("You arrived at work! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  enter: {
-                                    text: "Go to work...",
-                                    value: "enter",
-                                  },
-                                },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "enter":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                            switch (result) {
-                                                case 0:
-                                                    swal(<p>You worked <a href="https://www.investopedia.com/articles/markets-economy/090516/what-are-pros-and-cons-raising-minimum-wage.asp" target="_blank">minimum wage</a>!</p>);
-                                                    pass_time(1);
-                                                    break;
-                                                case 1:
-                                                    swal(<p>You worked at an <a href="https://technologyadvice.com/blog/human-resources/company-needs-start-paying-interns/" target ="_blank">unpaid internship</a>!</p>);
-                                                    pass_time(3);
-                                                    break;
-                                                case 2:
-                                                    swal(<p>You worked at a <a href="https://www.thebalancecareers.com/the-pros-and-cons-of-working-at-a-startup-company-3859588" target="_blank">tech startup</a>!</p>);
-                                                    pass_time(3);
-                                                    break;
-                                                case 3:
-                                                    swal(<p>You lost your job due to <a href="https://www.thebalance.com/how-outsourcing-jobs-affects-the-u-s-economy-3306279" target="_blank">outsourcing</a>! (In game hint: Try raising your intelligence stat! This is harder in real life.)</p>);
-                                                    pass_time(2);
-                                                    break;
-                                                case 4:
-                                                    swal(<p>You received <a href="https://www.youtube.com/watch?v=iik25wqIuFo" target="_blank">a small loan of $100</a>!</p>);
-                                                    pass_time(2);
-                                                    break;
-                                                case 5:
-                                                    swal(<p>You remember that you are retired and should go collect <a href="https://abcnews.go.com/Politics/social-security-running-money-benefits-track-reduced-2035/story?id=62557507" target="_blank">social security benefits</a> from the city hall while it lasts!</p>)
-                                                    pass_time(1);
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to go to work.");
-                                        break;
+                          swal('You arrived at work! What do you want to do?', {
+                            buttons: {
+                              leave: {
+                                text: 'Leave for now...',
+                                value: 'leave',
+                              },
+                              enter: {
+                                text: 'Go to work...',
+                                value: 'enter',
+                              },
+                            },
+                          }).then(value => {
+                            switch (value) {
+                              case 'enter':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player)
+                                  switch (result) {
+                                    case 0:
+                                      swal(
+                                        <p>
+                                          You worked{' '}
+                                          <a
+                                            href="https://www.investopedia.com/articles/markets-economy/090516/what-are-pros-and-cons-raising-minimum-wage.asp"
+                                            target="_blank"
+                                          >
+                                            minimum wage
+                                          </a>
+                                          !
+                                        </p>
+                                      )
+                                      pass_time(1)
+                                      break
+                                    case 1:
+                                      swal(
+                                        <p>
+                                          You worked at an{' '}
+                                          <a
+                                            href="https://technologyadvice.com/blog/human-resources/company-needs-start-paying-interns/"
+                                            target="_blank"
+                                          >
+                                            unpaid internship
+                                          </a>
+                                          !
+                                        </p>
+                                      )
+                                      pass_time(3)
+                                      break
+                                    case 2:
+                                      swal(
+                                        <p>
+                                          You worked at a{' '}
+                                          <a
+                                            href="https://www.thebalancecareers.com/the-pros-and-cons-of-working-at-a-startup-company-3859588"
+                                            target="_blank"
+                                          >
+                                            tech startup
+                                          </a>
+                                          !
+                                        </p>
+                                      )
+                                      pass_time(3)
+                                      break
+                                    case 3:
+                                      swal(
+                                        <p>
+                                          You lost your job due to{' '}
+                                          <a
+                                            href="https://www.thebalance.com/how-outsourcing-jobs-affects-the-u-s-economy-3306279"
+                                            target="_blank"
+                                          >
+                                            outsourcing
+                                          </a>
+                                          ! (In game hint: Try raising your
+                                          intelligence stat! This is harder in
+                                          real life.)
+                                        </p>
+                                      )
+                                      pass_time(2)
+                                      break
+                                    case 4:
+                                      swal(
+                                        <p>
+                                          You received{' '}
+                                          <a
+                                            href="https://www.youtube.com/watch?v=iik25wqIuFo"
+                                            target="_blank"
+                                          >
+                                            a small loan of $100
+                                          </a>
+                                          !
+                                        </p>
+                                      )
+                                      pass_time(2)
+                                      break
+                                    case 5:
+                                      swal(
+                                        <p>
+                                          You remember that you are retired and
+                                          should go collect{' '}
+                                          <a
+                                            href="https://abcnews.go.com/Politics/social-security-running-money-benefits-track-reduced-2035/story?id=62557507"
+                                            target="_blank"
+                                          >
+                                            social security benefits
+                                          </a>{' '}
+                                          from the city hall while it lasts!
+                                        </p>
+                                      )
+                                      pass_time(1)
+                                      break
                                     default:
-                                        swal("You decided not to go to work.");
-                                        break;
-                                };
-                            });
+                                      break
+                                  }
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to go to work.')
+                                break
+                              default:
+                                swal('You decided not to go to work.')
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 18 && player.y_pos === 21) {
-                            swal("You arrived at the gym! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  enter: {
-                                    text: "Workout ($10 fine for violation!)",
-                                    value: "enter",
-                                  },
+                          swal(
+                            'You arrived at the gym! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "enter":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            if (location_objects[obj_pos_map.get(hashedPos)].do_something(player)) {
-                                                swal("Phew!", "What a great workout!", "success").then(() => {
-                                                    swal(<p>With an uneasy economy, learn more about how <a href="https://kmph.com/news/local/governor-newsom-shuts-down-gyms-and-hair-salons-again" target="_blank">COVID-19 shutdowns</a> further hurt struggling, small businesses.</p>);
-                                                });
-                                                pass_time(2);
-                                            } else {
-                                                swal("Uh-oh", "You don't have enough cash!", "error")};
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to enter the gym.");
-                                        break;
-                                    default:
-                                        swal("You decided not to enter the gym.");
-                                        break;
-                                };
-                            });
+                                enter: {
+                                  text: 'Workout ($10 fine for violation!)',
+                                  value: 'enter',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'enter':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  if (
+                                    location_objects[
+                                      obj_pos_map.get(hashedPos)
+                                    ].do_something(player)
+                                  ) {
+                                    swal(
+                                      'Phew!',
+                                      'What a great workout!',
+                                      'success'
+                                    ).then(() => {
+                                      swal(
+                                        <p>
+                                          With an uneasy economy, learn more
+                                          about how{' '}
+                                          <a
+                                            href="https://kmph.com/news/local/governor-newsom-shuts-down-gyms-and-hair-salons-again"
+                                            target="_blank"
+                                          >
+                                            COVID-19 shutdowns
+                                          </a>{' '}
+                                          further hurt struggling, small
+                                          businesses.
+                                        </p>
+                                      )
+                                    })
+                                    pass_time(2)
+                                  } else {
+                                    swal(
+                                      'Uh-oh',
+                                      "You don't have enough cash!",
+                                      'error'
+                                    )
+                                  }
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to enter the gym.')
+                                break
+                              default:
+                                swal('You decided not to enter the gym.')
+                                break
+                            }
+                          })
                         } else if (player.x_pos === 22 && player.y_pos === 21) {
-                            swal("You arrived at the hospital! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  enter: {
-                                    text: "Check vaccine progress...",
-                                    value: "enter",
-                                  },
+                          swal(
+                            'You arrived at the hospital! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "enter":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            if (location_objects[obj_pos_map.get(hashedPos)].do_something(player)) {
-                                                swal("You Win!", "You received the vaccine!.", "success");
-                                            } else {
-                                                swal(<p>Check again when you have 100 in strength, intelligence, or morale, and <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/expect.html" target="_blank">learn more</a> about <a href="https://www.defense.gov/Explore/Spotlight/Coronavirus/Operation-Warp-Speed/" target="_blank">the COVID-19 vaccine.</a></p>);
-                                            };
-                                            pass_time(0.1);
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to enter the hospital.");
-                                        break;
-                                    default:
-                                        swal("You decided not to enter the hospital.");
-                                        break;
-                                };
-                            });
-                        } else if (player.x_pos === 24 && (player.y_pos === 21 || player.y_pos === 22)) {
-                            swal("You arrived at the college! What do you want to do?", {
-                                buttons: {
-                                  leave: {
-                                    text: "Leave for now...",
-                                    value: "leave",
-                                  },
-                                  enter: {
-                                    text: "Enter college...",
-                                    value: "enter",
-                                  },
+                                enter: {
+                                  text: 'Check vaccine progress...',
+                                  value: 'enter',
                                 },
-                            }).then((value) => {
-                                switch (value) {
-                                    case "enter":
-                                        if (obj_pos_map.has(hashedPos)) {
-                                            let result = location_objects[obj_pos_map.get(hashedPos)].do_something(player);
-                                            switch (result) {
-                                                case 0:
-                                                    swal(<p>You went to college and paid part of your <a href="https://www.investopedia.com/student-loan-debt-2019-statistics-and-outlook-4772007" target="_blank">tuition</a>!</p>);
-                                                    pass_time(2);
-                                                    break;
-                                                case 1:
-                                                    swal(<p>You could not afford a guided tour of the campus!</p>);
-                                                    pass_time(1);
-                                                    break;
-                                                case 2:
-                                                    swal(<p>You went on a guided tour of the beautiful campus.</p>)
-                                                    pass_time(1);
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                        };
-                                        break;
-                                    case "leave":
-                                        swal("You decided not to visit the college.");
-                                        break;
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'enter':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  if (
+                                    location_objects[
+                                      obj_pos_map.get(hashedPos)
+                                    ].do_something(player)
+                                  ) {
+                                    swal(
+                                      'You Win!',
+                                      'You received the vaccine!.',
+                                      'success'
+                                    )
+                                  } else {
+                                    swal(
+                                      <p>
+                                        Check again when you have 100 in
+                                        strength, intelligence, or morale, and{' '}
+                                        <a
+                                          href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/expect.html"
+                                          target="_blank"
+                                        >
+                                          learn more
+                                        </a>{' '}
+                                        about{' '}
+                                        <a
+                                          href="https://www.defense.gov/Explore/Spotlight/Coronavirus/Operation-Warp-Speed/"
+                                          target="_blank"
+                                        >
+                                          the COVID-19 vaccine.
+                                        </a>
+                                      </p>
+                                    )
+                                  }
+                                  pass_time(0.1)
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to enter the hospital.')
+                                break
+                              default:
+                                swal('You decided not to enter the hospital.')
+                                break
+                            }
+                          })
+                        } else if (
+                          player.x_pos === 24 &&
+                          (player.y_pos === 21 || player.y_pos === 22)
+                        ) {
+                          swal(
+                            'You arrived at the college! What do you want to do?',
+                            {
+                              buttons: {
+                                leave: {
+                                  text: 'Leave for now...',
+                                  value: 'leave',
+                                },
+                                enter: {
+                                  text: 'Enter college...',
+                                  value: 'enter',
+                                },
+                              },
+                            }
+                          ).then(value => {
+                            switch (value) {
+                              case 'enter':
+                                if (obj_pos_map.has(hashedPos)) {
+                                  let result = location_objects[
+                                    obj_pos_map.get(hashedPos)
+                                  ].do_something(player)
+                                  switch (result) {
+                                    case 0:
+                                      swal(
+                                        <p>
+                                          You went to college and paid part of
+                                          your{' '}
+                                          <a
+                                            href="https://www.investopedia.com/student-loan-debt-2019-statistics-and-outlook-4772007"
+                                            target="_blank"
+                                          >
+                                            tuition
+                                          </a>
+                                          !
+                                        </p>
+                                      )
+                                      pass_time(2)
+                                      break
+                                    case 1:
+                                      swal(
+                                        <p>
+                                          You could not afford a guided tour of
+                                          the campus!
+                                        </p>
+                                      )
+                                      pass_time(1)
+                                      break
+                                    case 2:
+                                      swal(
+                                        <p>
+                                          You went on a guided tour of the
+                                          beautiful campus.
+                                        </p>
+                                      )
+                                      pass_time(1)
+                                      break
                                     default:
-                                        swal("You decided not to visit the college.");
-                                        break;
-                                };
-                            });
+                                      break
+                                  }
+                                }
+                                break
+                              case 'leave':
+                                swal('You decided not to visit the college.')
+                                break
+                              default:
+                                swal('You decided not to visit the college.')
+                                break
+                            }
+                          })
                         };
                     };
                     break;
@@ -1601,150 +2030,42 @@ function COVID_SMASHER() {
         isTooClose(player, npc4, 1.5, ticks);
     }
 
-    function move_npc(character) {
+    function moveNPC(character, move_directions, animation_stage_npc) {
         if (move_directions.length > 0 && (animation_stage_npc === 0 || animation_stage_npc === 3)) {
             switch (move_directions[0]) {
                 case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT) {
-                        character.move_left();
+                    if (character.direction === LEFT) {
+                        character.move(LEFT);
                     } else {
-                        character.set_direction(locations_module.DIRECTION.LEFT);
+                        character.set_direction(LEFT);
                     };
                     break;
                 case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT) {
-                        character.move_right();
+                    if (character.direction === RIGHT) {
+                        character.move(RIGHT);
                     } else {
-                        character.set_direction(locations_module.DIRECTION.RIGHT);
+                        character.set_direction(RIGHT);
                     };
                     break;
                 case 2:
-                    if (character.direction === locations_module.DIRECTION.UP) {
-                        character.move_up();
+                    if (character.direction === UP) {
+                        character.move(UP);
                     } else {
-                        character.set_direction(locations_module.DIRECTION.UP);
+                        character.set_direction(UP);
                     };
                     break;
                 case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN) {
-                        character.move_down();
+                    if (character.direction === DOWN) {
+                        character.move(DOWN);
                     } else {
-                        character.set_direction(locations_module.DIRECTION.DOWN);
+                        character.set_direction(DOWN);
                     };
                     break;
                 }
+
             move_directions.shift();
         }
     }
-
-        function move_npc2(character) {
-        if (move_directions2.length > 0 && (animation_stage_npc2 === 0 || animation_stage_npc2 === 3)) {
-            switch (move_directions2[0]) {
-                case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT) {
-                        character.move_left();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.LEFT);
-                    };
-                    break;
-                case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT) {
-                        character.move_right();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.RIGHT);
-                    };
-                    break;
-                case 2:
-                    if (character.direction === locations_module.DIRECTION.UP) {
-                        character.move_up();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.UP);
-                    };
-                    break;
-                case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN) {
-                        character.move_down();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.DOWN);
-                    };
-                    break;
-                }
-            move_directions2.shift();
-        }
-    }
-
-        function move_npc3(character) {
-        if (move_directions3.length > 0 && (animation_stage_npc3 === 0 || animation_stage_npc3 === 3)) {
-            switch (move_directions3[0]) {
-                case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT) {
-                        character.move_left();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.LEFT);
-                    };
-                    break;
-                case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT) {
-                        character.move_right();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.RIGHT);
-                    };
-                    break;
-                case 2:
-                    if (character.direction === locations_module.DIRECTION.UP) {
-                        character.move_up();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.UP);
-                    };
-                    break;
-                case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN) {
-                        character.move_down();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.DOWN);
-                    };
-                    break;
-                }
-            move_directions3.shift();
-        }
-    }
-
-        function move_npc4(character) {
-        if (move_directions4.length > 0 && (animation_stage_npc4 === 0 || animation_stage_npc4 === 3)) {
-            switch (move_directions4[0]) {
-                case 0:
-                    if (character.direction === locations_module.DIRECTION.LEFT) {
-                        character.move_left();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.LEFT);
-                    };
-                    break;
-                case 1:
-                    if (character.direction === locations_module.DIRECTION.RIGHT) {
-                        character.move_right();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.RIGHT);
-                    };
-                    break;
-                case 2:
-                    if (character.direction === locations_module.DIRECTION.UP) {
-                        character.move_up();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.UP);
-                    };
-                    break;
-                case 3:
-                    if (character.direction === locations_module.DIRECTION.DOWN) {
-                        character.move_down();
-                    } else {
-                        character.set_direction(locations_module.DIRECTION.DOWN);
-                    };
-                    break;
-                }
-            move_directions4.shift();
-        }
-    }
-
 
     // Adds text/avatar image to each of the slots
     function addSlotText(x, slotData, ctx) {
@@ -1939,16 +2260,16 @@ function COVID_SMASHER() {
     function draw_sprite(ctx, direction, sprite_sheet_type, player) {
         let sprite_sheet = document.getElementById(sprite_sheet_type);
         switch (direction) {
-            case locations_module.DIRECTION.UP:
+            case UP:
                 draw_animation(ctx, 1 + animation_stage, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.DOWN:
+            case DOWN:
                 draw_animation(ctx, 6 + animation_stage, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.LEFT:
+            case LEFT:
                 draw_animation(ctx, 11 + animation_stage, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.RIGHT:
+            case RIGHT:
                 draw_animation(ctx, 16 + animation_stage, sprite_sheet, player);
                 break;
             default:
@@ -2045,16 +2366,16 @@ function COVID_SMASHER() {
     function draw_sprite_npc(ctx, direction, sprite_sheet_type, player) {
         let sprite_sheet = document.getElementById(sprite_sheet_type);
         switch (direction) {
-            case locations_module.DIRECTION.UP:
+            case UP:
                 draw_animation(ctx, 1 + animation_stage_npc, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.DOWN:
+            case DOWN:
                 draw_animation(ctx, 6 + animation_stage_npc, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.LEFT:
+            case LEFT:
                 draw_animation(ctx, 11 + animation_stage_npc, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.RIGHT:
+            case RIGHT:
                 draw_animation(ctx, 16 + animation_stage_npc, sprite_sheet, player);
                 break;
             default:
@@ -2082,16 +2403,16 @@ function COVID_SMASHER() {
     function draw_sprite_npc2(ctx, direction, sprite_sheet_type, player) {
         let sprite_sheet = document.getElementById(sprite_sheet_type);
         switch (direction) {
-            case locations_module.DIRECTION.UP:
+            case UP:
                 draw_animation(ctx, 1 + animation_stage_npc2, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.DOWN:
+            case DOWN:
                 draw_animation(ctx, 6 + animation_stage_npc2, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.LEFT:
+            case LEFT:
                 draw_animation(ctx, 11 + animation_stage_npc2, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.RIGHT:
+            case RIGHT:
                 draw_animation(ctx, 16 + animation_stage_npc2, sprite_sheet, player);
                 break;
             default:
@@ -2119,16 +2440,16 @@ function COVID_SMASHER() {
     function draw_sprite_npc3(ctx, direction, sprite_sheet_type, player) {
         let sprite_sheet = document.getElementById(sprite_sheet_type);
         switch (direction) {
-            case locations_module.DIRECTION.UP:
+            case UP:
                 draw_animation(ctx, 1 + animation_stage_npc3, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.DOWN:
+            case DOWN:
                 draw_animation(ctx, 6 + animation_stage_npc3, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.LEFT:
+            case LEFT:
                 draw_animation(ctx, 11 + animation_stage_npc3, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.RIGHT:
+            case RIGHT:
                 draw_animation(ctx, 16 + animation_stage_npc3, sprite_sheet, player);
                 break;
             default:
@@ -2156,16 +2477,16 @@ function COVID_SMASHER() {
     function draw_sprite_npc4(ctx, direction, sprite_sheet_type, player) {
         let sprite_sheet = document.getElementById(sprite_sheet_type);
         switch (direction) {
-            case locations_module.DIRECTION.UP:
+            case UP:
                 draw_animation(ctx, 1 + animation_stage_npc4, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.DOWN:
+            case DOWN:
                 draw_animation(ctx, 6 + animation_stage_npc4, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.LEFT:
+            case LEFT:
                 draw_animation(ctx, 11 + animation_stage_npc4, sprite_sheet, player);
                 break;
-            case locations_module.DIRECTION.RIGHT:
+            case RIGHT:
                 draw_animation(ctx, 16 + animation_stage_npc4, sprite_sheet, player);
                 break;
             default:
@@ -2207,25 +2528,25 @@ function COVID_SMASHER() {
             case 37: // Left
             case 65: // A
                 if(play) {
-                    movequeue.push(0); // move_left();
+                    movequeue.push(0); // move(LEFT);
                 }
                 break;
             case 39: // Right
             case 68: // D
                 if(play) {
-                    movequeue.push(1); // move_right();
+                    movequeue.push(1); // move(RIGHT);
                 }
                 break;
             case 38: // up
             case 87: // W
                 if(play) {
-                    movequeue.push(2); // move_up();
+                    movequeue.push(2); // move(UP);
                 }
                 break;
             case 40: // Down
             case 83: // S
                 if(play) {
-                    movequeue.push(3); // move_down();
+                    movequeue.push(3); // move(DOWN);
                 }
                 break;
             // case 32: // Space
@@ -2674,7 +2995,7 @@ function loadSlot(num, slotData) {
 }
 
 function resetGameState() {
-    player = new player_module.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
+    player = new playerModule.Role(2, 5, 100, 200, 50, 69, 50, 'Female College Student');
     time = 6
 }
 
@@ -2696,11 +3017,11 @@ function setPlayerState(slotData) {
 
     const len = player._inventory._item_array.length
     for (let x = 0; x < len; x++) {
-        const itemType = player._inventory._item_array.length[x]._item_type
-        player._inventory.item_array[x] = items_module[itemType]
+        const itemType = player._inventory._item_array[x]
+        player._inventory.item_array[x] = itemsModule[itemType]
     }
     player._inventory._capacity = slotData.inventory.capacity;
-    console.log(player.playerState());
+    // console.log(player.playerState());
 };
 
 // Set all values to those that were in the save
