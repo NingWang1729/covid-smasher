@@ -290,7 +290,7 @@ function COVID_SMASHER() {
         }
         setTicks(ticks + 1)
     }
-
+        
     // Function to reuse first made for NPC
     function updateFacingDirection(a_stage, is_animated, character, queue) {
         if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
@@ -337,140 +337,6 @@ function COVID_SMASHER() {
         };
     }
 
-    function updateFacingDirection2(a_stage, is_animated2, character, queue) {
-        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
-            switch (queue[0]) {
-                case 0:
-                    if (character.direction === LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
-                        is_animated2 = true;
-                    } else {
-                        // alert("Facing left");
-                        a_stage = 0;
-                        is_animated2 = false;
-                    };
-                    break;
-                case 1:
-                    if (character.direction === RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
-                        is_animated2 = true;
-                    } else {
-                        // alert("Facing right");
-                        a_stage = 0;
-                        is_animated2 = false;
-                    };
-                    break;
-                case 2:
-                    if (character.direction === UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
-                        is_animated2 = true;
-                    } else {
-                        // alert("Facing up");
-                        a_stage = 0;
-                        is_animated2 = false;
-                    };
-                    break;
-                case 3:
-                    if (character.direction === DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
-                        is_animated2 = true;
-                    } else {
-                        // alert("Facing down");
-                        a_stage = 0;
-                        is_animated2 = false;
-                    };
-                    break;
-                default:
-                    break;
-            };
-        };
-    }
-
-        function updateFacingDirection3(a_stage, is_animated3, character, queue) {
-        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
-            switch (queue[0]) {
-                case 0:
-                    if (character.direction === LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
-                        is_animated3 = true;
-                    } else {
-                        // alert("Facing left");
-                        a_stage = 0;
-                        is_animated3 = false;
-                    };
-                    break;
-                case 1:
-                    if (character.direction === RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
-                        is_animated3 = true;
-                    } else {
-                        // alert("Facing right");
-                        a_stage = 0;
-                        is_animated3 = false;
-                    };
-                    break;
-                case 2:
-                    if (character.direction === UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
-                        is_animated3 = true;
-                    } else {
-                        // alert("Facing up");
-                        a_stage = 0;
-                        is_animated3 = false;
-                    };
-                    break;
-                case 3:
-                    if (character.direction === DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
-                        is_animated3 = true;
-                    } else {
-                        // alert("Facing down");
-                        a_stage = 0;
-                        is_animated3 = false;
-                    };
-                    break;
-                default:
-                    break;
-            };
-        };
-    }
-
-        function updateFacingDirection4(a_stage, is_animated4, character, queue) {
-        if (queue.length > 0 && (a_stage === 0 || a_stage === 4)) {
-            switch (queue[0]) {
-                case 0:
-                    if (character.direction === LEFT && character.x_pos > 0 && (WORLD_MAP[character.y_pos][character.x_pos - 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos - 1] === 2)) {
-                        is_animated4 = true;
-                    } else {
-                        // alert("Facing left");
-                        a_stage = 0;
-                        is_animated4 = false;
-                    };
-                    break;
-                case 1:
-                    if (character.direction === RIGHT && character.x_pos < WORLD_WIDTH - 1 && (WORLD_MAP[player.y_pos][player.x_pos + 1] === 0 || WORLD_MAP[character.y_pos][character.x_pos + 1] === 2)) {
-                        is_animated4 = true;
-                    } else {
-                        // alert("Facing right");
-                        a_stage = 0;
-                        is_animated4 = false;
-                    };
-                    break;
-                case 2:
-                    if (character.direction === UP && character.y_pos > 0 && (WORLD_MAP[character.y_pos - 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos - 1][character.x_pos] === 2)) {
-                        is_animated4 = true;
-                    } else {
-                        // alert("Facing up");
-                        a_stage = 0;
-                        is_animated4 = false;
-                    };
-                    break;
-                case 3:
-                    if (character.direction === DOWN && character.y_pos < WORLD_HEIGHT - 1 && (WORLD_MAP[player.y_pos + 1][character.x_pos] === 0 || WORLD_MAP[character.y_pos + 1][character.x_pos] === 2)) {
-                        is_animated4 = true;
-                    } else {
-                        // alert("Facing down");
-                        a_stage = 0;
-                        is_animated4 = false;
-                    };
-                    break;
-                default:
-                    break;
-            };
-        };
-    }
     // WORLD MAP
     function update_game_0 () {
         if (player._substenance <= 0 && ticks % 20 === 0) {
@@ -486,9 +352,9 @@ function COVID_SMASHER() {
         }
         // Same as code below
         updateFacingDirection(animation_stage_npc, is_animated, npc1, move_directions);
-        updateFacingDirection2(animation_stage_npc2, is_animated2, npc2, move_directions2);
-        updateFacingDirection3(animation_stage_npc3, is_animated3, npc3, move_directions3);
-        updateFacingDirection4(animation_stage_npc4, is_animated4, npc4, move_directions4);
+        updateFacingDirection(animation_stage_npc2, is_animated2, npc2, move_directions2);
+        updateFacingDirection(animation_stage_npc3, is_animated3, npc3, move_directions3);
+        updateFacingDirection(animation_stage_npc4, is_animated4, npc4, move_directions4);
 
         let movequeue = moves;
         if (moves.length > 0 && (animation_stage === 0 || animation_stage === 4)) {
