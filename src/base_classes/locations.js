@@ -109,6 +109,7 @@ export class Unary_Store extends Location {
                 } else {
                     return false;
                 };
+            default: break
         };
     };
 };
@@ -140,6 +141,7 @@ export class Binary_Store extends Location {
                 } else {
                     return false;
                 };
+            default: break
         };
     };
 };
@@ -235,6 +237,7 @@ export class Object_Garden extends Location {
                 } else {
                     return false;
                 };
+            default: break
         };
     };
 };
@@ -266,6 +269,7 @@ export class Cin_N_Cout extends Location {
                 } else {
                     return false;
                 };
+            default: break
         };
     };
 };
@@ -297,6 +301,7 @@ export class Foobar extends Location {
                 } else {
                     return false;
                 };
+            default: break
         };
     };
 };
@@ -343,6 +348,7 @@ export class Casino extends Location {
                 } else {
                     return -1;
                 };
+            default: break
         };
     };
 };

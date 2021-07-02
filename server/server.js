@@ -1,9 +1,9 @@
 import express from 'express'
-import bodyParser from 'body-parser' // Do I really need this?
+// import bodyParser from 'body-parser' // Do I really need this?
 import path, { dirname } from 'path'
 import cors from 'cors'
 
-import { Save } from './mongodb.js'
+import { Save } from './schema/Save.js'
 
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -45,6 +45,7 @@ app.post('/save', async (req, res) => {
   )
 })
 
+// Serve the game
 app.get('/', (req, res) => {
   res.sendFile(path.join(buildPath, 'index.html'))
 })
