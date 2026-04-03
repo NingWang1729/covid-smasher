@@ -71,6 +71,7 @@ class Player {
     // See if player is at a location
     isAt(x, y) { return x === this.x_pos && y === this.y_pos }
 
+    // TO-DO: Fix this so that this works properly
     isWithin(xMin, xMax, yMin, yMax) {
         return xMin < this.x_pos && this.x_pos 
     }
@@ -91,48 +92,17 @@ class Player {
         else return false
     }
 
-    // move_right() { 
-    //     if (this.canMoveHere(this.x_pos + 1, this.y_pos)) {
-    //         this.x_pos += 1;
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // };
-    // move_left() {
-    //     if (this.canMoveHere(this.x_pos - 1, this.y_pos)) {
-    //         this.x_pos -= 1;
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // };
-    // move_up() {
-    //     if (this.canMoveHere(this.x_pos, this.y_pos - 1)) {
-    //         this.y_pos -= 1;
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // };
-    // move_down() {
-    //     if (this.canMoveHere(this.x_pos, this.y_pos + 1)) {
-    //         this.y_pos += 1;
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // };
     move(dir) {
-        let moved = false
         switch (dir) {
-            case LEFT: if (this.canMoveHere(this.x_pos - 1, this.y_pos)) { this.x_pos += -1; moved = true } break
-            case RIGHT: if (this.canMoveHere(this.x_pos + 1, this.y_pos)) { this.x_pos += 1; moved = true } break
-            case UP: if (this.canMoveHere(this.x_pos, this.y_pos - 1)) { this.y_pos += -1; moved = true } break
-            case DOWN: if (this.canMoveHere(this.x_pos, this.y_pos + 1)) { this.y_pos += 1; moved = true } break
-            default: break
+            case LEFT: if (this.canMoveHere(this.x_pos - 1, this.y_pos)) { this.x_pos += -1 } break
+            case RIGHT: if (this.canMoveHere(this.x_pos + 1, this.y_pos)) { this.x_pos += 1 } break
+            case UP: if (this.canMoveHere(this.x_pos, this.y_pos - 1)) { this.y_pos += -1 } break
+            case DOWN: if (this.canMoveHere(this.x_pos, this.y_pos + 1)) { this.y_pos += 1 } break
+
+            // Didn't move so return false
+            default: return false;
         }
-        return moved
+        return true
     }
 };
 
@@ -145,7 +115,7 @@ class Role extends Player {
         this._intelligence = intelligence;
         this._morale = morale;
         this._type = type;
-        this._substenance = 100;
+        this._sustenance = 100;
         this._slot = 1;
     }
     // Getters to get all sorts of info about the player
@@ -156,7 +126,7 @@ class Role extends Player {
     get strength() { return this._strength; }
     get intelligence() { return this._intelligence; }
     get morale() { return this._morale; }
-    get substenance() { return this._substenance; }
+    get sustenance() { return this._sustenance; }
 
     // Add/decrement values by a certain amount
     set delta_health(val) { this._hp += val; }
@@ -164,7 +134,7 @@ class Role extends Player {
     set delta_strength(val) { this._strength += val; }
     set delta_intelligence(val) { this._intelligence += val; }
     set delta_morale(val) { this._morale += val; }
-    set delta_substenance(val) { this._substenance += val; }
+    set delta_sustenance(val) { this._sustenance += val; }
 
     // Get all the stats of the player
     // Need this to save to database
@@ -181,7 +151,7 @@ class Role extends Player {
             intelligence: this._intelligence,
             strength: this._strength,
             morale: this._morale,
-            sustenance: this._substenance, // TO-DO: Change substenance to sustenance
+            sustenance: this._sustenance, // TO-DO: Change sustenance to sustenance
             health: this._hp,
           },
           money: this._cash,
@@ -192,44 +162,5 @@ class Role extends Player {
         }
     }
 };
-
-// TO-DO: All of this here is unused code, remove it?
-/*
-class HSTeen extends Role {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos, 100, 100, 40, 45, 50, 'HSTeen');
-    }
-};
-
-class CollegeStudent extends Role {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos, 100, 200, 50, 69, 50, 'CollegeStudent');
-    }
-};
-
-class PoorPerson extends Role {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos, 100, 50, 30, 50, 30, 'PoorPerson');
-    }
-};
-
-class RichKid extends Role {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos, 100, 1000, 20, 60, 60, 'RichKid');
-    }
-};
-
-class OldMan extends Role {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos, 100, 100, 10, 50, 40, 'OldMan');
-    }
-};
-
-class Pedestrian extends player {
-    constructor(x_pos, y_pos) {
-        super(x_pos, y_pos);
-    }
-}
-*/
 
 export { Player, Role };
